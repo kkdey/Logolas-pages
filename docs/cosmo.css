@@ -3981,7 +3981,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   margin-bottom: 0;
   padding-left: 0;
   list-style: none;
-  background : linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(start.gif);
+  background : linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(start.jpg);
 }
 .nav > li {
   position: relative;
