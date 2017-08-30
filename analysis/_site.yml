@@ -2,23 +2,14 @@ name: Logolas-pages
 output_dir: "../docs"
 include: [".nojekyll"]
 exclude: ["include"]
-navbar:
-  title: Logolas-pages
-  left:
-    - text: "Home"
-      href: index.html
-    - text: "About"
-      href: about.html
-    - text: "License"
-      href: license.html
-  right:
-    - icon: fa-github
-      href: https://github.com/jdblischak/workflowr
+
 output:
   html_document:
     toc: true
-    toc_float: true
-    theme: cosmo
+    toc_float: false
+    theme: null
     highlight: textmate
+    css: cosmo.css
     include:
+      before_body: include/header.html
       after_body: include/footer.html
