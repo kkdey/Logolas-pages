@@ -1,8 +1,5 @@
 ---
 title: "Extended features of Logolas"
-author: "Dongyue Xie"
-date: 2017-08-23
-output: html_document
 ---
 
 <!-- The file analysis/chunks.R contains chunks that define default settings
@@ -25,8 +22,6 @@ knitr::read_chunk("chunks.R")
 ```
 
 <!-- Add your analysis here -->
-
-#Extended features of Logolas
 
 ##Protein logo plot
 

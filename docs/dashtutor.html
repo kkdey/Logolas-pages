@@ -10,9 +10,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="author" content="Dongyue Xie" />
 
-<meta name="date" content="2017-08-26" />
 
 <title>Dirichlet adaptive shrinkage</title>
 
@@ -54,19 +52,19 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div class = "nav" align = "middle">
 <div class= "p1"></div>
 <p>
-  <a class="btn btn-large btn btn-primary" type="button" href = "Logolas_home.html">HOME</a> 
+  <a class="btn btn-large btn btn-primary" type="button" href = "Logolas_home.html">HOME</a>
   &nbsp &nbsp
-  <a class="btn btn-large btn btn-primary" type="button" href = "Gallery.html">GALLERY</a> 
+  <a class="btn btn-large btn btn-primary" type="button" href = "Gallery.html">GALLERY</a>
   &nbsp &nbsp
-  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas">SOFTWARE</a> 
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas">SOFTWARE</a>
   &nbsp &nbsp
-  <a class="btn btn-large btn btn-primary" type="button" href = "https://dongyuexie.github.io/Sequence-Motif-Depletion/">VIGNETTES</a> 
+  <a class="btn btn-large btn btn-primary" type="button" href = "workflow.html">VIGNETTES</a>
   &nbsp &nbsp
-  <a class="btn btn-large btn btn-primary" type="button" href = "license.html">LICENSE</a> 
+  <a class="btn btn-large btn btn-primary" type="button" href = "license.html">LICENSE</a>
    &nbsp &nbsp
-  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas-pages">GITHUB</a> 
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas-pages">GITHUB</a>
  </p>
-</div>  
+</div>
 <!-- <div class="nav">
   <a href="index.html">Home page</a> &nbsp &nbsp
   <a href="musings.html">Musings</a> &nbsp &nbsp
@@ -80,8 +78,6 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 
 <h1 class="title toc-ignore">Dirichlet adaptive shrinkage</h1>
-<h4 class="author"><em>Dongyue Xie</em></h4>
-<h4 class="date"><em>2017-08-26</em></h4>
 
 
 <div id="TOC">
@@ -100,7 +96,7 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-09-13</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 485cb2a</p>
+<p><strong>Code version:</strong> 345e7ba</p>
 <!-- Add your analysis here -->
 <p>Logo plot is based on the position weight matrix(PWM), which is transformed from the position frequency matrix(PFM). PFM consists of the counts for each base at each position. This is a typical example of compositional data, which is used to describe the constituents of discrete sample space.</p>
 <p>Suppose for a specific position of a TFBS, the compositional data is <span class="math display">\[ (A, C, G, T) : = (6, 1, 2, 1) \]</span> and one another case is <span class="math display">\[ (A, C, G, T) : = (600, 100, 200, 100). \]</span> And the background probability is assumed to be equal for the four bases. If we transform the counts data into PWM by using the sample proportion, then the estimated proportions for the four bases are the same in both cases. However, in the second case, we have total 1000 samples while only 10 samples in the first case. Hence, we would consider to shrink the estimates to the background probability more strongly in the first case than that in the second case, for the reason that the force of data is stronger in the second scenarios.</p>

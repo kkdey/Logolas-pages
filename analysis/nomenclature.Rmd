@@ -1,8 +1,5 @@
 ---
-title: "Consensus sequence"
-author: "Dongyue Xie"
-date: 2017-09-05
-output: html_document
+title: "Symbol calling and Consensus sequence"
 ---
 
 <!-- The file analysis/chunks.R contains chunks that define default settings

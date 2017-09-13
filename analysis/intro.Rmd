@@ -1,8 +1,5 @@
 ---
-title: "Introduction"
-author: "Dongyue Xie"
-date: 2017-08-23
-output: html_document
+title: " Why Logolas? "
 ---
 
 <!-- The file analysis/chunks.R contains chunks that define default settings

@@ -1,8 +1,5 @@
 ---
 title: "Dirichlet adaptive shrinkage"
-author: "Dongyue Xie"
-date: 2017-08-26
-output: html_document
 ---
 
 <!-- The file analysis/chunks.R contains chunks that define default settings
@@ -30,7 +27,7 @@ Logo plot is based on the position weight matrix(PWM), which is transformed from
 
 Suppose for a specific position of a TFBS, the compositional data is \[ (A, C, G, T) : = (6, 1, 2, 1) \] and one another case is \[ (A, C, G, T) : = (600, 100, 200, 100). \] And the background probability is assumed to be equal for the four bases. If we transform the counts data into PWM by using the sample proportion, then the estimated proportions for the four bases are the same in both cases. However, in the second case, we have total 1000 samples while only 10 samples in the first case. Hence, we would consider to shrink the estimates to the background probability more strongly in the first case than that in the second case, for the reason that the force of data is stronger in the second scenarios.
 
-##Model formulation
+## Model formulation
 
 To address these questions, we propose Dirichlet adaptive shrinkage(dash) for compositional data. Assume that there are \(L\) constituents in the compositional mix. \(L\) equals \(4\) (corresponding to A,C, G and T bases) for the transcription factor data and \(20\) corresponding to the amino acids for the protein sequence data.
 
