@@ -1,0 +1,69 @@
+---
+title: "Introduction"
+author: "Dongyue Xie"
+date: 2017-08-23
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+Sequence logos is a graphical representation of patterns in the aligned sets of sequences. It was first introduced by Schneider&Stephens(1990). Sequence logos is an informative visualization of patterns and easily shows the residue preferences and conservation of a particular position. These patterns are suggestive, in the sense of the key functional sites of transcription factor or protein family. 
+
+There are many existing packages or tools for generating sequence logos. For example, the R package `seqLogo`for displaying DNA sequence motif, web-based tool `WebLogo` , and `Seq2Logo` for construction and visualization of amino acid binding motifs. 
+
+However, certain limitations exist in these packages or tools. In particular, they have limited size of symbol library that can be used to make the plot, which greatly constrain the scope of applications. For example, the `seqLogo` could only plot logos of alphabet. 
+
+To address these constraints and make various applications possible, we introduce a new R package `Logolas`, for displaying logos that are not only standard but also user-specified. The logos could be alphabet, numbers, punctuation and etc. What is more important is that Logolas lets the user plot alphanumeric strings as logos, which extends the scope of the visualization massively, beyond the TFs or protein sequences. We will show examples of how this string representation of logos is effective in visualizing mutation signature patterns, ecological species abundance
+patterns etc. 
+
+Besides, the common sequence logos could only show the enrichment of residues, while the depletion is usually overlooked. In Logolas, we develop the negative logo plot that could display both the enrichment and depletion at one time. This would provide more insights and information.
+
+Furthermore, based on the enrichment and depletion, a new symbol-calling way is proposed. This Logolas based nomenclature is a more generic alternative to the IUPAC and the Prosite nomenclatures used for calling nucleotide and amino acid respectively.
+
+Most existing logo plotting tools take position weight matrix as input for making the
+logo plots. But this approach neglects the frequency scale underlying the position
+weight matrix. For example, a position weight computed for TF data based on just
+10 fragments mapping to that position is less reliable compared to one based on
+100 fragments. In such a case, the user would want to shrink the composition
+probability to the pre-defined background or prior much more in the first case
+compared to the second.
+
+In Logolas, we provide a Dirichlet Adaptive Shrinkage method (dash), in similar lines
+to the adaptive shrinkage(ash) approach due to Stephens(2016), to adaptively
+shrink the positional weights based on the positional frequency scale.
+
+Besides all the above benefits, Logolas allows for new and flexible stylizations,
+textures and color patterns of the logos , allows the user to create her own logos
+and add them to the library, and also provides an easy interface to combine
+Logolas plots with R base graphics and ggplot2 graphs in multi-panel visualizations.
+
+#Reference
+
+Schneider, T. D., & Stephens, R. M. (1990). Sequence logos: a new way to display consensus sequences. Nucleic acids research, 18(20), 6097-6100.
+
+Stephens, M. (2016). False discovery rates: a new deal. Biostatistics, 18(2), 275-294.
+
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```

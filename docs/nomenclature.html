@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Dongyue Xie" />
+
+<meta name="date" content="2017-09-05" />
+
+<title>Consensus sequence</title>
+
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+
+<link rel="stylesheet" href="cosmo.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
+    <link href="../docs/cosmo.css" rel="stylesheet">
+    <link href="../docs/cosmo.min.css" rel="stylesheet">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../docs/bootstrap/js/bootstrap.min.js"></script>
+
+<body>
+
+<div class = "nav" align = "middle">
+<div class= "p1"></div>
+<p>
+  <a class="btn btn-large btn btn-primary" type="button" href = "Logolas_home.html">HOME</a> 
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "Gallery.html">GALLERY</a> 
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas">SOFTWARE</a> 
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://dongyuexie.github.io/Sequence-Motif-Depletion/">VIGNETTES</a> 
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "license.html">LICENSE</a> 
+   &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas-pages">GITHUB</a> 
+ </p>
+</div>  
+<!-- <div class="nav">
+  <a href="index.html">Home page</a> &nbsp &nbsp
+  <a href="musings.html">Musings</a> &nbsp &nbsp
+  <a href="town.html">My town</a> &nbsp &nbsp
+  <a href="links.html">Links</a>
+</div> -->
+
+<!-- Main content -->
+</body>
+</html>
+
+
+<h1 class="title toc-ignore">Consensus sequence</h1>
+<h4 class="author"><em>Dongyue Xie</em></h4>
+<h4 class="date"><em>2017-09-05</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#session-information">Session information</a></li>
+</ul>
+</div>
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+<!-- Update knitr chunk options -->
+<!-- Insert the date the file was last updated -->
+<p><strong>Last updated:</strong> 2017-09-13</p>
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+<p><strong>Code version:</strong> 485cb2a</p>
+<!-- Add your analysis here -->
+<p>Consensus sequence is the summarized patten of multiple sequence alignment of nucleotide or amino acid. For the nucleotide, the consensus sequence is usually coded by the IUPAC, in which nucleobases are represented by the first letters of their names: [G]uanine, [C]ytosine, [A]denine, and [T]hymine. For the amino acid sequence, the Prosite pattern syntax is commonly used.</p>
+<p>Based on the logo heights from the negative logo plot, we develop a way to detect and give the consensus sequence and it could provide more information about the conservation of residues, especially for the nucleotide. Some existing methods, such as the <code>getIUPAC</code> in the atSNP package, only give the enrichment of the residues and hence are biased. However, our method could give both the enrichment and depletion bases.</p>
+<p>For the nucleotide, aprat from the standard IUPAC code, we denote the depleted bases by lower cases of the corresponding IUPAC code.</p>
+<pre class="r"><code>GetMotif=function(pwm,seqmotif,bg=NULL){
+  library(Logolas)
+  if(is.null(bg)){bg=rep(1/nrow(pwm),nrow(pwm))}
+  ll=get_logo_heights_log(pwm,depletion_weight = 0,scale = 1,bg=bg)
+  pp=c();for (i in 1:ncol(pwm)){pp=cbind(pp,ll$pos_ic[i]*ll$table_mat_pos_norm[,i])};
+  nn=c();for(i in 1:ncol(pwm)){nn=cbind(nn,ll$neg_ic[i]*ll$table_mat_neg_norm[,i])};
+  #codes=matrix(nrow = length(bases),ncol = ncol(pwm))
+  code=c()
+  if(seqmotif==&#39;nucleotide&#39;){
+    bases=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
+    based=tolower(bases)
+  for(i in 1:ncol(pwm)){
+    codes=c()
+    #stringent on calling just A,C,G,T
+  #based on (0.6,0.4,0.1,0.1)
+  #if one is larger than 1.1, call it enrichment
+    if(sum(pp[,i]&gt;=0.8)==1){codes=c(codes,bases[which.max(pwm[,i])])}
+    #codes[1,i]=bases[which.max(pwm[,i])]
+    #based on (0.4,0.4,0.1,0.1)
+    if(sum(pp[,i]&gt;=0.4)==2){codes=c(codes,paste(bases[pp[,i]&gt;=0.4],collapse =&#39;&#39;))}
+    #codes[2,i]=paste(bases[pp[,i]&gt;=0.4],collapse =&#39;&#39;)
+    #based on (0.8,0.1,0.1,0)
+    if(sum(nn[,i]&gt;=0.45)==1){codes=c(codes,based[nn[,i]&gt;=0.45])}
+    #codes[3,i]=based[nn[,i]&gt;=0.45]
+    #based on (0.3,0.3,0.2,0.2)
+    #else{codes[4,i]=&#39;N&#39;}
+    if(is.null(codes)){codes=c(codes,&#39;N&#39;)}
+    if(length(codes)&gt;1){codes=paste0(&#39;[&#39;,paste0(codes,collapse = &#39;|&#39;),&#39;]&#39;,sep=&#39;&#39;)}
+    code[i]=codes
+  }
+  }
+  
+  if(seqmotif==&#39;protein&#39;){
+   bases=rownames(pwm)
+  based=tolower(bases)
+  for(i in 1:ncol(pwm)){
+    codes=c()
+    #based on (0.6,0.4)
+    if(sum(pp[,i]&gt;=1.1)&gt;0){codes=c(codes,paste(bases[pp[,i]&gt;=0.4],collapse =&#39;&#39;))}
+    if(sum(nn[,i]&gt;=0.45)&gt;0){codes=c(codes,paste(based[nn[,i]&gt;=0.4],collapse =&#39;&#39;))}
+    if(is.null(codes)){codes=c(codes,&#39;N&#39;)}
+    if(length(codes)&gt;1){codes=paste0(&#39;[&#39;,paste0(codes,collapse = &#39;|&#39;),&#39;]&#39;,sep=&#39;&#39;)}
+    code[i]=codes
+  } 
+  }
+  
+  
+  return(paste(code,collapse=&#39; &#39;))
+  
+}</code></pre>
+<p>The way we give the consensus sequence is intuitive if we have a look at the logo plot.</p>
+<pre class="r"><code>pwm=matrix(c(0.8,0.1,0.1,0,0.9,0.1,0,0,0.9,0.05,0.05,0,0.5,0.4,0,0.1,0.6,0.4,0,0,0.4,0.4,0.1,0.1,0.5,0,0.2,0.3,0.35,0.35,0.06,0.24,0.4,0.3,0.2,0.1,0.4,0.2,0.2,0.2,0.28,0.24,0.24,0.24,0.5,0.16,0.17,0.17),nrow = 4,byrow = F)
+rownames(pwm)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
+colnames(pwm)=1:ncol(pwm)
+color_profile=list(&quot;type&quot; = &quot;per_row&quot;,&quot;col&quot; = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;))
+GetMotif(pwm,&#39;nucleotide&#39;)</code></pre>
+<pre><code>[1] &quot;[A|t] A A [AC|g] [A|AC] AC c g t N N A&quot;</code></pre>
+<pre class="r"><code>logomaker(pwm,color_profile = color_profile,frame_width = 1)</code></pre>
+<p><img src="figure/nomenclature.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#nlogomaker(pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1,control = list(depletion_weight=0,logscale=1))</code></pre>
+<p>Also, it works well with the protein seqence.</p>
+<pre class="r"><code>counts_mat &lt;- rbind(c(0, 0, 100, 1, 2), c(4, 3, 30, 35, 2),
+c(100, 0, 10, 2, 7),rep(0,5),
+c(4, 2, 3, 7, 70), c(1, 8, 0, 60, 3),
+rep(0, 5), c(4, 2, 100, 1, 1),
+c(12, 8, 16, 7, 20), c(55, 0, 1, 0, 12),
+rep(0,5), c(rep(0,3), 20, 0),
+rep(0,5), c(0, 0, 30, 0, 22),
+c(1, 0, 12, 3, 10), rep(0,5),
+c(0, 1, 0, 34, 1), c(0, 1, 12, 35, 1),
+c(0, 30, 1, 10, 2), c(0, 1, 4, 100, 2))
+
+rownames(counts_mat) &lt;- c(&quot;A&quot;, &quot;R&quot;, &quot;N&quot;, &quot;D&quot;,&quot;C&quot;, &quot;E&quot;, &quot;Q&quot;, &quot;G&quot;,
+&quot;H&quot;, &quot;I&quot;, &quot;L&quot;, &quot;K&quot;, &quot;M&quot;, &quot;F&quot;, &quot;P&quot;, &quot;S&quot;,
+&quot;T&quot;, &quot;W&quot;, &quot;Y&quot;, &quot;V&quot;)
+colnames(counts_mat) &lt;- c(&quot;Pos 1&quot;, &quot;Pos 2&quot;, &quot;Pos 3&quot;, &quot;Pos 4&quot;, &quot;Pos 5&quot;)
+
+GetMotif(counts_mat,&#39;protein&#39;)</code></pre>
+<pre><code>[1] &quot;RNCGHI RCEGHTWYV ARNGHFPW REKTWYV NCHIFP&quot;</code></pre>
+<pre class="r"><code>cols1 &lt;- c(rev(RColorBrewer::brewer.pal(12, &quot;Paired&quot;))[c(3,4,7,8,11,12,5,6,9,10)],
+RColorBrewer::brewer.pal(12, &quot;Set3&quot;)[c(1,2,5,8,9)],
+RColorBrewer::brewer.pal(9, &quot;Set1&quot;)[c(9,7)],
+RColorBrewer::brewer.pal(8, &quot;Dark2&quot;)[c(3,4,8)])
+color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
+&quot;col&quot; = cols1)
+
+logomaker(counts_mat,
+color_profile = color_profile,
+frame_width = 1)</code></pre>
+<p><img src="figure/nomenclature.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="session-information" class="section level2">
+<h2>Session information</h2>
+<!-- Insert the session information into the document -->
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.3.3 (2017-03-06)
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+Running under: macOS Sierra 10.12.5
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] Logolas_1.1.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_0.12.12         digest_0.6.12        rprojroot_1.2       
+ [4] grid_3.3.3           backports_1.0.5      git2r_0.18.0        
+ [7] magrittr_1.5         evaluate_0.10        stringi_1.1.5       
+[10] LaplacesDemon_16.0.1 rmarkdown_1.6        RColorBrewer_1.1-2  
+[13] tools_3.3.3          stringr_1.2.0        parallel_3.3.3      
+[16] yaml_2.1.14          SQUAREM_2016.8-2     htmltools_0.3.6     
+[19] knitr_1.16          </code></pre>
+</div>
+
+<hr>
+<p>
+    This webpage has been developed using RStudio's <a href="http://rmarkdown.rstudio.com">R Markdown</a> and John D Blischak's <a href="https://github.com/jdblischak/workflowr">workflowr</a> package. 
+</p>
+<hr>
+
+<!-- To enable disqus, uncomment the section below and provide your disqus_shortname -->
+
+<!-- disqus
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rmarkdown'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+-->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -5,11 +5,41 @@ output:
     toc: false
 ---
 
-The goal of this new template is to simplify the setup and maintenance of a research website.
-Specifically,
+We present an elaborate guided tutorial of how to use the **Logolas** R package. A pdf version of the vignette is available [here](). 
 
-*  Easier to build and extend the website using the new tools in the [rmarkdown][] package and [latest RStudio release][rstudio]
-*  Easier to deploy the website with Git and GitHub by only using one branch
 
-[rmarkdown]: http://rmarkdown.rstudio.com/rmarkdown_websites.htm
-[rstudio]: https://www.rstudio.com/products/rstudio/download/preview/
+
+- [Chapter 1:   Why Logolas?](intro.Rmd)
+
+
+- [Chapter 2:   First Look at Logolas](FirstLook.Rmd)
+
+
+- [Chapter 3:   Extended Features of Logolas](extend.Rmd)
+
+
+- [Chapter 4:   Symbol calling and Nomenclature](nomenclature.Rmd)
+
+
+- [Chapter 5:   Dirichlet Adaptive Shrinkage (dash)](dashtutor.Rmd)
+
+
+- [Chapter 6:   Applications of Logolas](app.Rmd)
+
+
+
+Thank you for using Logolas !  
+
+
+
+If you have any questions, you can either open an issue in our [Github page](https://github.com/kkdey/Logolas) or write to Kushal K Dey (kkdey@uchicago.edu). Also please feel free to contribute to the package and send a pull request.
+
+For additional examples and analysis of logo visualizations, check out this [webpage](https://dongyuexie.github.io/Sequence-Motif-Depletion/) by Dongyue Xie.
+
+The authors would like to acknowledge John Blischak, Po Yuan Tung, Chiaowen Joyce Hsiao, Hussein al Asadi, Alex White, Trevor Price and Yuichi Shiraishi for data contribution and helpful discussions. 
+
+
+
+
+
+
