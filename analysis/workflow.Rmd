@@ -9,22 +9,22 @@ We present an elaborate guided tutorial of how to use the **Logolas** R package.
 
 
 
-- [Chapter 1:   Why Logolas?](intro.Rmd)
+- [Chapter 1:   Why Logolas?](intro.html)
 
 
-- [Chapter 2:   First Look at Logolas](FirstLook.Rmd)
+- [Chapter 2:   First Look at Logolas](FirstLook.html)
 
 
-- [Chapter 3:   Extended Features of Logolas](extend.Rmd)
+- [Chapter 3:   Extended Features of Logolas](extend.html)
 
 
-- [Chapter 4:   Symbol calling and Nomenclature](nomenclature.Rmd)
+- [Chapter 4:   Symbol calling and Nomenclature](nomenclature.html)
 
 
-- [Chapter 5:   Dirichlet Adaptive Shrinkage (dash)](dashtutor.Rmd)
+- [Chapter 5:   Dirichlet Adaptive Shrinkage (dash)](dashtutor.html)
 
 
-- [Chapter 6:   Applications of Logolas](app.Rmd)
+- [Chapter 6:   Applications of Logolas](app.html)
 
 
 
