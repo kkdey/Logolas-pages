@@ -23,35 +23,32 @@ knitr::read_chunk("chunks.R")
 
 <!-- Add your analysis here -->
 
-Sequence logos is a graphical representation of patterns in the aligned sets of sequences. It was first introduced by Schneider&Stephens(1990). Sequence logos is an informative visualization of patterns and easily shows the residue preferences and conservation of a particular position. These patterns are suggestive, in the sense of the key functional sites of transcription factor or protein family. 
+Ever since its introduction due to Schneider & Stephens (1990), sequence logos have proved to be an effective tool in informative visualization of patterns in aligned sets of sequences. There are several existing packages for plotting sequence logos, like 
 
-There are many existing packages or tools for generating sequence logos. For example, the R package `seqLogo`for displaying DNA sequence motif, web-based tool `WebLogo` , and `Seq2Logo` for construction and visualization of amino acid binding motifs. 
+- [seqLogo](http://bioconductor.org/packages/release/bioc/html/seqLogo.html) (exclusively for DNA sequence motif visualization)
+- [seq2Logo](http://www.cbs.dtu.dk/biotools/Seq2Logo/) (amino acid binding motifs visualization)
+- [WebLogo](http://weblogo.berkeley.edu/logo.cgi) (web based tool for logo plotting)
+- [motifStack](http://bioconductor.org/packages/release/bioc/html/motifStack.html)
 
-However, certain limitations exist in these packages or tools. In particular, they have limited size of symbol library that can be used to make the plot, which greatly constrain the scope of applications. For example, the `seqLogo` could only plot logos of alphabet. 
 
-To address these constraints and make various applications possible, we introduce a new R package `Logolas`, for displaying logos that are not only standard but also user-specified. The logos could be alphabet, numbers, punctuation and etc. What is more important is that Logolas lets the user plot alphanumeric strings as logos, which extends the scope of the visualization massively, beyond the TFs or protein sequences. We will show examples of how this string representation of logos is effective in visualizing mutation signature patterns, ecological species abundance
-patterns etc. 
+We introduce another Logo visualization package called [Logolas](https://bioconductor.org/packages/release/bioc/html/Logolas.html) which addresses some limitations of the above packages and makes logo visualization a more generic tool with potential applications in a much wider scope of problems, in comparison to the existing softwares. We highlight some of these advantages below.
 
-Besides, the common sequence logos could only show the enrichment of residues, while the depletion is usually overlooked. In Logolas, we develop the negative logo plot that could display both the enrichment and depletion at one time. This would provide more insights and information.
 
-Furthermore, based on the enrichment and depletion, a new symbol-calling way is proposed. This Logolas based nomenclature is a more generic alternative to the IUPAC and the Prosite nomenclatures used for calling nucleotide and amino acid respectively.
+- **Strings as symbols** : General logo building softwares have limited library of symbols (A, C, G and T for seqLogo, alphabets for WebLogo and seq2Logo). However Logolas lets the user plot, besides the usual alphabetic symbols, any alphanumeric string, comprising of English alphabets, numbers, punctuation marks, arrows etc. It also provides an easy interface for the user to create her own logo and add to the library of symbols that can be plotted (check the Vignette).
 
-Most existing logo plotting tools take position weight matrix as input for making the
-logo plots. But this approach neglects the frequency scale underlying the position
-weight matrix. For example, a position weight computed for TF data based on just
-10 fragments mapping to that position is less reliable compared to one based on
-100 fragments. In such a case, the user would want to shrink the composition
-probability to the pre-defined background or prior much more in the first case
-compared to the second.
 
-In Logolas, we provide a Dirichlet Adaptive Shrinkage method (dash), in similar lines
-to the adaptive shrinkage(ash) approach due to Stephens(2016), to adaptively
-shrink the positional weights based on the positional frequency scale.
+- **More parsimonious Representation** : General logo plotting softwares highlight only enrichment of certain symbols, but Logolas allows the user to highlight both enrichment and depletion of symbols at any position, leading to more parsimonious and visually appealing representation. 
 
-Besides all the above benefits, Logolas allows for new and flexible stylizations,
-textures and color patterns of the logos , allows the user to create her own logos
-and add them to the library, and also provides an easy interface to combine
-Logolas plots with R base graphics and ggplot2 graphs in multi-panel visualizations.
+
+- **Symbol calling Nomenclature** : Based on enrichment and depletion of symbols, Logolas introduces a new nomenclature to call symbols at each position. The Logolas nomenclature is more informative and generic compared to the IUPAC nomenclature for DNA sequence binding motifs and Prosite nomenclature for protein binding motifs.
+
+
+- **Dirichlet Adaptive Shrinkage** : Most existing logo plotting tools take position weight matrix (PWM) as input for the logo plot. But they tend to effectively adapt to the scale of the underlying positional frequencies from which the PWM is created. In Logolas, we provide a Dirichlet Adaptive Shrinkage method (dash) approach for adaptively scaling the heights of the logos based on the frequency scale. This approach is similar in lines to the **ashr** software due to M. Stephens (2016).
+
+
+- **Better stylizations** : Logolas also allows for new and flexible stylizations of the logos, involving color palettes, fill and border styles, in the choice of entropy for determining heights of the logos etc. In our vignettes, we also show how to plot multi-panel Logolas plots and combine Logolas plots with ggplot2 and base R graphics.
+
+
 
 #Reference
 
