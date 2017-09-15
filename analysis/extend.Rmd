@@ -235,7 +235,7 @@ colnames(mat) <- c("Intergenic","Intron","Exon \n 1000 KB window",
 color_profile <- list("type" = "per_row",
 "col" = RColorBrewer::brewer.pal(dim(mat)[1],name ="Spectral"))
 
-logomaker(mat,color_profile = color_profile,frame_width = 1)
+logomaker(mat,color_profile = color_profile,frame_width = 1, ic.scale = TRUE, yscale_change = TRUE)
 ```
 
 From the plot, it's practical to see how the patterns of histone modification sites changes across genomic region types for that cell line.
@@ -296,7 +296,7 @@ logomaker(tab_data,
 
 User could combine logo plots from Logolas with plots from the other R graphs such as R base graphics and ggplot2 graph.
 
-```{r,warning=FALSE,message=FALSE,fig.height=20,fig.width=20}
+```{r,warning=FALSE,message=FALSE,fig.height=7,fig.width=7}
 library(ggplot2)
 library(grid)
 library(gridBase)
@@ -322,7 +322,7 @@ mtcars$cyl <- factor(mtcars$cyl,levels=c(4,6,8),
 
 
 grid.newpage()
-layout.rows <- 2
+layout.rows <- 1
 layout.cols <- 2
 top.vp <- viewport(layout=grid.layout(layout.rows, layout.cols,
                                       widths=unit(rep(2,layout.cols), rep("null", layout.cols)),
@@ -354,14 +354,14 @@ vp3 = viewport(width=0.8, height=0.8, x = 0.5, y = 0.5)
 p <- qplot(mpg, data=mtcars, geom="density")
 print(p, vp = vp3)
 
-seekViewport(paste0("plotlogo", 3))
-vp3 = viewport(height = 1, width = 1)
-pushViewport(vp3)
-par(fig=gridFIG())
-par(gridPAR())
-par(new=TRUE)
-par(mar = c(3, 3, 1, 1))
-plot(1:10, type="b")
+# seekViewport(paste0("plotlogo", 3))
+# vp3 = viewport(height = 1, width = 1)
+# pushViewport(vp3)
+# par(fig=gridFIG())
+# par(gridPAR())
+# #par(new=TRUE)
+# #par(mar = c(3, 3, 1, 1))
+# plot(1:10, type="b")
 ```
 
 ## Session information

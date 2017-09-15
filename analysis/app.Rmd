@@ -39,6 +39,8 @@ library(JASPAR2014)
 library(TFBSTools)
 library(Logolas)
 library(Matrix)
+library(atSNP)
+
 color_profile = list("type" = "per_row", 
                      "col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
 
@@ -112,7 +114,6 @@ ggplot(dat,aes(x = number, fill = method)) +
 One kind of logo plots that are of particular interests is the dimer, in which the depleitons are in the middle and the enrichments are in the two sides. An example is the EBF1 family. The data are from [Manollis Kellis webpage](http://compbio.mit.edu/encode-motifs/motifs.txt).
 
 ```{r,warning=FALSE,message=FALSE,fig.width=10,fig.height=5}
-library(atSNP)
 pfm_mk=LoadMotifLibrary('http://compbio.mit.edu/encode-motifs/motifs.txt',tag = ">",transpose = F, field = 1, sep = c("\t", " ", ">"), skipcols = 1, skiprows = 1, pseudocount = 0)
 EBF1_disc1=t(pfm_mk[[52]]);rownames(EBF1_disc1)=c('A','C','G','T');colnames(EBF1_disc1)=1:10
 EBF1_known4=t(pfm_mk[[1325]]);rownames(EBF1_known4)=c('A','C','G','T');colnames(EBF1_known4)=1:14

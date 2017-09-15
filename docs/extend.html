@@ -98,10 +98,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-13</p>
+<p><strong>Last updated:</strong> 2017-09-15</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 345e7ba</p>
+<p><strong>Code version:</strong> 0de44dc</p>
 <!-- Add your analysis here -->
 <div id="protein-logo-plot" class="section level2">
 <h2>Protein logo plot</h2>
@@ -291,7 +291,7 @@ colnames(mat) &lt;- c(&quot;Intergenic&quot;,&quot;Intron&quot;,&quot;Exon \n 10
 color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
 &quot;col&quot; = RColorBrewer::brewer.pal(dim(mat)[1],name =&quot;Spectral&quot;))
 
-logomaker(mat,color_profile = color_profile,frame_width = 1)</code></pre>
+logomaker(mat,color_profile = color_profile,frame_width = 1, ic.scale = TRUE, yscale_change = TRUE)</code></pre>
 <p><img src="figure/extend.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>From the plot, it’s practical to see how the patterns of histone modification sites changes across genomic region types for that cell line.</p>
 </div>
@@ -372,7 +372,7 @@ mtcars$cyl &lt;- factor(mtcars$cyl,levels=c(4,6,8),
 
 
 grid.newpage()
-layout.rows &lt;- 2
+layout.rows &lt;- 1
 layout.cols &lt;- 2
 top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
                                       widths=unit(rep(2,layout.cols), rep(&quot;null&quot;, layout.cols)),
@@ -402,18 +402,16 @@ logomaker(m,xlab = &#39;position&#39;,color_profile = color_profile,
 seekViewport(paste0(&quot;plotlogo&quot;, 2))
 vp3 = viewport(width=0.8, height=0.8, x = 0.5, y = 0.5)
 p &lt;- qplot(mpg, data=mtcars, geom=&quot;density&quot;)
-print(p, vp = vp3)
-
-seekViewport(paste0(&quot;plotlogo&quot;, 3))
-vp3 = viewport(height = 1, width = 1)
-pushViewport(vp3)</code></pre>
-<p><img src="figure/extend.Rmd/unnamed-chunk-7-1.png" width="1920" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>par(fig=gridFIG())
-par(gridPAR())
-par(new=TRUE)
-par(mar = c(3, 3, 1, 1))
-plot(1:10, type=&quot;b&quot;)</code></pre>
-<p><img src="figure/extend.Rmd/unnamed-chunk-7-2.png" width="1920" style="display: block; margin: auto;" /></p>
+print(p, vp = vp3)</code></pre>
+<p><img src="figure/extend.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># seekViewport(paste0(&quot;plotlogo&quot;, 3))
+# vp3 = viewport(height = 1, width = 1)
+# pushViewport(vp3)
+# par(fig=gridFIG())
+# par(gridPAR())
+# #par(new=TRUE)
+# #par(mar = c(3, 3, 1, 1))
+# plot(1:10, type=&quot;b&quot;)</code></pre>
 </div>
 <div id="session-information" class="section level2">
 <h2>Session information</h2>
@@ -437,12 +435,12 @@ other attached packages:
 loaded via a namespace (and not attached):
  [1] Rcpp_0.12.12         RColorBrewer_1.1-2   git2r_0.18.0        
  [4] plyr_1.8.4           tools_3.3.3          digest_0.6.12       
- [7] evaluate_0.10        tibble_1.3.3         gtable_0.2.0        
+ [7] evaluate_0.10        tibble_1.3.4         gtable_0.2.0        
 [10] rlang_0.1.1.9000     curl_2.6             yaml_2.1.14         
 [13] parallel_3.3.3       LaplacesDemon_16.0.1 seqLogo_1.40.0      
 [16] httr_1.2.1           stringr_1.2.0        knitr_1.16          
 [19] stats4_3.3.3         rprojroot_1.2        R6_2.2.2            
-[22] XML_3.98-1.6         rmarkdown_1.6        magrittr_1.5        
+[22] XML_3.98-1.9         rmarkdown_1.6        magrittr_1.5        
 [25] backports_1.0.5      scales_0.4.1         htmltools_0.3.6     
 [28] colorspace_1.3-2     labeling_0.3         stringi_1.1.5       
 [31] lazyeval_0.2.0       munsell_0.4.3       </code></pre>

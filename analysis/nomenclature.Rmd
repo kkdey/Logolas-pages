@@ -33,7 +33,7 @@ For the nucleotide, aprat from the standard IUPAC code, we denote the depleted b
 GetMotif=function(pwm,seqmotif,bg=NULL){
   library(Logolas)
   if(is.null(bg)){bg=rep(1/nrow(pwm),nrow(pwm))}
-  ll=get_logo_heights_log(pwm,depletion_weight = 0,scale = 1,bg=bg)
+  ll=get_logo_heights_log(pwm,depletion_weight = 0,epsilon = 0.01,bg=bg)
   pp=c();for (i in 1:ncol(pwm)){pp=cbind(pp,ll$pos_ic[i]*ll$table_mat_pos_norm[,i])};
   nn=c();for(i in 1:ncol(pwm)){nn=cbind(nn,ll$neg_ic[i]*ll$table_mat_neg_norm[,i])};
   #codes=matrix(nrow = length(bases),ncol = ncol(pwm))
@@ -91,7 +91,7 @@ colnames(pwm)=1:ncol(pwm)
 color_profile=list("type" = "per_row","col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
 GetMotif(pwm,'nucleotide')
 logomaker(pwm,color_profile = color_profile,frame_width = 1)
-#nlogomaker(pwm,logoheight = 'log',color_profile = color_profile,frame_width = 1,control = list(depletion_weight=0,logscale=1))
+#nlogomaker(pwm,logoheight = 'log',color_profile = color_profile,frame_width = 1,control = list(depletion_weight=0))
 ```
 
 

@@ -90,10 +90,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-13</p>
+<p><strong>Last updated:</strong> 2017-09-15</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 345e7ba</p>
+<p><strong>Code version:</strong> 0de44dc</p>
 <!-- Add your analysis here -->
 <p>Consensus sequence is the summarized patten of multiple sequence alignment of nucleotide or amino acid. For the nucleotide, the consensus sequence is usually coded by the IUPAC, in which nucleobases are represented by the first letters of their names: [G]uanine, [C]ytosine, [A]denine, and [T]hymine. For the amino acid sequence, the Prosite pattern syntax is commonly used.</p>
 <p>Based on the logo heights from the negative logo plot, we develop a way to detect and give the consensus sequence and it could provide more information about the conservation of residues, especially for the nucleotide. Some existing methods, such as the <code>getIUPAC</code> in the atSNP package, only give the enrichment of the residues and hence are biased. However, our method could give both the enrichment and depletion bases.</p>
@@ -101,7 +101,7 @@ shared across the workflowr files. -->
 <pre class="r"><code>GetMotif=function(pwm,seqmotif,bg=NULL){
   library(Logolas)
   if(is.null(bg)){bg=rep(1/nrow(pwm),nrow(pwm))}
-  ll=get_logo_heights_log(pwm,depletion_weight = 0,scale = 1,bg=bg)
+  ll=get_logo_heights_log(pwm,depletion_weight = 0,epsilon = 0.01,bg=bg)
   pp=c();for (i in 1:ncol(pwm)){pp=cbind(pp,ll$pos_ic[i]*ll$table_mat_pos_norm[,i])};
   nn=c();for(i in 1:ncol(pwm)){nn=cbind(nn,ll$neg_ic[i]*ll$table_mat_neg_norm[,i])};
   #codes=matrix(nrow = length(bases),ncol = ncol(pwm))
@@ -154,10 +154,10 @@ rownames(pwm)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
 colnames(pwm)=1:ncol(pwm)
 color_profile=list(&quot;type&quot; = &quot;per_row&quot;,&quot;col&quot; = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;))
 GetMotif(pwm,&#39;nucleotide&#39;)</code></pre>
-<pre><code>[1] &quot;[A|t] A A [AC|g] [A|AC] AC c g t N N A&quot;</code></pre>
+<pre><code>[1] &quot;[A|t] AC [A|t] AC AC AC [A|c] g t A N A&quot;</code></pre>
 <pre class="r"><code>logomaker(pwm,color_profile = color_profile,frame_width = 1)</code></pre>
 <p><img src="figure/nomenclature.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>#nlogomaker(pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1,control = list(depletion_weight=0,logscale=1))</code></pre>
+<pre class="r"><code>#nlogomaker(pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1,control = list(depletion_weight=0))</code></pre>
 <p>Also, it works well with the protein seqence.</p>
 <pre class="r"><code>counts_mat &lt;- rbind(c(0, 0, 100, 1, 2), c(4, 3, 30, 35, 2),
 c(100, 0, 10, 2, 7),rep(0,5),
@@ -176,7 +176,7 @@ rownames(counts_mat) &lt;- c(&quot;A&quot;, &quot;R&quot;, &quot;N&quot;, &quot;
 colnames(counts_mat) &lt;- c(&quot;Pos 1&quot;, &quot;Pos 2&quot;, &quot;Pos 3&quot;, &quot;Pos 4&quot;, &quot;Pos 5&quot;)
 
 GetMotif(counts_mat,&#39;protein&#39;)</code></pre>
-<pre><code>[1] &quot;RNCGHI RCEGHTWYV ARNGHFPW REKTWYV NCHIFP&quot;</code></pre>
+<pre><code>[1] &quot;RNCEGHIP RCEGHTWYV [ARNGHFPWV|deqlkmst] [RCEHKTWYV|adqgilmfs] [NCHIFP|dqglkmstw]&quot;</code></pre>
 <pre class="r"><code>cols1 &lt;- c(rev(RColorBrewer::brewer.pal(12, &quot;Paired&quot;))[c(3,4,7,8,11,12,5,6,9,10)],
 RColorBrewer::brewer.pal(12, &quot;Set3&quot;)[c(1,2,5,8,9)],
 RColorBrewer::brewer.pal(9, &quot;Set1&quot;)[c(9,7)],
