@@ -56,7 +56,7 @@ We apply dash to PFMs with small, medium and high total frequencies($c_{n+}$). T
 
 Logo plots:
 
-```{r,message=FALSE,warning=FALSE,fig.height=20,fig.width=20}
+```{r,message=FALSE,warning=FALSE,fig.height=5,fig.width=5}
 library(Logolas)
 library(grid)
 library(dash)
@@ -149,7 +149,7 @@ logomaker(pfm3dash,
 
 
 Negative logo plots:
-```{r,message=FALSE,warning=FALSE,fig.height=20,fig.width=20}
+```{r,message=FALSE,warning=FALSE,fig.height=5,fig.width=5}
 
 grid.newpage()
 layout.rows <- 3
@@ -183,7 +183,7 @@ pfm1dash=t(dash(t(pfm1),optmethod = 'mixEM')$posmean)
 rownames(pfm1dash)=c('A','C','G','T')
 colnames(pfm1dash)=1:ncol(pfm1)
 nlogomaker(pfm1dash,
-           logoheight = 'log_odds',
+          logoheight = 'log_odds',
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
@@ -306,12 +306,15 @@ logomaker(pfm2dashbg,
 
 Negative logo plots:
 
-```{r,message=FALSE,warning=FALSE,fig.height=20,fig.width=20}
+```{r,message=FALSE,warning=FALSE,fig.height=20,fig.width=10}
 grid.newpage()
 layout.rows <- 2
 layout.cols <- 2
-top.vp <- viewport(layout=grid.layout(layout.rows,layout.cols, widths=unit(rep(2,layout.cols), rep("null",layout.cols)),heights=unit(rep(2,1), rep("null",1))))
+# top.vp <- viewport(layout=grid.layout(layout.rows,layout.cols, widths=unit(rep(2,layout.cols), rep("null",layout.cols)),heights=unit(rep(2,1), rep("null",1))))
 
+top.vp <- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(6,layout.cols), rep("null", 2)),
+                                      heights=unit(c(15,15), rep("lines", 2))))
 plot_reg <- vpList()
 l <- 1
 for(i in 1:layout.rows){

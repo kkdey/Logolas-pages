@@ -28,7 +28,7 @@ knitr::read_chunk("chunks.R")
 
 One of the most basic applications of logo plots is to visualize the DNA sequence alignment(motif), which consists of four letters(A,C,G and T), corresponding to the four nucleotides(Adenine, Cytosine, Guanine, Thymine). The function `logomaker()` in Logolas provides the standard logo plots with the position weight matrix(PWM) as input. Here, we start with the same demo example provided in the [seqLogo](https://bioconductor.org/packages/release/bioc/html/seqLogo.html) vignette. 
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 library(Logolas)
 mFile <- system.file("Exfiles/pwm1", package="seqLogo")
 m <- read.table(mFile)
@@ -50,7 +50,7 @@ If `ic.scale`= TRUE, the heights of the bars at each position are determined by 
 
 `Logolas` could also combine multiple plots into one overall graph. The figure below demonstrates the multiple panel plot as well as some variants of logo plots. 
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 library(grid)
 
 grid.newpage()
@@ -116,7 +116,7 @@ logomaker(p@pwm,xlab = 'position',color_profile = color_profile,
 
 Besides the default Shannon entropy, `logomaker` could also get the information content using Renyi entropy. The information content at position $i$ is $IC_{i,\alpha}=\frac{1}{1-\alpha}\Sigma_b\log_2(q_{b,i}^\alpha-0.25^{1-\alpha})$. When $\alpha\rightarrow1$, the limiting value of Renyi entropy is the Shannon entropy. The figure below shows the logo plot with different values of $\alpha$.
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 grid.newpage()
 layout.rows <- 1
 layout.cols <- 2
@@ -163,7 +163,7 @@ The negative logo plot actually shows the relative change of base frequencies. T
 
 Below we show the negative logo plot using log and log-odds heights for the same example as above.
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 
 grid.newpage()
 layout.rows <- 1
@@ -207,7 +207,7 @@ Steps to get the `log` height at position $i$, let $q_i$ be the relative frequen
 
 Logolas further allow users to customize the weight of depletion. The option `depletion_weight` is the weighting attached to the information content and the rest is for the log height. As the depletion weight increasing, the depletion would look more prominent. The default depletion weight is 0.5 and comparisons of different depletion weights are shown below. The weights chosen are 0.1,0.3,0.5(default),1.
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 grid.newpage()
 layout.rows <- 2
 layout.cols <- 2
@@ -270,7 +270,7 @@ nlogomaker(p@pwm,
 
 User could customize the border and fill of the logos. For example, the user may choose to fill the enrichment while only show the border of depletion. The figure below shows the various option on making the logos.
 
-```{r,message=FALSE,warning=FALSE,fig.height=20,fig.width=20}
+```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 grid.newpage()
 layout.rows <- 2
 layout.cols <- 2

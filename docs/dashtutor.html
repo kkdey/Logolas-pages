@@ -93,10 +93,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-13</p>
+<p><strong>Last updated:</strong> 2017-09-14</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 345e7ba</p>
+<p><strong>Code version:</strong> 846f575</p>
 <!-- Add your analysis here -->
 <p>Logo plot is based on the position weight matrix(PWM), which is transformed from the position frequency matrix(PFM). PFM consists of the counts for each base at each position. This is a typical example of compositional data, which is used to describe the constituents of discrete sample space.</p>
 <p>Suppose for a specific position of a TFBS, the compositional data is <span class="math display">\[ (A, C, G, T) : = (6, 1, 2, 1) \]</span> and one another case is <span class="math display">\[ (A, C, G, T) : = (600, 100, 200, 100). \]</span> And the background probability is assumed to be equal for the four bases. If we transform the counts data into PWM by using the sample proportion, then the estimated proportions for the four bases are the same in both cases. However, in the second case, we have total 1000 samples while only 10 samples in the first case. Hence, we would consider to shrink the estimates to the background probability more strongly in the first case than that in the second case, for the reason that the force of data is stronger in the second scenarios.</p>
@@ -206,12 +206,14 @@ logomaker(pfm3dash,
           newpage=F,
           yscale_change = F,
           pop_name = &#39;high freq, dash&#39;)</code></pre>
-<p><img src="figure/dashtutor.Rmd/unnamed-chunk-1-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="figure/dashtutor.Rmd/unnamed-chunk-1-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>Negative logo plots:</p>
 <pre class="r"><code>grid.newpage()
 layout.rows &lt;- 3
 layout.cols &lt;- 2
 top.vp &lt;- viewport(layout=grid.layout(layout.rows,layout.cols, widths=unit(rep(2,layout.cols), rep(&quot;null&quot;,layout.cols)),heights=unit(rep(2,1), rep(&quot;null&quot;,1))))
+
+top.vp &lt;- viewport(layout=grid.layout(layout.rows,layout.cols, widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),heights=unit(c(15,15), rep(&quot;lines&quot;, 2))))
 
 plot_reg &lt;- vpList()
 l &lt;- 1
@@ -286,7 +288,7 @@ nlogomaker(pfm3dash,
           newpage=F,
           ylimit = 2.5,
           pop_name = &#39;high freq, dash&#39;)</code></pre>
-<p><img src="figure/dashtutor.Rmd/unnamed-chunk-2-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="figure/dashtutor.Rmd/unnamed-chunk-2-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>The default background probability is uniform for each compositional class. User could also specify the background probability in the functions including <code>dash</code>,<code>logomaker</code>,<code>nlogomaker</code>.</p>
 <p>Here, we present the comparisons of logo plots and negative logo plots from 4 different PWMs of one PFM generated in the following way:</p>
 <table>
