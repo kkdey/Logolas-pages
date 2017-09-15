@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Dongyue Xie" />
+
+<meta name="date" content="2017-09-01" />
+
+<title>Applications of Logolas</title>
+
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+
+<link rel="stylesheet" href="cosmo.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
+    <link href="../docs/cosmo.css" rel="stylesheet">
+    <link href="../docs/cosmo.min.css" rel="stylesheet">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../docs/bootstrap/js/bootstrap.min.js"></script>
+
+<body>
+
+<div class = "nav" align = "middle">
+<div class= "p1"></div>
+<p>
+  <a class="btn btn-large btn btn-primary" type="button" href = "Logolas_home.html">HOME</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "Gallery.html">GALLERY</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas">SOFTWARE</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "workflow.html">VIGNETTES</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "license.html">LICENSE</a>
+   &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas-pages">GITHUB</a>
+ </p>
+</div>
+<!-- <div class="nav">
+  <a href="index.html">Home page</a> &nbsp &nbsp
+  <a href="musings.html">Musings</a> &nbsp &nbsp
+  <a href="town.html">My town</a> &nbsp &nbsp
+  <a href="links.html">Links</a>
+</div> -->
+
+<!-- Main content -->
+</body>
+</html>
+
+
+<h1 class="title toc-ignore">Applications of Logolas</h1>
+<h4 class="author"><em>Dongyue Xie</em></h4>
+<h4 class="date"><em>2017-09-01</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#tfbs">TFBS</a><ul>
+<li><a href="#dimer-case">Dimer case</a></li>
+<li><a href="#plant-tf">Plant TF</a></li>
+<li><a href="#combined-dash">Combined dash</a></li>
+</ul></li>
+<li><a href="#protein">Protein</a><ul>
+<li><a href="#dash-on-protein-pfm">Dash on protein PFM</a></li>
+</ul></li>
+<li><a href="#mutation-signature">Mutation Signature</a></li>
+<li><a href="#umi-data">UMI data</a></li>
+<li><a href="#arxiv-data">aRxiv data</a></li>
+<li><a href="#creating-logos">Creating logos</a><ul>
+<li><a href="#session-information">Session information</a></li>
+</ul></li>
+</ul>
+</div>
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+<!-- Update knitr chunk options -->
+<!-- Insert the date the file was last updated -->
+<p><strong>Last updated:</strong> 2017-09-15</p>
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+<p><strong>Code version:</strong> f78648a</p>
+<!-- Add your analysis here -->
+<p>We now proceed to demonstrate various applications of Logolas.</p>
+<div id="tfbs" class="section level1">
+<h1>TFBS</h1>
+<p>Transcription factor binding site(TFBS) data are available from several databases, e.g. JASPAR2014, Encode, HOCOMOCO, etc. Common methods to obtain these data include Chip-seq, Chip-Chip, HT-SELEX, etc.</p>
+<p>The figure below shows the application of Logolas on the TFBS data from Chip-seq and HT-SELEX. The data of these examples are from JASPAR2014. JASPAR is a collection of transcription factor DNA-binding preferences.</p>
+<pre class="r"><code>library(JASPAR2014)
+library(TFBSTools)
+library(Logolas)
+library(Matrix)
+library(atSNP)
+
+color_profile = list(&quot;type&quot; = &quot;per_row&quot;, 
+                     &quot;col&quot; = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;))
+
+opts_ht=list()
+opts_ht[[&#39;type&#39;]]=&#39;SELEX&#39;
+pfm_ht=getMatrixSet(JASPAR2014,opts_ht)
+
+opts_chip=list()
+opts_chip[[&#39;type&#39;]]=&#39;ChIP-seq&#39;
+pfm_chip=TFBSTools::getMatrixSet(JASPAR2014,opts_chip)
+
+library(grid)
+grid.newpage()
+layout.rows &lt;- 1
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
+
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+pfm1=as.matrix(pfm_chip[[1]])
+colnames(pfm1)=1:ncol(pfm1)
+logomaker(pfm1,xlab = &#39;position&#39;,color_profile = color_profile,
+          frame_width = 1,
+          newpage = FALSE,
+          pop_name = &#39;Logo plot, Chip-seq&#39;
+          )
+
+
+seekViewport(paste0(&quot;plotlogo&quot;, 2))
+pfm2=as.matrix(pfm_ht[[1]])
+colnames(pfm2)=1:ncol(pfm2)
+logomaker(pfm2,xlab = &#39;position&#39;,color_profile = color_profile,
+          frame_width = 1,
+          newpage = FALSE,
+          pop_name = &#39;Logo plot, HT-SELEX&#39;
+          )</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>One may notice that the number of positions of TFBS from Chip-seq is usually larger than that from HT-SELEX. A comparison of this is shown in the figure below. The data are from JASPAR2014.</p>
+<pre class="r"><code>library(ggplot2)
+library(plyr)
+ns = lapply(pfm_ht,function(x) dim(x)[2])
+nc = lapply(pfm_chip,function(x) dim(x)[2])
+dat = data.frame(method = factor(rep(c(&quot;SELEX&quot;,&quot;CHIP&quot;), c(length(pfm_ht),length(pfm_chip)))),number = as.numeric(c(ns,nc)))
+mdat = ddply(dat,&quot;method&quot;,summarise,nummean=mean(number))
+
+ggplot(dat,aes(x = number, fill = method)) +
+    geom_histogram(binwidth = 1, alpha = 0.5, position=&quot;identity&quot;) +
+    geom_vline(data=mdat,aes(xintercept = nummean,colour = method),linetype=&quot;dashed&quot;, size=1)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="dimer-case" class="section level2">
+<h2>Dimer case</h2>
+<p>One kind of logo plots that are of particular interests is the dimer, in which the depleitons are in the middle and the enrichments are in the two sides. An example is the EBF1 family. The data are from <a href="http://compbio.mit.edu/encode-motifs/motifs.txt">Manollis Kellis webpage</a>.</p>
+<pre class="r"><code>pfm_mk=LoadMotifLibrary(&#39;http://compbio.mit.edu/encode-motifs/motifs.txt&#39;,tag = &quot;&gt;&quot;,transpose = F, field = 1, sep = c(&quot;\t&quot;, &quot; &quot;, &quot;&gt;&quot;), skipcols = 1, skiprows = 1, pseudocount = 0)
+EBF1_disc1=t(pfm_mk[[52]]);rownames(EBF1_disc1)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;);colnames(EBF1_disc1)=1:10
+EBF1_known4=t(pfm_mk[[1325]]);rownames(EBF1_known4)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;);colnames(EBF1_known4)=1:14
+
+grid.newpage()
+layout.rows &lt;- 1
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
+
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+
+nlogomaker(EBF1_disc1,logoheight = &#39;log_odds&#39;,
+           color_profile = color_profile,frame_width = 1,
+           newpage = F,
+           pop_name = &#39;EBF1_disc1&#39;)
+
+seekViewport(paste0(&quot;plotlogo&quot;, 2))
+nlogomaker(EBF1_known4,logoheight = &#39;log_odds&#39;,
+           color_profile = color_profile,frame_width = 1,
+           newpage = F,
+           pop_name = &#39;EBF1_known4&#39;)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>Notice that both of the plots show the pattern TCCC–GGGA, with G and C depleted in the middle. The typical case is that there is depleted ‘gaps’ in the middle of palindromic sequences.</p>
+</div>
+<div id="plant-tf" class="section level2">
+<h2>Plant TF</h2>
+<p>While we usually assume the uniform background probability(bg) for all symbols, there are some databases providing specific bg for each species, for example, the <a href="http://planttfdb.cbi.pku.edu.cn/">PlantTFDB</a>. The database plantTFDB provides transcription factors of more than 160 species, including main lineages of green plants. The figures below show the logo plot and negative logo plot of TF motif from Vigna radiata.</p>
+<pre class="r"><code>Vra= get(load(&quot;../../Logolas/data/Vra_plant_TFDB.rData&quot;))
+library(grid)
+
+grid.newpage()
+layout.rows &lt;- 2
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(5,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(rep(5,layout.rows), rep(&quot;null&quot;, 1))))
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+logomaker(Vra$pwm_original[[12]],xlab = &#39;position&#39;,color_profile = color_profile,
+          frame_width = 1,
+          bg=Vra$bg,
+          newpage = FALSE,
+          pop_name = &#39;Logo plot&#39;,
+          yscale_change = F,
+          control = list(viewport.margin.left = 5))
+
+seekViewport(paste0(&quot;plotlogo&quot;, 2))
+logomaker(Vra$pwm_dash[[12]],xlab = &#39;position&#39;,color_profile = color_profile,
+          frame_width = 1,
+          bg=Vra$bg,
+          newpage = FALSE,
+          pop_name = &#39;Logo plot, dash applied&#39;,
+          yscale_change = FALSE,
+          control = list(viewport.margin.left = 5))
+
+seekViewport(paste0(&quot;plotlogo&quot;, 3))
+nlogomaker(Vra$pwm_original[[12]],
+           logoheight = &#39;log_odds&#39;,
+           xlab = &#39;position&#39;,color_profile = color_profile,
+          frame_width = 1,
+          bg=Vra$bg,
+          newpage = FALSE,
+          control = list(viewport.margin.left = 5))
+
+seekViewport(paste0(&quot;plotlogo&quot;, 4))
+nlogomaker(Vra$pwm_dash[[12]],
+           logoheight = &#39;log_odds&#39;,
+           xlab = &#39;position&#39;,color_profile = color_profile,
+          frame_width = 1,
+          bg=Vra$bg,
+          newpage = FALSE,
+          pop_name = &#39;Nrg logo plot, dash applied&#39;,
+          control = list(viewport.margin.left = 5))</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-5-1.png" width="1920" style="display: block; margin: auto;" /></p>
+</div>
+<div id="combined-dash" class="section level2">
+<h2>Combined dash</h2>
+<p>In plantTFDB, the transcription factors from the same species have the same background probability. There are two ways to apply dash. One is to apply dash to each PFM, called signature wise dash. The second way is to firstly combine all the PFM then apply dash to the combined PFM. For example, we have three PFMs, with 5,6,7 positions respectively. After combining the three PFMs, we get a large combined PFM with 18 positions. The dash is applied to this combined PFM and then restore the PWM by separating the result given by dash. In this combined way, the “sample size”(number of positions) is larger. It turns out that the combined dash shrinks less than the signature wise dash.</p>
+<p>For example, the original PFM is</p>
+<pre class="r"><code>Vra$pfm[[12]]</code></pre>
+<pre><code>  1  2  3  4  5  6  7  8  9 10
+A 6 17  3 18 16  0  0  1  4  5
+C 3  2  1  0  0  0 19  2  1  2
+G 9  1 15  0  0  0  0  1 11  5
+T 2  0  1  1  4 19  1 17  4  8</code></pre>
+<p>The signature wise dash gives</p>
+<pre class="r"><code>round(Vra$pwm_dash[[12]],3)</code></pre>
+<pre><code>      1     2     3     4     5     6     7     8     9    10
+A 0.314 0.804 0.171 0.916 0.769 0.012 0.013 0.082 0.221 0.336
+C 0.154 0.106 0.062 0.008 0.011 0.006 0.921 0.103 0.067 0.159
+G 0.347 0.060 0.684 0.008 0.011 0.006 0.006 0.061 0.490 0.164
+T 0.185 0.031 0.082 0.068 0.209 0.976 0.061 0.754 0.221 0.341</code></pre>
+<p>The combined dash gives</p>
+<pre class="r"><code>round(Vra$pwm_cbdash[[12]],3)</code></pre>
+<pre><code>      1     2     3     4     5     6     7     8     9    10
+A 0.311 0.809 0.172 0.922 0.774 0.011 0.011 0.093 0.232 0.286
+C 0.153 0.105 0.063 0.007 0.009 0.005 0.924 0.105 0.076 0.125
+G 0.371 0.059 0.683 0.007 0.009 0.005 0.005 0.065 0.459 0.214
+T 0.166 0.027 0.083 0.064 0.208 0.978 0.059 0.737 0.232 0.375</code></pre>
+<p>The background probability is (A,C,G,T)=</p>
+<pre class="r"><code>Vra$bg</code></pre>
+<pre><code>[1] 0.339 0.161 0.161 0.339</code></pre>
+</div>
+</div>
+<div id="protein" class="section level1">
+<h1>Protein</h1>
+<p>Another application of logo plot is for the protein sequence motif. Protein is composed of 20 amino acid.</p>
+<p>Protein sequence motif can be found in <a href="http://caps.ncbs.res.in/3pfdb/">3PFDB</a> database. The database provides the multiple alignment data, PSSM, PWM(weighted observed percentages), etc. It does not give the PFM directly, but we could recover it from the PWM as well as the number of reference sequences.</p>
+<p>user could make logo plot and negative plot of protein sequence motif using Logolas.</p>
+<pre class="r"><code>cols1 &lt;- c(rev(RColorBrewer::brewer.pal(12, &quot;Paired&quot;))[c(3,4,7,8,11,12,5,6,9,10)],
+RColorBrewer::brewer.pal(12, &quot;Set3&quot;)[c(1,2,5,8,9)],
+RColorBrewer::brewer.pal(9, &quot;Set1&quot;)[c(9,7)],
+RColorBrewer::brewer.pal(8, &quot;Dark2&quot;)[c(3,4,8)])
+color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
+&quot;col&quot; = cols1)
+
+bg=c(0.074,0.052,0.045,0.054,0.025,0.034,0.054,0.074,0.026,0.068,0.099,0.058,0.025,0.047,0.039,0.057,0.051,0.013,0.034,0.073)
+
+pwm= readprotein(&#39;http://caps.ncbs.res.in/cgi-bin/mini/databases/3pfdb/3pfdb_pssm_download.cgi?id=PF07966&amp;data_dir=SDB_folder&#39;,nrows = 29,nsites = 85,adash = FALSE,mat=&#39;pwm&#39;)
+pwm=pwm[,19:27]
+colnames(pwm)=1:9
+pfm=round(pwm*85)
+
+grid.newpage()
+layout.rows &lt;- 1
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
+
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+logomaker(pwm,color_profile = color_profile,
+          frame_width = 1,
+          bg=bg,
+          newpage = F)
+
+seekViewport(paste0(&#39;plotlogo&#39;,2))
+nlogomaker(pwm,logoheight = &#39;log_odds&#39;,
+           color_profile = color_profile,
+           frame_width = 1,
+           bg=bg,
+           newpage = F)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;" /></p>
+<div id="dash-on-protein-pfm" class="section level2">
+<h2>Dash on protein PFM</h2>
+<p>One may also apply dash to some protein family PFMs, which have very few sequences mapped. The figure below shows the logo plot and negative logo plot of the same PFM as the one in above figure.</p>
+<pre class="r"><code>pwm_dash=t(dash(t(pfm),optmethod = &#39;mixEM&#39;,mode = bg)$posmean)
+rownames(pwm_dash)=c(&#39;A&#39; ,&#39;R&#39;,&#39;N&#39;,&#39;D&#39;,   &#39;C&#39; ,  &#39;Q&#39;,   &#39;E&#39; ,  &#39;G&#39;,   &#39;H&#39; ,  &#39;I&#39;,   &#39;L&#39; , &#39;K&#39;  , &#39;M&#39; ,  &#39;F&#39;,   &#39;P&#39; ,  &#39;S&#39;  , &#39;T&#39; ,  &#39;W&#39;,   &#39;Y&#39;,   &#39;V&#39;)
+colnames(pwm_dash)=1:ncol(pwm_dash)
+
+grid.newpage()
+layout.rows &lt;- 1
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
+
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+logomaker(pwm_dash,color_profile = color_profile,
+          bg=bg,
+          frame_width = 1,
+          newpage = F)
+
+seekViewport(paste0(&#39;plotlogo&#39;,2))
+nlogomaker(pwm_dash,logoheight = &#39;log_odds&#39;,
+           bg=bg,
+           color_profile = color_profile,
+           newpage = F)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="mutation-signature" class="section level1">
+<h1>Mutation Signature</h1>
+<p>As discussed in the <a href="https://dongyuexie.github.io/Sequence-Motif-Depletion/extend.html">entended feature of Logolas</a>, one important feature of Logolas is that it could plot the patterns of somatic mutation or “mutation signature”.</p>
+<p>Shiraishi <em>et al.</em>(2015) proposed a parsimonious approach to model the mutation signatures, by assuming independence across mutation patterns, and applied the model to somatic mutation data from Alexander <em>et al</em>.(2013), which analyzed mutations from 7042 cancers and found more than 20 distinct mutational signatures.</p>
+<p>The model in Shiraishi <em>et al.</em>(2015) assumes each mutation arose from one of K mutation signatures. The number of signatures, K, for each cancer types is selected by examining the likelihood, bootstrap errors and correlation of membership parameters. There are 27 mutation signatures identified. The visualization of signatures are in the Figure 4 of the paper.</p>
+<p>Here, we propose a new approach to visualize these mutation signatures. The new approach clearly shows the enrichment of the mutation and bases while also presents the depletion. The figure below is the mutation signature 16, which corresponds to the Ovary cancer.</p>
+<pre class="r"><code>mat=read.table(&#39;../../Logolas/data/sig_16.txt&#39;)
+
+mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
+  rownames(mat1)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
+  colnames(mat1) = c(&quot;-2&quot;, &quot;-1&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;)
+  mat2=cbind(rep(NA,6),rep(NA,6),t(mat[1,]),rep(NA,6),rep(NA,6))
+  colnames(mat2) = c(&quot;-2&quot;, &quot;-1&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;)
+  rownames(mat2) = c(&quot;C&gt;A&quot;, &quot;C&gt;G&quot;, &quot;C&gt;T&quot;, &quot;T&gt;A&quot;, &quot;T&gt;C&quot;, &quot;T&gt;G&quot;)
+  table = rbind(mat1, mat2)
+  
+  cols = RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category == 
+&#39;qual&#39;,]
+col_vector = unlist(mapply(RColorBrewer::brewer.pal, cols$maxcolors, rownames(cols)))
+total_chars = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;I&quot;, &quot;J&quot;, &quot;K&quot;, &quot;L&quot;, &quot;M&quot;, &quot;N&quot;, &quot;O&quot;,
+&quot;P&quot;, &quot;Q&quot;, &quot;R&quot;, &quot;S&quot;, &quot;T&quot;, &quot;U&quot;, &quot;V&quot;, &quot;W&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;zero&quot;, &quot;one&quot;, &quot;two&quot;,
+&quot;three&quot;, &quot;four&quot;, &quot;five&quot;, &quot;six&quot;, &quot;seven&quot;, &quot;eight&quot;, &quot;nine&quot;, &quot;dot&quot;, &quot;comma&quot;,
+&quot;dash&quot;, &quot;colon&quot;, &quot;semicolon&quot;, &quot;leftarrow&quot;, &quot;rightarrow&quot;)
+
+  set.seed(20)
+color_profile &lt;- list(&quot;type&quot; = &quot;per_symbol&quot;,
+&quot;col&quot; = sample(col_vector, length(total_chars), replace=FALSE))
+
+grid.newpage()
+layout.rows &lt;- 1
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
+
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+logomaker(table,
+          color_profile = color_profile,
+          total_chars = total_chars,
+          frame_width = 1,
+          newpage = FALSE,
+          xlab = &quot;Position&quot;,
+          ylab = &quot;Information content&quot;)
+
+seekViewport(paste0(&quot;plotlogo&quot;, 2))
+nlogomaker(table,
+          logoheight=&#39;log_odds&#39;,
+          color_profile = color_profile,
+          total_chars = total_chars,
+          frame_width = 1,
+          newpage = FALSE,
+          xlab = &quot;Position&quot;,
+          ylab = &quot;Information content&quot;)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-13-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>library(pmsignature)
+file=&#39;Ovary.3.Rdata&#39;
+load(paste(&#39;../../Logolas/data/&#39;,file,sep = &#39;&#39;))
+visPMSignature(resultForSave[[1]],1,isScale=T)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-14-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>We also apply the <code>nlogomaker</code> to some of the mutation signatures from Alexandrov <em>et al.</em>(2013).</p>
+<pre class="r"><code>grid.newpage()
+layout.rows &lt;- 1
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
+
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+
+load(&#39;../../Logolas/data/ALL.2.RData&#39;)
+
+mat=resultForSave[[1]]@signatureFeatureDistribution[1,,]
+mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
+rownames(mat1)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
+colnames(mat1) = c(&quot;-2&quot;, &quot;-1&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;)
+mat2=cbind(rep(NA,6),rep(NA,6),(mat[1,]),rep(NA,6),rep(NA,6))
+colnames(mat2) = c(&quot;-2&quot;, &quot;-1&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;)
+rownames(mat2) = c(&quot;C&gt;A&quot;, &quot;C&gt;G&quot;, &quot;C&gt;T&quot;, &quot;T&gt;A&quot;, &quot;T&gt;C&quot;, &quot;T&gt;G&quot;)
+table = rbind(mat1, mat2)
+  
+color_profile &lt;- list(&quot;type&quot; = &quot;per_symbol&quot;,
+                      &quot;col&quot; = RColorBrewer::brewer.pal(dim(table)[1],name =&quot;Spectral&quot;))
+
+
+nlogomaker(table,
+          logoheight = &#39;log_odds&#39;,
+          color_profile = color_profile,
+          frame_width = 1,
+          xlab = &quot;Position&quot;,
+          ylab = &quot;Information content&quot;,
+          pop_name = &#39;ALL&#39;,
+          newpage = F
+          )
+
+seekViewport(paste0(&quot;plotlogo&quot;, 2))
+
+load(&#39;../../Logolas/data/Bladder.2.Rdata&#39;)
+
+mat=resultForSave[[1]]@signatureFeatureDistribution[1,,]
+mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
+rownames(mat1)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
+colnames(mat1) = c(&quot;-2&quot;, &quot;-1&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;)
+mat2=cbind(rep(NA,6),rep(NA,6),(mat[1,]),rep(NA,6),rep(NA,6))
+colnames(mat2) = c(&quot;-2&quot;, &quot;-1&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;)
+rownames(mat2) = c(&quot;C&gt;A&quot;, &quot;C&gt;G&quot;, &quot;C&gt;T&quot;, &quot;T&gt;A&quot;, &quot;T&gt;C&quot;, &quot;T&gt;G&quot;)
+table = rbind(mat1, mat2)
+  
+nlogomaker(table,
+          logoheight = &#39;log_odds&#39;,
+          color_profile = color_profile,
+          frame_width = 1,
+          xlab = &quot;Position&quot;,
+          ylab = &quot;Information content&quot;,
+          pop_name = &#39;Bladder&#39;,
+          newpage = F
+          )</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="umi-data" class="section level1">
+<h1>UMI data</h1>
+<pre class="r"><code>load(&#39;../../Logolas/data/count_table_19101.3.B12.AGCCACTT.L004.R1.C6WYKACXX.rda&#39;)
+nlogomaker(mat,
+           logoheight = &#39;log&#39;,
+           color_profile = color_profile,
+           frame_width = 1,
+           xlab = &#39;UMI base position&#39;)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="arxiv-data" class="section level1">
+<h1>aRxiv data</h1>
+<p>We have showed the logo plot for field categories of professors in the document mining section. Here we describe it in more details.</p>
+<p>One way to get the data of professors’ field categories is to summarize the categories of their publications. The aRxiv is a repository of e-prints of scientific papers and the package <code>aRxiv</code> can easily fetch the data from the repository. A tutorial of <code>aRxiv</code> package is <a href="https://ropensci.org/tutorials/arxiv_tutorial.html">here</a>.</p>
+<p>For a set of professor’ names, we firstly get their most recent publications that have been put on aRxiv and limit the number of publications to be 50, using the function <code>arxiv_search</code>. Then extract the primary categories of the publications. So now we have a set of field categories(without replications). Next, for each professor, we count the number of publications in each category. Finally, a table is formulated with field categories as rows and the professor’s name as columns. This is analogous to the position frequency matrix.</p>
+<p>User has the option to apply dash to this kind of string logo based data, which is illustrated by the figure below.</p>
+<pre class="r"><code>tab_data &lt;- get(load(file = &quot;../../Logolas/data/aRxiv_field_cat.Rdata&quot;))
+
+color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
+&quot;col&quot; = RColorBrewer::brewer.pal(dim(tab_data)[1],
+name = &quot;Spectral&quot;))
+
+tab_data_dash=t(dash(t(tab_data),optmethod = &#39;mixEM&#39;)$posmean)
+colnames(tab_data_dash) &lt;- c(&quot;Matthew Stephens&quot;,
+&quot;John Lafferty&quot;,
+&quot;Wei Biao Wu&quot;,
+&quot;Peter McCullagh&quot;)
+
+rownames(tab_data_dash)=rownames(tab_data)
+
+grid.newpage()
+layout.rows &lt;- 2
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(5,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(rep(5,layout.rows), rep(&quot;null&quot;, 1))))
+
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+
+logomaker(tab_data,
+        color_profile = color_profile,
+        frame_width = 1,
+        pop_name = &quot;arXiv field categories of UChicago STAT professors&quot;,
+        xlab = &quot;Professors&quot;,
+        ylab = &quot;Information content&quot;,
+        yscale_change = F,
+        newpage = F)
+
+seekViewport(paste0(&quot;plotlogo&quot;, 2))
+
+logomaker(tab_data_dash,
+        color_profile = color_profile,
+        frame_width = 1,
+        pop_name = &quot;arXiv field categories of UChicago STAT professors, dash applied&quot;,
+        xlab = &quot;Professors&quot;,
+        ylab = &quot;Information content&quot;,
+        yscale_change = F,
+        newpage = F)
+
+seekViewport(paste0(&quot;plotlogo&quot;, 3))
+
+nlogomaker(tab_data,
+           logoheight = &#39;log&#39;,
+        color_profile = color_profile,
+        frame_width = 1,
+        pop_name = &quot;arXiv field categories of UChicago STAT professors&quot;,
+        xlab = &quot;Professors&quot;,
+        ylab = &quot;Information content&quot;,
+        newpage = F)
+
+seekViewport(paste0(&quot;plotlogo&quot;, 4))
+
+nlogomaker(tab_data_dash,
+           logoheight = &#39;log&#39;,
+        color_profile = color_profile,
+        frame_width = 1,
+        pop_name = &quot;arXiv field categories of UChicago STAT professors, dash applied&quot;,
+        xlab = &quot;Professors&quot;,
+        ylab = &quot;Information content&quot;,
+        newpage = F)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-17-1.png" width="1920" style="display: block; margin: auto;" /></p>
+</div>
+<div id="creating-logos" class="section level1">
+<h1>Creating logos</h1>
+<p>Logolas provides users the freedom to create specific logos. Take the symbol “Lambda” for example. Firstly, create the function for it:</p>
+<pre class="r"><code>LAMBDAletter &lt;- function(plot=FALSE,
+                         fill_symbol = TRUE,
+                         colfill=&quot;green&quot;,
+                         lwd=10){
+
+  x &lt;- c(0.15, 0.5, 0.85, 0.75, 0.5, 0.25)
+  y &lt;- c(0, 1, 0, 0, 0.8, 0)
+  fill &lt;- colfill
+  id &lt;- rep(1, length(x))
+
+  colfill &lt;- rep(colfill, length(unique(id)))
+
+  if(plot){
+    get_plot(x, y, id, fill, colfill, lwd = lwd, fill_symbol = fill_symbol)
+  }
+
+  ll &lt;- list(&quot;x&quot;= x,
+             &quot;y&quot;= y,
+             &quot;id&quot; = id,
+             &quot;fill&quot; = fill,
+             &quot;colfill&quot; = colfill)
+  return(ll)
+}</code></pre>
+<p>Notice that the function name has to be of the form “<span class="math inline">\(*\)</span>letter”, where the user can be creative with the ”<span class="math inline">\(*\)</span>” part. Also the name must be in uppercase letters. The user can then check if the symbol plot looks like a lambda or not in the following way.</p>
+<pre class="r"><code>lambda &lt;- LAMBDAletter()
+grid::grid.newpage()
+grid::pushViewport(grid::viewport(x=0.5,y=0.5,width=1, height=1,
+                                  clip=TRUE))
+grid::grid.polygon(lambda$x, lambda$y,
+                   default.unit=&quot;native&quot;,
+                   id=lambda$id,
+                   gp=grid::gpar(fill=lambda$fill,
+                                 lwd=10))</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-19-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>The user can then add this symbol to the library. To use lambda as part of a string, the user has to put lambda inside ”/…/” to make sure that the function reads it as a new symbol and not general English alphabets or numbers. We provide an example below.</p>
+<pre class="r"><code>counts_mat &lt;- rbind(c(0, 10, 100, 60, 20),
+                    c(40, 30, 30, 35, 20),
+                    c(100, 0, 15, 25, 75),
+                    c(10, 30, 20, 50, 70)
+)
+colnames(counts_mat) &lt;- c(&quot;Pos 1&quot;, &quot;Pos 2&quot;, &quot;Pos 3&quot;, &quot;Pos 4&quot;, &quot;Pos 5&quot;)
+rownames(counts_mat) &lt;- c(&quot;R/LMBD/Q&quot;, &quot;A&quot;, &quot;X&quot;, &quot;Y&quot;)
+
+color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
+                      &quot;col&quot; = RColorBrewer::brewer.pal(dim(counts_mat)[1], name = &quot;Spectral&quot;))
+logomaker(counts_mat,
+          color_profile = color_profile,
+          frame_width = 1,
+          addlogos=&quot;LMBD&quot;,
+          addlogos_text=&quot;LAMBDA&quot;)</code></pre>
+<div id="session-information" class="section level2">
+<h2>Session information</h2>
+<!-- Insert the session information into the document -->
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.3.3 (2017-03-06)
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+Running under: macOS Sierra 10.12.5
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+ [1] grid      stats4    parallel  stats     graphics  grDevices utils    
+ [8] datasets  methods   base     
+
+other attached packages:
+ [1] pmsignature_0.2.0    tidyr_0.6.1          dplyr_0.5-1         
+ [4] dash_0.99.0          SQUAREM_2016.8-2     plyr_1.8.4          
+ [7] ggplot2_2.2.1        atSNP_1.0            motifStack_1.18.0   
+[10] ade4_1.7-6           MotIV_1.30.0         grImport_0.9-0      
+[13] XML_3.98-1.9         GenomicRanges_1.26.4 GenomeInfoDb_1.10.3 
+[16] doParallel_1.0.10    iterators_1.0.8      foreach_1.4.3       
+[19] data.table_1.10.4    Rcpp_0.12.12         Matrix_1.2-10       
+[22] Logolas_1.1.2        TFBSTools_1.15.4     JASPAR2014_1.10.0   
+[25] Biostrings_2.42.1    XVector_0.14.1       IRanges_2.8.2       
+[28] S4Vectors_0.12.2     BiocGenerics_0.20.0 
+
+loaded via a namespace (and not attached):
+ [1] bitops_1.0-6                DirichletMultinomial_1.16.0
+ [3] bit64_0.9-7                 RColorBrewer_1.1-2         
+ [5] httr_1.2.1                  rprojroot_1.2              
+ [7] LaplacesDemon_16.0.1        tools_3.3.3                
+ [9] backports_1.0.5             R6_2.2.2                   
+[11] rGADEM_2.22.0               seqLogo_1.40.0             
+[13] DBI_0.7                     lazyeval_0.2.0             
+[15] colorspace_1.3-2            bit_1.1-12                 
+[17] git2r_0.18.0                Biobase_2.34.0             
+[19] rtracklayer_1.34.2          labeling_0.3               
+[21] caTools_1.17.1              scales_0.4.1               
+[23] readr_1.1.1                 stringr_1.2.0              
+[25] digest_0.6.12               Rsamtools_1.26.2           
+[27] rmarkdown_1.6               R.utils_2.5.0              
+[29] pkgconfig_2.0.1             htmltools_0.3.6            
+[31] BSgenome_1.42.0             rlang_0.1.1.9000           
+[33] RSQLite_2.0                 VGAM_1.0-3                 
+[35] BiocParallel_1.8.2          gtools_3.5.0               
+[37] R.oo_1.21.0                 RCurl_1.95-4.8             
+[39] magrittr_1.5                GO.db_3.4.0                
+[41] munsell_0.4.3               R.methodsS3_1.7.1          
+[43] stringi_1.1.5               yaml_2.1.14                
+[45] SummarizedExperiment_1.4.0  zlibbioc_1.20.0            
+[47] blob_1.1.0                  CNEr_1.10.2                
+[49] lattice_0.20-34             splines_3.3.3              
+[51] annotate_1.52.0             hms_0.3                    
+[53] KEGGREST_1.14.1             knitr_1.16                 
+[55] reshape2_1.4.2.9000         codetools_0.2-15           
+[57] TFMPvalue_0.0.6             evaluate_0.10              
+[59] png_0.1-7                   gtable_0.2.0               
+[61] poweRlaw_0.70.1             assertthat_0.2.0           
+[63] xtable_1.8-2                tibble_1.3.4               
+[65] GenomicAlignments_1.10.1    AnnotationDbi_1.36.0       
+[67] memoise_1.1.0              </code></pre>
+</div>
+</div>
+
+<hr>
+<p>
+    This webpage has been developed using RStudio's <a href="http://rmarkdown.rstudio.com">R Markdown</a> and John D Blischak's <a href="https://github.com/jdblischak/workflowr">workflowr</a> package. 
+</p>
+<hr>
+
+<!-- To enable disqus, uncomment the section below and provide your disqus_shortname -->
+
+<!-- disqus
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rmarkdown'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+-->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

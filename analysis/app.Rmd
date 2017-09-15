@@ -1,5 +1,5 @@
 ---
-title: "Applicaiton of Logolas"
+title: "Applications of Logolas"
 author: "Dongyue Xie"
 date: 2017-09-01
 output: html_document
@@ -225,8 +225,7 @@ return(results)
 ```
 
 ```{r,warning=FALSE,message=FALSE,fig.height=20,fig.width=20}
-Vra=plantTF("C:/Users/happy/OneDrive/Research/Logoplot/data/Vra",cb=T)
-
+Vra= get(load("../../Logolas/data/Vra_plant_TFDB.rData"))
 library(grid)
 
 grid.newpage()
@@ -286,7 +285,7 @@ nlogomaker(Vra$pwm_dash[[12]],
           control = list(viewport.margin.left = 5))
 ```
 
-##Combined dash
+## Combined dash
 
 In plantTFDB, the transcription factors from the same species have the same background probability. There are two ways to apply dash. One is to apply dash to each PFM, called signature wise dash. The second way is to firstly combine all the PFM then apply dash to the combined PFM. For example, we have three PFMs, with 5,6,7 positions respectively. After combining the three PFMs, we get a large combined PFM with 18 positions. The dash is applied to this combined PFM and then restore the PWM by separating the result given by dash. In this combined way, the "sample size"(number of positions) is larger. It turns out that the combined dash shrinks less than the signature wise dash.
 
@@ -448,7 +447,7 @@ The model in Shiraishi *et al.*(2015) assumes each mutation arose from one of K 
 Here, we propose a new approach to visualize these mutation signatures. The new approach clearly shows the enrichment of the mutation and bases while also presents the depletion. The figure below is the mutation signature 16, which corresponds to the Ovary cancer.
 
 ```{r,warning=FALSE,message=FALSE,fig.width=10,fig.height=5}
-mat=read.table('C:/Users/happy/OneDrive/Research/Logoplot/data/Fig4_rawdata/sig_16.txt')
+mat=read.table('../../Logolas/data/sig_16.txt')
 
 mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
   rownames(mat1)=c('A','C','G','T')
@@ -512,7 +511,7 @@ nlogomaker(table,
 ```{r,warning=FALSE,message=FALSE,fig.width=5,fig.height=2.5}
 library(pmsignature)
 file='Ovary.3.Rdata'
-load(paste('C:/Users/happy/OneDrive/Research/Logoplot/data/mutation/',file,sep = ''))
+load(paste('../../Logolas/data/',file,sep = ''))
 visPMSignature(resultForSave[[1]],1,isScale=T)
 
 
@@ -520,7 +519,7 @@ visPMSignature(resultForSave[[1]],1,isScale=T)
 
 We also apply the `nlogomaker` to some of the mutation signatures from Alexandrov *et al.*(2013). 
 
-```{r,warning=FALSE,message=FALSE,fig.width=10,fig.height=5}
+```{r,warning=FALSE,message=FALSE,fig.width=8,fig.height=8}
 grid.newpage()
 layout.rows <- 1
 layout.cols <- 2
@@ -542,7 +541,7 @@ plot_tree <- vpTree(top.vp, plot_reg)
 pushViewport(plot_tree)
 seekViewport(paste0("plotlogo", 1))
 
-load('C:/Users/happy/OneDrive/Research/Logoplot/data/mutation/ALL.2.RData')
+load('../../Logolas/data/ALL.2.RData')
 
 mat=resultForSave[[1]]@signatureFeatureDistribution[1,,]
 mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
@@ -553,6 +552,10 @@ colnames(mat2) = c("-2", "-1", "0", "1", "2")
 rownames(mat2) = c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G")
 table = rbind(mat1, mat2)
   
+color_profile <- list("type" = "per_symbol",
+                      "col" = RColorBrewer::brewer.pal(dim(table)[1],name ="Spectral"))
+
+
 nlogomaker(table,
           logoheight = 'log_odds',
           color_profile = color_profile,
@@ -565,7 +568,7 @@ nlogomaker(table,
 
 seekViewport(paste0("plotlogo", 2))
 
-load('C:/Users/happy/OneDrive/Research/Logoplot/data/mutation/Bladder.2.Rdata')
+load('../../Logolas/data/Bladder.2.Rdata')
 
 mat=resultForSave[[1]]@signatureFeatureDistribution[1,,]
 mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
@@ -591,7 +594,7 @@ nlogomaker(table,
 #UMI data
 
 ```{r,message=FALSE,warning=FALSE}
-load('C:/Users/happy/OneDrive/Research/Logoplot/data/count_table_19101.3.B12.AGCCACTT.L004.R1.C6WYKACXX.rda')
+load('../../Logolas/data/count_table_19101.3.B12.AGCCACTT.L004.R1.C6WYKACXX.rda')
 nlogomaker(mat,
            logoheight = 'log',
            color_profile = color_profile,
@@ -611,37 +614,7 @@ For a set of professor' names, we firstly get their most recent publications tha
 User has the option to apply dash to this kind of string logo based data, which is illustrated by the figure below.
 
 ```{r,message=FALSE,warning=FALSE,fig.width=20,fig.height=20}
-library(aRxiv)
-rec1 <- aRxiv::arxiv_search('au:"Matthew Stephens"', limit=50)
-rec2 <- aRxiv::arxiv_search('au:"John Lafferty"', limit=50)
-rec3 <- aRxiv::arxiv_search('au:"Wei Biao Wu"', limit=50)
-rec4 <- aRxiv::arxiv_search('au:"Peter Mccullagh"', limit=50)
-
-primary_categories_1 <- toupper(rec1$primary_category)
-primary_categories_2 <- toupper(rec2$primary_category)
-primary_categories_3 <- toupper(rec3$primary_category)
-primary_categories_4 <- toupper(rec4$primary_category)
-
-factor_levels <- unique(c(unique(primary_categories_1),
-unique(primary_categories_2),
-unique(primary_categories_3),
-unique(primary_categories_4)))
-
-primary_categories_1 <- factor(primary_categories_1, levels=factor_levels)
-primary_categories_2 <- factor(primary_categories_2, levels=factor_levels)
-primary_categories_3 <- factor(primary_categories_3, levels=factor_levels)
-primary_categories_4 <- factor(primary_categories_4, levels=factor_levels)
-
-tab_data <- cbind(table(primary_categories_1),
-table(primary_categories_2),
-table(primary_categories_3),
-table(primary_categories_4))
-
-colnames(tab_data) <- c("Matthew Stephens",
-"John Lafferty",
-"Wei Biao Wu",
-"Peter McCullagh")
-tab_data <- as.matrix(tab_data)
+tab_data <- get(load(file = "../../Logolas/data/aRxiv_field_cat.Rdata"))
 
 color_profile <- list("type" = "per_row",
 "col" = RColorBrewer::brewer.pal(dim(tab_data)[1],
