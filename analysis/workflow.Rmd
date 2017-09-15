@@ -1,11 +1,13 @@
 ---
-title: "Home"
+title: "Guided Tutorial"
 output:
   html_document:
     toc: false
 ---
 
-We present an elaborate guided tutorial of how to use the **Logolas** R package. A pdf version of the vignette is available [here](). 
+We present an elaborate guided tutorial of how to use the **Logolas** R package. 
+
+A pdf version of the vignette is available [here](). 
 
 
 
@@ -28,15 +30,19 @@ We present an elaborate guided tutorial of how to use the **Logolas** R package.
 
 
 
-Thank you for using Logolas !  
+For additional examples and analysis of logo visualizations, check out 
+
+[Additional examples of Logolas visualizations](https://dongyuexie.github.io/Sequence-Motif-Depletion/) by Dongyue Xie.
+ 
+
+The authors would like to acknowledge John Blischak, Po Yuan Tung, Chiaowen Joyce Hsiao, Hussein al Asadi, Alex White, Trevor Price and Yuichi Shiraishi for data contribution and helpful discussions. 
 
 
+**Thank you for using Logolas !**  
 
 If you have any questions, you can either open an issue in our [Github page](https://github.com/kkdey/Logolas) or write to Kushal K Dey (kkdey@uchicago.edu). Also please feel free to contribute to the package and send a pull request.
 
-For additional examples and analysis of logo visualizations, check out this [webpage](https://dongyuexie.github.io/Sequence-Motif-Depletion/) by Dongyue Xie.
 
-The authors would like to acknowledge John Blischak, Po Yuan Tung, Chiaowen Joyce Hsiao, Hussein al Asadi, Alex White, Trevor Price and Yuichi Shiraishi for data contribution and helpful discussions. 
 
 
 
