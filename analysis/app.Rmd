@@ -225,7 +225,7 @@ return(results)
 ```
 
 ```{r,warning=FALSE,message=FALSE,fig.width=7,fig.height=7}
-Vra= get(load("../../Logolas/data/Vra_plant_TFDB.rData"))
+suppressWarnings(suppressMessages(Vra <- get(load(system.file("extdata", "Vra_plant_TFDB.Rdata", package = "Logolas")))))
 library(grid)
 
 grid.newpage()
@@ -447,7 +447,7 @@ The model in Shiraishi *et al.*(2015) assumes each mutation arose from one of K 
 Here, we propose a new approach to visualize these mutation signatures. The new approach clearly shows the enrichment of the mutation and bases while also presents the depletion. The figure below is the mutation signature 16, which corresponds to the Ovary cancer.
 
 ```{r,warning=FALSE,message=FALSE,fig.width=8,fig.height=5}
-mat=read.table('../../Logolas/data/sig_16.txt')
+suppressWarnings(suppressMessages(mat <- get(load(system.file("extdata", "sig_16.rda", package = "Logolas")))))
 
 mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
   rownames(mat1)=c('A','C','G','T')
@@ -510,8 +510,7 @@ nlogomaker(table,
 ```
 ```{r,warning=FALSE,message=FALSE,fig.width=5,fig.height=2.5}
 library(pmsignature)
-file='Ovary.3.Rdata'
-load(paste('../../Logolas/data/',file,sep = ''))
+suppressWarnings(suppressMessages(load(system.file("extdata", "Ovary.3.Rdata", package = "Logolas"))))
 visPMSignature(resultForSave[[1]],1,isScale=T)
 
 
@@ -541,7 +540,7 @@ plot_tree <- vpTree(top.vp, plot_reg)
 pushViewport(plot_tree)
 seekViewport(paste0("plotlogo", 1))
 
-load('../../Logolas/data/ALL.2.RData')
+suppressWarnings(suppressMessages(load(system.file("extdata", "ALL.2.Rdata", package = "Logolas"))))
 
 mat=resultForSave[[1]]@signatureFeatureDistribution[1,,]
 mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
@@ -568,7 +567,7 @@ nlogomaker(table,
 
 seekViewport(paste0("plotlogo", 2))
 
-load('../../Logolas/data/Bladder.2.Rdata')
+suppressWarnings(suppressMessages(load(system.file("extdata", "Bladder.2.Rdata", package = "Logolas"))))
 
 mat=resultForSave[[1]]@signatureFeatureDistribution[1,,]
 mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
@@ -594,7 +593,7 @@ nlogomaker(table,
 #UMI data
 
 ```{r,message=FALSE,warning=FALSE,fig.width=7,fig.height=7}
-load('../../Logolas/data/count_table_19101.3.B12.AGCCACTT.L004.R1.C6WYKACXX.rda')
+suppressWarnings(suppressMessages(load(system.file("extdata", "count_table_19101.3.B12.AGCCACTT.L004.R1.C6WYKACXX.rda", package = "Logolas"))))
 nlogomaker(mat,
            logoheight = 'log',
            color_profile = color_profile,
@@ -614,7 +613,8 @@ For a set of professor' names, we firstly get their most recent publications tha
 User has the option to apply dash to this kind of string logo based data, which is illustrated by the figure below.
 
 ```{r,message=FALSE,warning=FALSE,fig.width=7,fig.height=7}
-tab_data <- get(load(file = "../../Logolas/data/aRxiv_field_cat.Rdata"))
+suppressWarnings(suppressMessages(load(system.file("extdata", "aRxiv_field_cat.Rdata", package = "Logolas"))))
+
 colnames(tab_data) <- c("Matthew \n Stephens",
 "John \n Lafferty",
 "Wei \n Biao Wu",
