@@ -110,7 +110,7 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-09-15</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> f78648a</p>
+<p><strong>Code version:</strong> ccf96a4</p>
 <!-- Add your analysis here -->
 <p>We now proceed to demonstrate various applications of Logolas.</p>
 <div id="tfbs" class="section level1">
@@ -173,7 +173,7 @@ logomaker(pfm2,xlab = &#39;position&#39;,color_profile = color_profile,
           newpage = FALSE,
           pop_name = &#39;Logo plot, HT-SELEX&#39;
           )</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-1-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>One may notice that the number of positions of TFBS from Chip-seq is usually larger than that from HT-SELEX. A comparison of this is shown in the figure below. The data are from JASPAR2014.</p>
 <pre class="r"><code>library(ggplot2)
 library(plyr)
@@ -225,7 +225,7 @@ nlogomaker(EBF1_known4,logoheight = &#39;log_odds&#39;,
            color_profile = color_profile,frame_width = 1,
            newpage = F,
            pop_name = &#39;EBF1_known4&#39;)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Notice that both of the plots show the pattern TCCC–GGGA, with G and C depleted in the middle. The typical case is that there is depleted ‘gaps’ in the middle of palindromic sequences.</p>
 </div>
 <div id="plant-tf" class="section level2">
@@ -289,7 +289,7 @@ nlogomaker(Vra$pwm_dash[[12]],
           newpage = FALSE,
           pop_name = &#39;Nrg logo plot, dash applied&#39;,
           control = list(viewport.margin.left = 5))</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-5-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="combined-dash" class="section level2">
 <h2>Combined dash</h2>
@@ -371,7 +371,7 @@ nlogomaker(pwm,logoheight = &#39;log_odds&#39;,
            frame_width = 1,
            bg=bg,
            newpage = F)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="dash-on-protein-pfm" class="section level2">
 <h2>Dash on protein PFM</h2>
 <p>One may also apply dash to some protein family PFMs, which have very few sequences mapped. The figure below shows the logo plot and negative logo plot of the same PFM as the one in above figure.</p>
@@ -410,7 +410,7 @@ nlogomaker(pwm_dash,logoheight = &#39;log_odds&#39;,
            bg=bg,
            color_profile = color_profile,
            newpage = F)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="mutation-signature" class="section level1">
@@ -479,7 +479,7 @@ nlogomaker(table,
           newpage = FALSE,
           xlab = &quot;Position&quot;,
           ylab = &quot;Information content&quot;)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-13-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>library(pmsignature)
 file=&#39;Ovary.3.Rdata&#39;
 load(paste(&#39;../../Logolas/data/&#39;,file,sep = &#39;&#39;))
@@ -554,7 +554,7 @@ nlogomaker(table,
           pop_name = &#39;Bladder&#39;,
           newpage = F
           )</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-15-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="umi-data" class="section level1">
 <h1>UMI data</h1>
@@ -573,16 +573,20 @@ nlogomaker(mat,
 <p>For a set of professor’ names, we firstly get their most recent publications that have been put on aRxiv and limit the number of publications to be 50, using the function <code>arxiv_search</code>. Then extract the primary categories of the publications. So now we have a set of field categories(without replications). Next, for each professor, we count the number of publications in each category. Finally, a table is formulated with field categories as rows and the professor’s name as columns. This is analogous to the position frequency matrix.</p>
 <p>User has the option to apply dash to this kind of string logo based data, which is illustrated by the figure below.</p>
 <pre class="r"><code>tab_data &lt;- get(load(file = &quot;../../Logolas/data/aRxiv_field_cat.Rdata&quot;))
+colnames(tab_data) &lt;- c(&quot;Matthew \n Stephens&quot;,
+&quot;John \n Lafferty&quot;,
+&quot;Wei \n Biao Wu&quot;,
+&quot;Peter \n McCullagh&quot;)
 
 color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
 &quot;col&quot; = RColorBrewer::brewer.pal(dim(tab_data)[1],
 name = &quot;Spectral&quot;))
 
 tab_data_dash=t(dash(t(tab_data),optmethod = &#39;mixEM&#39;)$posmean)
-colnames(tab_data_dash) &lt;- c(&quot;Matthew Stephens&quot;,
-&quot;John Lafferty&quot;,
-&quot;Wei Biao Wu&quot;,
-&quot;Peter McCullagh&quot;)
+colnames(tab_data_dash) &lt;- c(&quot;Matthew \n Stephens&quot;,
+&quot;John \n Lafferty&quot;,
+&quot;Wei \n Biao Wu&quot;,
+&quot;Peter \n McCullagh&quot;)
 
 rownames(tab_data_dash)=rownames(tab_data)
 
@@ -611,9 +615,10 @@ seekViewport(paste0(&quot;plotlogo&quot;, 1))
 logomaker(tab_data,
         color_profile = color_profile,
         frame_width = 1,
-        pop_name = &quot;arXiv field categories of UChicago STAT professors&quot;,
+        pop_name = &quot;arXiv logo, no dash&quot;,
         xlab = &quot;Professors&quot;,
         ylab = &quot;Information content&quot;,
+        xaxis_fontsize=5,
         yscale_change = F,
         newpage = F)
 
@@ -622,9 +627,10 @@ seekViewport(paste0(&quot;plotlogo&quot;, 2))
 logomaker(tab_data_dash,
         color_profile = color_profile,
         frame_width = 1,
-        pop_name = &quot;arXiv field categories of UChicago STAT professors, dash applied&quot;,
+        pop_name = &quot;arXiv logo, dash&quot;,
         xlab = &quot;Professors&quot;,
         ylab = &quot;Information content&quot;,
+        xaxis_fontsize=5,
         yscale_change = F,
         newpage = F)
 
@@ -634,9 +640,10 @@ nlogomaker(tab_data,
            logoheight = &#39;log&#39;,
         color_profile = color_profile,
         frame_width = 1,
-        pop_name = &quot;arXiv field categories of UChicago STAT professors&quot;,
+        pop_name = &quot;arXiv logo, no dash&quot;,
         xlab = &quot;Professors&quot;,
         ylab = &quot;Information content&quot;,
+        xaxis_fontsize=5,
         newpage = F)
 
 seekViewport(paste0(&quot;plotlogo&quot;, 4))
@@ -645,11 +652,12 @@ nlogomaker(tab_data_dash,
            logoheight = &#39;log&#39;,
         color_profile = color_profile,
         frame_width = 1,
-        pop_name = &quot;arXiv field categories of UChicago STAT professors, dash applied&quot;,
+        pop_name = &quot;arXiv logo, dash&quot;,
         xlab = &quot;Professors&quot;,
         ylab = &quot;Information content&quot;,
+        xaxis_fontsize=5,
         newpage = F)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-17-1.png" width="1920" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="creating-logos" class="section level1">
 <h1>Creating logos</h1>

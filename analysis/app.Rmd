@@ -34,7 +34,7 @@ Transcription factor binding site(TFBS) data are available from several database
 
 The figure below shows the application of Logolas on the TFBS data from Chip-seq and HT-SELEX. The data of these examples are from JASPAR2014. JASPAR is a collection of transcription factor DNA-binding preferences. 
 
-```{r,warning=FALSE,message=FALSE,fig.width=10,fig.height=5}
+```{r,warning=FALSE,message=FALSE,fig.width=7,fig.height=7}
 library(JASPAR2014)
 library(TFBSTools)
 library(Logolas)
@@ -95,7 +95,7 @@ logomaker(pfm2,xlab = 'position',color_profile = color_profile,
 
 One may notice that the number of positions of TFBS from Chip-seq is usually larger than that from HT-SELEX. A comparison of this is shown in the figure below. The data are from JASPAR2014.
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,fig.width=7,fig.height=7}
 library(ggplot2)
 library(plyr)
 ns = lapply(pfm_ht,function(x) dim(x)[2])
@@ -113,7 +113,7 @@ ggplot(dat,aes(x = number, fill = method)) +
 
 One kind of logo plots that are of particular interests is the dimer, in which the depleitons are in the middle and the enrichments are in the two sides. An example is the EBF1 family. The data are from [Manollis Kellis webpage](http://compbio.mit.edu/encode-motifs/motifs.txt).
 
-```{r,warning=FALSE,message=FALSE,fig.width=10,fig.height=5}
+```{r,warning=FALSE,message=FALSE,fig.width=7,fig.height=7}
 pfm_mk=LoadMotifLibrary('http://compbio.mit.edu/encode-motifs/motifs.txt',tag = ">",transpose = F, field = 1, sep = c("\t", " ", ">"), skipcols = 1, skiprows = 1, pseudocount = 0)
 EBF1_disc1=t(pfm_mk[[52]]);rownames(EBF1_disc1)=c('A','C','G','T');colnames(EBF1_disc1)=1:10
 EBF1_known4=t(pfm_mk[[1325]]);rownames(EBF1_known4)=c('A','C','G','T');colnames(EBF1_known4)=1:14
@@ -224,7 +224,7 @@ return(results)
 }
 ```
 
-```{r,warning=FALSE,message=FALSE,fig.height=20,fig.width=20}
+```{r,warning=FALSE,message=FALSE,fig.width=7,fig.height=7}
 Vra= get(load("../../Logolas/data/Vra_plant_TFDB.rData"))
 library(grid)
 
@@ -344,7 +344,7 @@ readprotein=function(file,skip=3,nrows,nsites,bg=bg,adash,mat){
 ```
 
 
-```{r,warning=FALSE,message=FALSE,fig.width=10,fig.height=5}
+```{r,warning=FALSE,message=FALSE,fig.width=7,fig.height=7}
 cols1 <- c(rev(RColorBrewer::brewer.pal(12, "Paired"))[c(3,4,7,8,11,12,5,6,9,10)],
 RColorBrewer::brewer.pal(12, "Set3")[c(1,2,5,8,9)],
 RColorBrewer::brewer.pal(9, "Set1")[c(9,7)],
@@ -398,7 +398,7 @@ nlogomaker(pwm,logoheight = 'log_odds',
 One may also apply dash to some protein family PFMs, which have very few sequences
 mapped. The figure below shows the logo plot and negative logo plot of the same PFM as the one in above figure. 
 
-```{r,warning=FALSE,message=FALSE,fig.width=10,fig.height=5}
+```{r,warning=FALSE,message=FALSE,fig.width=7,fig.height=7}
 pwm_dash=t(dash(t(pfm),optmethod = 'mixEM',mode = bg)$posmean)
 rownames(pwm_dash)=c('A' ,'R','N','D',   'C' ,  'Q',   'E' ,  'G',   'H' ,  'I',   'L' , 'K'  , 'M' ,  'F',   'P' ,  'S'  , 'T' ,  'W',   'Y',   'V')
 colnames(pwm_dash)=1:ncol(pwm_dash)
@@ -446,7 +446,7 @@ The model in Shiraishi *et al.*(2015) assumes each mutation arose from one of K 
 
 Here, we propose a new approach to visualize these mutation signatures. The new approach clearly shows the enrichment of the mutation and bases while also presents the depletion. The figure below is the mutation signature 16, which corresponds to the Ovary cancer.
 
-```{r,warning=FALSE,message=FALSE,fig.width=10,fig.height=5}
+```{r,warning=FALSE,message=FALSE,fig.width=8,fig.height=5}
 mat=read.table('../../Logolas/data/sig_16.txt')
 
 mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
@@ -519,7 +519,7 @@ visPMSignature(resultForSave[[1]],1,isScale=T)
 
 We also apply the `nlogomaker` to some of the mutation signatures from Alexandrov *et al.*(2013). 
 
-```{r,warning=FALSE,message=FALSE,fig.width=8,fig.height=8}
+```{r,warning=FALSE,message=FALSE,fig.width=7,fig.height=7}
 grid.newpage()
 layout.rows <- 1
 layout.cols <- 2
@@ -593,7 +593,7 @@ nlogomaker(table,
 
 #UMI data
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,fig.width=7,fig.height=7}
 load('../../Logolas/data/count_table_19101.3.B12.AGCCACTT.L004.R1.C6WYKACXX.rda')
 nlogomaker(mat,
            logoheight = 'log',
@@ -613,18 +613,22 @@ For a set of professor' names, we firstly get their most recent publications tha
 
 User has the option to apply dash to this kind of string logo based data, which is illustrated by the figure below.
 
-```{r,message=FALSE,warning=FALSE,fig.width=20,fig.height=20}
+```{r,message=FALSE,warning=FALSE,fig.width=7,fig.height=7}
 tab_data <- get(load(file = "../../Logolas/data/aRxiv_field_cat.Rdata"))
+colnames(tab_data) <- c("Matthew \n Stephens",
+"John \n Lafferty",
+"Wei \n Biao Wu",
+"Peter \n McCullagh")
 
 color_profile <- list("type" = "per_row",
 "col" = RColorBrewer::brewer.pal(dim(tab_data)[1],
 name = "Spectral"))
 
 tab_data_dash=t(dash(t(tab_data),optmethod = 'mixEM')$posmean)
-colnames(tab_data_dash) <- c("Matthew Stephens",
-"John Lafferty",
-"Wei Biao Wu",
-"Peter McCullagh")
+colnames(tab_data_dash) <- c("Matthew \n Stephens",
+"John \n Lafferty",
+"Wei \n Biao Wu",
+"Peter \n McCullagh")
 
 rownames(tab_data_dash)=rownames(tab_data)
 
@@ -653,9 +657,10 @@ seekViewport(paste0("plotlogo", 1))
 logomaker(tab_data,
         color_profile = color_profile,
         frame_width = 1,
-        pop_name = "arXiv field categories of UChicago STAT professors",
+        pop_name = "arXiv logo, no dash",
         xlab = "Professors",
         ylab = "Information content",
+        xaxis_fontsize=5,
         yscale_change = F,
         newpage = F)
 
@@ -664,9 +669,10 @@ seekViewport(paste0("plotlogo", 2))
 logomaker(tab_data_dash,
         color_profile = color_profile,
         frame_width = 1,
-        pop_name = "arXiv field categories of UChicago STAT professors, dash applied",
+        pop_name = "arXiv logo, dash",
         xlab = "Professors",
         ylab = "Information content",
+        xaxis_fontsize=5,
         yscale_change = F,
         newpage = F)
 
@@ -676,9 +682,10 @@ nlogomaker(tab_data,
            logoheight = 'log',
         color_profile = color_profile,
         frame_width = 1,
-        pop_name = "arXiv field categories of UChicago STAT professors",
+        pop_name = "arXiv logo, no dash",
         xlab = "Professors",
         ylab = "Information content",
+        xaxis_fontsize=5,
         newpage = F)
 
 seekViewport(paste0("plotlogo", 4))
@@ -687,9 +694,10 @@ nlogomaker(tab_data_dash,
            logoheight = 'log',
         color_profile = color_profile,
         frame_width = 1,
-        pop_name = "arXiv field categories of UChicago STAT professors, dash applied",
+        pop_name = "arXiv logo, dash",
         xlab = "Professors",
         ylab = "Information content",
+        xaxis_fontsize=5,
         newpage = F)
 
 ```

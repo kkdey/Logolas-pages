@@ -296,7 +296,7 @@ logomaker(tab_data,
 
 User could combine logo plots from Logolas with plots from the other R graphs such as R base graphics and ggplot2 graph.
 
-```{r,warning=FALSE,message=FALSE,fig.height=7,fig.width=7}
+```{r,warning=FALSE,message=FALSE,fig.height=4,fig.width=8}
 library(ggplot2)
 library(grid)
 library(gridBase)
