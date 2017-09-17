@@ -23,23 +23,25 @@ knitr::read_chunk("chunks.R")
 
 <!-- Add your analysis here -->
 
-Logo plot is based on the position weight matrix(PWM), which is transformed from the position frequency matrix(PFM). PFM consists of the counts for each base at each position. This is a typical example of compositional data, which is used to describe the constituents of discrete sample space. 
+Typically logo plots are used to represent the position weight matrix (PWM). However, the PWM is often generated from underlying position frequency matrix (PFM). PFM stores the compositional data - the frequencies of the symbols at each position. Given a PFM matrix however, we also have knowledge of the scale of the frequencies for each position. This additional information can be used to get a better logo plot representation compared to the usual PWM-based logo plots. 
 
-Suppose for a specific position of a TFBS, the compositional data is \[ (A, C, G, T) : = (6, 1, 2, 1) \] and one another case is \[ (A, C, G, T) : = (600, 100, 200, 100). \] And the background probability is assumed to be equal for the four bases. If we transform the counts data into PWM by using the sample proportion, then the estimated proportions for the four bases are the same in both cases. However, in the second case, we have total 1000 samples while only 10 samples in the first case. Hence, we would consider to shrink the estimates to the background probability more strongly in the first case than that in the second case, for the reason that the force of data is stronger in the second scenarios.
+Suppose for a specific position in a sequence, the compositional data is \[ (A, C, G, T) : = (6, 1, 2, 1) \] and in another case, it is \[ (A, C, G, T) : = (600, 100, 200, 100). \]. We assume that the background probability is equal for the four bases. If we transform the positional frequencies into PWM by taking the sample proportion, then the estimated PWM would be same for the two cases and would correspond to the same logo plot representation. However, in the second case, we have a total frequency of 1000 for all symbols while for the first case, it is only 10. Hence, it makes sense to shrink the PWM estimate to the background probability more strongly in the first case than that in the second case.
+
+This is what we accomplish in an adaptive fashion using `dash` (Dirichlet Adaptive Shrinkage). We discuss the model formulation next. 
 
 ## Model formulation
 
-To address these questions, we propose Dirichlet adaptive shrinkage(dash) for compositional data. Assume that there are \(L\) constituents in the compositional mix. \(L\) equals \(4\) (corresponding to A,C, G and T bases) for the transcription factor data and \(20\) corresponding to the amino acids for the protein sequence data.
+Assume that there are \(L\) constituents in the compositional mix. \(L\) equals \(4\) (corresponding to A,C, G and T bases) for the DNa sequence motif data and \(20\) corresponding to the amino acids for the protein sequence data.
 
-Suppose there are $L$ categories and $n$ compositional samples. Here, $n$ represents the number of positions for a TF. We model these compositional counts vectors as follows
+Suppose there are $L$ categories and $n$ positions. We model these compositional counts vectors as follows
 
 \[ (c_{n1}, c_{n2}, \cdots, c_{nL}) \sim Mult \left ( c_{n+} : p_{n1}, p_{n2}, \cdots, p_{nL} \right ) \]
 
-where \(c_{n+}\) is the total frequency of the different constituents of the compositional data observed for the \(n\) th base. \(p_{nl}\) here represents the compositional probabilities such that
+where \(c_{n+}\) is the total frequency of the different constituents of the compositional data observed for the \(n\) th base. \(p_{nl}\) here represents the compositional probability for the $l$ th base in the position $n$. We have
 
 \[ p_{nl} >= 0 \hspace {1 cm} \sum_{l=1}^{L} p_{nl} = 1 \]
 
-We then choose the Dirichlet prior distribution on the  \((p_{n1}, p_{n2}, \cdots, p_{nL})\). In order to achieve the adaptive shrinkage property, we assume a mixture of known Dirichlet priors, each having mean same as the background mean but with varying amounts of concentration, along with unknown mixture proportions to be estimated from the data. \[ \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right ) : = \sum_{k=1}^{K} \pi_{k} Dir \left (\alpha_{k} \mu_{k1}, \alpha_{k} \mu_{k2}, \cdots, \alpha_{k} \mu_{kL} \right ) \hspace {1 cm} \alpha_{k} > 0 \hspace{1 cm} \sum_{l=1}^{L} \mu_{kl} = 1 \] 
+We choose the Dirichlet prior distribution on the compositional probability vector \((p_{n1}, p_{n2}, \cdots, p_{nL})\). In order to perform adaptive shrinkage, we assume a mixture of known Dirichlet priors, each having mean to be the background mean probability vector \( \mu_{1}, \mu_{2}, \cdots, \mu_{L} \), but with varying amounts of concentration, which need to be estimated along with the unknown mixture proportions from the data. \[ \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right ) : = \sum_{k=1}^{K} \pi_{k} Dir \left (\alpha_{k} \mu_{k1}, \alpha_{k} \mu_{k2}, \cdots, \alpha_{k} \mu_{kL} \right ) \hspace {1 cm} \alpha_{k} > 0 \hspace{1 cm} \sum_{l=1}^{L} \mu_{kl} = 1 \] 
 We assume a prior of \(\pi_{k}\) to be Dirichlet
 
 \[ f(\pi) : = \prod_{k=1}^{K} {\pi_{k}}^{\lambda_{k}-1} \]

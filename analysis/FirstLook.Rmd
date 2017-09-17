@@ -24,31 +24,49 @@ knitr::read_chunk("chunks.R")
 <!-- Add your analysis here -->
 
 
-##logo plots
+## First Illustration
 
-One of the most basic applications of logo plots is to visualize the DNA sequence alignment(motif), which consists of four letters(A,C,G and T), corresponding to the four nucleotides(Adenine, Cytosine, Guanine, Thymine). The function `logomaker()` in Logolas provides the standard logo plots with the position weight matrix(PWM) as input. Here, we start with the same demo example provided in the [seqLogo](https://bioconductor.org/packages/release/bioc/html/seqLogo.html) vignette. 
+One of the first applications of logo plots have been in visualization of DNA sequence motifs (e.g.: [seqLogo](http://bioconductor.org/packages/release/bioc/html/seqLogo.html)). These logo plots consist of symbol logos for four letters(A,C,G and T) corresponding to the four nucleotides(Adenine, Cytosine, Guanine, Thymine). We start with an example application of seqLogo in representing DNA sequence motifs using A, C, G and T. Then we show, even with this specific set of symbols, **Logolas** offers way more options to the user for building the logo plot representations. 
 
-```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
-library(Logolas)
+We use the same example PWM as in **seqLogo**.
+
+```{r}
 mFile <- system.file("Exfiles/pwm1", package="seqLogo")
 m <- read.table(mFile)
 p <- seqLogo::makePWM(m)
+seqLogo::seqLogo(p)
+```
+
+
+The `logomaker()` function in Logolas is an improved and more flexible alternative to the `seqLogo()` function for visual representation of the position weight matrix(PWM). 
+
+```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
+library(Logolas)
 color_profile <- list("type" = "per_row",
 "col" = RColorBrewer::brewer.pal(dim(p@pwm)[1],name ="Spectral"))
 logomaker(p@pwm,color_profile = color_profile, frame_width = 1,ic.scale = TRUE)
 ```
 
-As a comparison, we present the logo plot of the same PWM from the package `seqLogo`.
+As evident from the above example, `logomaker` offers the user several options to stylize the logo plots. Some of them are 
 
-```{r}
-seqLogo::seqLogo(p)
-```
+- **color_profile** : This option allows the user to specify the color patterns for the different symbols. This is a list argument with a `type` variable and the `color` variable. The `type` variable depicts the coloring scheme to be used, and can be one of three choices - `per_row`, `per_symbol` and `per_column` depending on whether the user wants to fix a color for a specific row name of the PWM matrix, or for each column or for a specific alphanumeric symbol. We shall provide example usages of all the options later in other chapters of the vignettes.
 
-User could specify the color for each letter through the `color_profile`. 
+- **frame_width** : Determines the width of the position to be used for the logo plot. Default is set to 1 usually. 
 
-If `ic.scale`= TRUE, the heights of the bars at each position are determined by the Shannon entropy. The information content for position $i$ is $IC_i=-\Sigma_b p_{b}\times \log_2p_{b}-(-\Sigma_b q_{b,i}\times \log_2q_{b,i})$, where $q_{b,i}$ is the relative frequency of base $b$ at position $i$ and $p_{b}$ is the background probability of base $b$. By default, the background probability of the each base is 0.25. So the information content at position $i$ is $IC_i=\Sigma_bq_{b,i}\times \log_2(q_{b,i}/0.25)$. 
+- **ic.scale** : If TRUE (which is also the default), Information Criterion (I.C)  is used to determine the heights of the logo symbols in the logo plot. The most standard entropy measure for determining the IC is the Shannon entropy, which is also the default entropy measure in Logolas. 
 
-`Logolas` could also combine multiple plots into one overall graph. The figure below demonstrates the multiple panel plot as well as some variants of logo plots. 
+## Information Criterion and Background Probabilities 
+
+The information content for position $i$ is $IC_i=-\Sigma_b p_{b, i}\times \log_2p_{b, i}-(-\Sigma_b q_{b,i}\times \log_2q_{b,i})$, where $q_{b,i}$ is the relative frequency of base $b$ at position $i$ and $p_{b, i}$ is the background probability of base $b$ and position $i$. For many examples, we usually have $p_{b,i}= p_{b}$ for each position. Logolas allows the user to fix a background probability `bg` as input.  `bg` can be a matrix, vector or NULL. When `bg` is a matrix, each position has a specific base probabilities $p_{b,i}$, if `bg` is a vector, it is assumed that $p_{b,i} = p_{b}$ for all $i$, and if NULL, the background probability is assumed to be same for all the bases. For example, for the DNA motif data, it would correspond to $p_{b,i} = 0.25$. 
+
+We present examples of Logolas with different options for `bg`. We plot here a multi-panel Logolas plot for different choices of `bg`. 
+
+[A FIGURE GOES HERE]
+
+## Plotting Options in Logolas 
+
+Logolas also allows the user to choose different colors, change the scale of the Y axis, normalize the height of the logos and also play around with the margins of the plot in the plotting region. Besides, Logolas also allows the user to choose the labels and the title, along with their font sizes and spacings. 
+
 
 ```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 library(grid)
@@ -112,9 +130,9 @@ logomaker(p@pwm,xlab = 'position',color_profile = color_profile,
 
 ```
 
-##Choose the entropy
+## Other entropy measures 
 
-Besides the default Shannon entropy, `logomaker` could also get the information content using Renyi entropy. The information content at position $i$ is $IC_{i,\alpha}=\frac{1}{1-\alpha}\Sigma_b\log_2(q_{b,i}^\alpha-0.25^{1-\alpha})$. When $\alpha\rightarrow1$, the limiting value of Renyi entropy is the Shannon entropy. The figure below shows the logo plot with different values of $\alpha$.
+Besides the default Shannon entropy, `logomaker` can also determine the Information Criterion using Renyi entropy. For this entropy measure, the Information content at position $i$ is $IC_{i,\alpha}=\frac{1}{1-\alpha}\Sigma_b\log_2(q_{b,i}^\alpha-0.25^{1-\alpha})$. When $\alpha\rightarrow1$, the limiting value of Renyi entropy is the Shannon entropy. In `logomaker`, `alpha` is a control parameter that can be tuned to get plots for different entropy measures. The figure below shows the logo plots with different values of $\alpha$.
 
 ```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 grid.newpage()
@@ -153,15 +171,50 @@ logomaker(p@pwm,xlab = 'position',color_profile = color_profile,
           control = list(viewport.margin.left = 5,alpha=0.2))
 ```
 
-##Negative logo plots
+## Negative Logolas Plot 
 
-In the logo plot, the enrichment is highlighted while the depletion is usually overlooked. We hence propose the negative logo plot, in which the depletion is plotted down below the zero on y-axis so that we can find both strong positive and negative effects.
+In the above logo plot representation, we highlight the enrichment of symbols. But sometimes, highlighting enrichment along with depletion leads to a more parsimonious logo plot representation. For examples, suppose for a particular position $i$, the base composition of $ \left (A, C, G, T \right)$ is as follows 
 
-The `nlogomaker` function provides negative logo plot. And there are three different options of logo heights: information content, log probability and log-odds.
+$$ \left (A, C, G, T \right ) : = \left ( 0.33, 0.33, 0.01, 0.33 \right )  $$
 
-The negative logo plot actually shows the relative change of base frequencies. To achieve this, the median of base frequencies is subtracted at a position. For example, the relative frequencies at a position is $P=(0.7,0.15,0.15,0)$; subtracted by the median, it becomes $P_{neg}=(0.55,0,0,-0.15)$. Then the total heights are allocated to the positive and negative parts and further allocated to each base, based on $P_{neg}$.
+Then the logo plot above would highlight $A, C, T$ for that position. Also, the information content would be lower compared to an enrichment of a single symbol. But, a more ideal representation would be to show the depletion of $G$ instead. We propose a negative logo plot representation to demonstrate this. 
 
-Below we show the negative logo plot using log and log-odds heights for the same example as above.
+In these plots, we show enrichment above the zero on the Y-axis and depletion is shown below the zero on the Y-axis. The size of the logo on the positive or negative scale is proportional to how strong the enrichment or depletion is. 
+
+We use `nlogomaker` function in Logolas to perform these negative Logolas plots. There are three different options for determining the logo heights: information content, log probability and log-odds.
+
+The negative Logolas plot shows the relative change of base frequencies at a each position. To achieve this, the median of base frequencies is subtracted at a position. For example, assume that the relative frequencies at a position is $P=(0.7,0.15,0.15,0)$. We obtain median adjusted values to be used for determining the heights of the logos in the logo using the following algorithms for each option.
+
+## Algorithm for nlogomaker height detection
+
+Following are the steps to determine the heights of the logos for `log` based approach.
+
+Let $q_{*,i} = ((q_{b, i} )) $ be the relative frequency vector of bases at position $i$ and $p$ be the background probabiltiy vector.
+
+1. Take $\log_2$ of $(q_i + \epsilon)/(p+\epsilon)$ where $\epsilon$ is a small number (default 0.01) meant to prevent log (0) type errors. 
+2. Subtract the median to get relative PWM scores : 
+
+For the `log` approach
+
+$$ f_i=\log_2\frac{q_i+\epsilon}{p+\epsilon}-median \left (\log_2\frac{q_i + \epsilon}{p + \epsilon} \right) $$
+
+For the `log_odds` approach,
+
+$$ f_i=\log_2\frac{q_i (1-p) + \epsilon}{p (1-q_i) + \epsilon}-median \left (\log_2\frac{q_i (1-p) + \epsilon}{p (1-q_i) + \epsilon} \right ) $$
+
+3. Determine $f^{+}_{i} = max (f_i, 0) $ and $f^{-}_{i} = max(-f_i, 0)$. 
+
+4. For the `log` or the `log_odds` approaches, $f^{+}_{i}$ scores are plotted on the positive Y axis for the $i$ th position, whereas $f^{-}_{i}$ scores are plotted along the negative Y axis for the same position.
+
+5. For the `ic` approach, we also calculate the IC measure for the $i$th measure as in the positive Logolas plot using Shannon entropy or some Renyi entropy measure. 
+
+6. Normalize both $f^{+}_{i}$ and $f^{-}_{i}$ so that each sums up to 1. 
+
+7.Caluclate $IC^{+}_{i} = IC_{i} * f^{+}_{i} $ and $IC^{-}_{i} = IC_{i} * f^{-}_{i} $.
+
+8. The $IC^{+}_{i}$ scores are plotted on the positive Y axis for the $i$ th position, whereas the $IC^{-}_{i}$ scores are plotted along the negative Y axis for the same position. 
+
+Below we show the negative Logolas plot using `ic`, `log` and `log-odds` heights for the same example as above, along with the positive Logolas plot.
 
 ```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 
@@ -194,18 +247,11 @@ nlogomaker(p@pwm,logoheight = 'log_odds',color_profile = color_profile,frame_wid
 
 ```
 
-As seen from the above figures, the negative logo plot presents both the enrichment and depletion. For example, there is an obvious depletion of T at the position 4. It may be considered that the transcription factor(TF) would find both enrichment and depletion to decide whether to bind. For example, at position 4, the depletion of T probably means the TF dislikes T at that position. 
+As seen from the above figures, the negative Logolas plot presents both the enrichment and depletion while the positive Logolas highlights only enrichment. For example, there is an obvious depletion of T at the position 4. When one looks at the positive Logolas plot, that position does not seem interesting. But the negative Logolas plot clearly highlights the T depletion and hence proves its worth.  
+ 
+## Depletion weights
 
-Steps to get the `log` height at position $i$, let $q_i$ be the relative frequency vecotr of bases at pisotion $i$ and $p$ be the background probabiltiy vector.
-
-1. Take the $\log_2$ of $q_i/p$,may need scaling to avoid $\log_20$.
-2. Subtract the median: $f_i=\log_2\frac{q_i}{p}-median(\log_2\frac{q_i}{p})$.
-3. Normalized $f_i^{norm=}|f_i|$ and calculate the information content, $IC_i$, based on $f_i^{norm}$
-4. 
-
-##Depletion weights
-
-Logolas further allow users to customize the weight of depletion. The option `depletion_weight` is the weighting attached to the information content and the rest is for the log height. As the depletion weight increasing, the depletion would look more prominent. The default depletion weight is 0.5 and comparisons of different depletion weights are shown below. The weights chosen are 0.1,0.3,0.5(default),1.
+Logolas further allow users to customize the weight of depletion. The option `depletion_weight` is the weighting attached on top of the `nlogomaker` scaling rules for logo height detection (see the 3 algorithms above), that highlights the depletion more clearly. The default choice of `depletion_weight` is $0$, which means the depletion is solely determined by the above rules. However with the depletion weight increasing, the depletion (as well as the enrichment) would look more prominent. Here we show `nlogomaker` plots for the same PWM with the `depletion_weights` chosen to be 0 (default), 0.3, 0.5, 1.
 
 ```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 grid.newpage()
@@ -266,9 +312,9 @@ nlogomaker(p@pwm,
 
 ```
 
-##Border and fill
+## Border and fill
 
-User could customize the border and fill of the logos. For example, the user may choose to fill the enrichment while only show the border of depletion. The figure below shows the various option on making the logos.
+Logolas allows the user to customize the border and fill of the logos and also have separate border and fill rules for the enrichment and depletion of logos. The figure below shows the various options of choosing border and fill for making the logos.
 
 ```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 grid.newpage()

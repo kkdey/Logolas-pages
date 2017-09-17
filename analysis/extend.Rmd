@@ -23,13 +23,14 @@ knitr::read_chunk("chunks.R")
 
 <!-- Add your analysis here -->
 
-##Protein logo plot
 
-User could use Logolas for protein sequence motif plot as well, as its logo library includes all the English alphabets and the 20 amino acids have a 1-letter representation using English alphabets.
+In this chapter, we discuss how Logolas can be used to plot symbols beyond A, C, G, T which formed the library of symbols for all the examples in the first chapter. Here we show examples where Logolas has been used for plotting symbols that are English alphabets beyond the A, C, G and T, as well as strings comprising of alphabets and numbers and also arrows. This really increases the scope of applications of the Logolas package.  
 
-Note that all one needs to do to build the logo plots is to specify the row names and column names as per the the logos and the stack labels and then fix the colors for the logos.
+## Protein logo plot
 
-The default background probability is uniform and user could specify the background probability for each amino acid. One common used is from the BLOSUM62.
+In the first chapter, we primarily discussed how Logolas can be used in various ways to plot the PWM matrix for DNA sequence motifs. However Logolas can be used to visualize protein sequence motifs as its logo library includes all the English alphabets and the 20 amino acids, which are the building blocks for the proteins, have a 1-letter representation using English alphabets.
+
+The default background probability is uniform in Logolas but for the protein data exampl here, we use a background `bg` set from BLOSUM62.
 
 ```{r,message=FALSE,warning=FALSE}
 library(Logolas)
@@ -91,11 +92,15 @@ pop_name = 'Logo plot with Varying background prob',
 frame_width = 1)
 ```
 
-##PSSM plot
+## PSSM plot
 
-Position-specific scoring matrix(PSSM) is constructed from a multiple alignment of a set of sequences. If a residue at a particular position is highly conserved(high relative frequency), it is given a high positive socre and the other residues are given high negative score. All residues are given scores near zero if the residues are all weakly conserved at that position.
+However for protein motif data, PWM is not always reported. Instead a more popular position scoring candidate for the amino acids data is called PSSM (Position specific scoring matrix).
 
-The function `logo_pssm` plots the sequence logo based on the PSSM.
+PSSM is constructed from a multiple alignment of a set of sequences. If a residue at a particular position is highly conserved(high relative frequency), it is given a high positive socre and the other residues are given high negative score. All residues are given scores near zero if the residues are all weakly conserved at that position.
+
+A guide to how to construct the PSSM matrix from the PWM matrix is given here [LINK - Dongyue]
+
+Logolas provides a function `logo_pssm` to plot the sequence logo based on the PSSM data.
 
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 bg=c(0.074,0.052,0.045,0.054,0.025,0.034,0.054,0.074,0.026,0.068,0.099,0.058,0.025,0.047,0.039,0.057,0.051,0.013,0.034,0.073)
@@ -132,18 +137,13 @@ logo_pssm(pssm,
           )
 ```
 
-##Mutation signature plot
+## Mutation signature plot
 
-Logolas could plot strings as logos. The first example is the cancer mutation signature. Detection of cancer mutaiton signatures is important in the study of the causes and mechanism of cancers. Usually we consider 6 possible mutation patterns(C to A/G/T, T to A/C/G). Suppose for a set of cell lines, we are provided data on the number of mutations (nucleotide substitions) and nucleotides at the flanking bases of the nucleotide substitution. 
+Mutation signatures have been shown to play a major role in causing cancer and driving cancer progression (Alexandrov et al, Shiraichi et al). In a cancer mutation signature, we usually record the type of mutation (C->T, C->A, C->G, T->A, T->C.T->G) along with the immediately surrounding left and right flanking bases, each of which can take the symbols A, C, G and T. 
 
-Shiraishi *et al.*(2015) proposed a parsimonious approach to model the mutation signatures, by assuming independence across mutation patterns. We apply it here on a
-demo example.
+Using Logolas, one can plot mutation logos like $X>Y$, which denotes $X\rightarrow Y$ substitutions. Using this, therefore, the user can present the logo plot for the whole mutational signature. 
 
-we use the symbols $X>Y$ to denote the $X\rightarrow Y$ substitutions. The data contains proportion of logos in each position :  left flanking, left flanking, mutation, 1 right flanking and 2 right flanking. Note that $X>Y$ type symbols occur only in the middle stack (column) as that is the mutation stack, while the nucleotides A, C, T and G occur only in the left two and right two flanking bases stacks (columns).
-
-User may want to have the C in $C>T$ to be of the same color as the C at the flankings and Logolas coloring profile provides the user the flexibility to color each symbol instead of a string. We use the color type `per_symbol` instead of the `per_row` profile we have been using so far. We consider a list of all symbols `total_chars` which is set as default to the list chosen above (so you can skip the `total_chars` argument below). However, if the user adds a symbol to the library (the process of doing that we show in the end), then the library is expected to grow and the user then might want to update the total_chars list by adding new symbols.
-
-Another coloring option is `per_column`, in which we have a specific color for a specific column. This sort of coloring might be useful when the user wants to highlight the difference between columns. We provide an example of this next.
+User may want to have the C in $C>T$ to be of the same color as the C at the flanking bases and Logolas coloring profile provides the user the flexibility to color each symbol instead of a string. We use the color type `per_symbol` instead of the `per_row` profile used before. We consider a list of all symbols `total_chars` which is set as default to the list chosen above (so you can skip the `total_chars` argument below). However, if the user adds a symbol to the library (the process of doing that we show in the end), then the library is expected to grow and the user then might want to update the total_chars list by adding new symbols.
 
 
 ```{r,message=FALSE}
@@ -214,13 +214,17 @@ logomaker(table,
           ylab = "Information content")
 ```
 
-##Full string plots
+Another coloring option is `per_column`, in which we have a specific color for a specific column. This sort of coloring might be useful when the user wants to highlight the difference between columns. We provide an example of this next.
 
-Logolas provides a handy visualization of strings, apart from the simple alphabet. We present two examples below.
+[ECOLOGICAL Logo plot]
 
-###Histone marks
+## Full string plots
 
-In studies related to histone marks, one might be interested to see if certain histone marks are prominent than others in some cell lines or tissues or in some genomic regions. In this case, we apply Logolas on an example data from Koch *et al* (2007).  The authors recorded number of histone modification sites identified by their algorithm which overlap with an intergenic sequence, intron, exon, gene start and gene end for the lymphoblastoid cell line, GM06990, in the ChIP-CHIP data. Note here that the histone mark symbols are alphanumeric, for example H3K4ME1.
+The mutational signature Logo plot was the first example of the use of strings as logos in Logolas. Now we look at a few more examples, where the logos are alphanumeric strings.
+
+### Histone marks
+
+In studies related to histone marks, one might be interested to see if certain histone marks are prominent than others in some cell lines or tissues or in some genomic regions. In this case, we apply Logolas on an example data from Koch *et al* (2007).  The authors recorded number of histone modification sites identified by their algorithm which overlap with an intergenic sequence, intron, exon, gene start and gene end for the lymphoblastoid cell line, GM06990, in the ChIP-CHIP data. Note here that the histone mark symbols are alphanumeric, for example, H3K4ME1.
 
 ```{r,message=FALSE}
 mat <- rbind(c(326, 296, 81, 245, 71),
@@ -238,13 +242,13 @@ color_profile <- list("type" = "per_row",
 logomaker(mat,color_profile = color_profile,frame_width = 1, ic.scale = TRUE, yscale_change = TRUE)
 ```
 
-From the plot, it's practical to see how the patterns of histone modification sites changes across genomic region types for that cell line.
+From the plot, we see how the patterns of histone modification sites change across genomic region types for that cell line.
 
-###Document mining
+### Document mining
 
-Further, the logos could include the punctuation marks as well like the full stop. 
+Further, besides alphanumerics, the logos in Logolas may include punctuation marks - dot, colon, semicolon, along with dashes etc. 
 
-Here we build a logo plot of the field categories of manuscipts submitted on aRxiv by 4 professors from Department of Statistics, University of Chicago. Note that the field categories here are a combination of numbers, alphabets, dots and dashes.
+We present such an example using the data on the field categories of manuscipts submitted on aRxiv by 4 professors from Department of Statistics, University of Chicago. Note that the field categories here are a combination of numbers, alphabets, dots and dashes.
 
 ```{r,message=FALSE,warning=FALSE}
 library(aRxiv)
@@ -292,9 +296,9 @@ logomaker(tab_data,
 
 ```
 
-##Combining plots with R graphs
+## Combine Logolas with ggplot2 graphics
 
-User could combine logo plots from Logolas with plots from the other R graphs such as R base graphics and ggplot2 graph.
+We saw in the previous chapter that the user can build multi-panel Logolas plots. However, once can also have multi-panel plots pooling Logolas plots with ggplot2 graphics. We show such an example below.
 
 ```{r,warning=FALSE,message=FALSE,fig.height=4,fig.width=8}
 library(ggplot2)

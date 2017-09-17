@@ -90,14 +90,14 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-16</p>
+<p><strong>Last updated:</strong> 2017-09-17</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> a1a3ebd</p>
+<p><strong>Code version:</strong> 8a1bced</p>
 <!-- Add your analysis here -->
-<p>Consensus sequence is the summarized patten of multiple sequence alignment of nucleotide or amino acid. For the nucleotide, the consensus sequence is usually coded by the IUPAC, in which nucleobases are represented by the first letters of their names: [G]uanine, [C]ytosine, [A]denine, and [T]hymine. For the amino acid sequence, the Prosite pattern syntax is commonly used.</p>
-<p>Based on the logo heights from the negative logo plot, we develop a way to detect and give the consensus sequence and it could provide more information about the conservation of residues, especially for the nucleotide. Some existing methods, such as the <code>getIUPAC</code> in the atSNP package, only give the enrichment of the residues and hence are biased. However, our method could give both the enrichment and depletion bases.</p>
-<p>For the nucleotide, aprat from the standard IUPAC code, we denote the depleted bases by lower cases of the corresponding IUPAC code.</p>
+<p>Using the negative Logolas plot repreentation, the user can get a consensus sequence of the logos along the positions. For the DNA sequence data, the consensus sequence is usually coded by the IUPAC code, in which the bases are represented by the first letters of their names: [G]uanine, [C]ytosine, [A]denine, and [T]hymine (check the <code>getIUPAC</code> in the <a href="https://github.com/chandlerzuo/atSNP">atSNP</a> package). For the amino acid sequence, the Prosite syntax is commonly used.</p>
+<p>Based on the logo heights from the Negative Logolas plot, we develop an algorithm to generate a consensus sequence, which can be used for prediction purposes to check if a given sequence matches with the underlying PWM matrix. Unlike the IUPAC and the Prosite nomenclatures that only decide on the consensus sequence using logo enrichment, the Logolas nomenclature uses both enrichment and depletion of the symbols.</p>
+<p>In the Logolas nomenclature, we use uppercase of the symbol to depict enrichment and lowercase of a symbol to depict depletion of that symbol. We present an example below to demonstrate how Logolas nomenclature can be used.</p>
 <pre class="r"><code>GetMotif=function(pwm,seqmotif,bg=NULL){
   library(Logolas)
   if(is.null(bg)){bg=rep(1/nrow(pwm),nrow(pwm))}
