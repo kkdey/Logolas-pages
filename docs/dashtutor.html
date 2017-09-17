@@ -84,7 +84,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <ul>
 <li><a href="#model-formulation">Model formulation</a></li>
 <li><a href="#default-parameters">Default parameters</a></li>
-<li><a href="#dash-examples">Dash examples</a></li>
+<li><a href="#examples-of-dash">Examples of dash</a></li>
+<li><a href="#dash-and-background-probability">Dash and background probability</a></li>
 <li><a href="#session-information">Session information</a></li>
 </ul>
 </div>
@@ -93,30 +94,31 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-15</p>
+<p><strong>Last updated:</strong> 2017-09-17</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 0de44dc</p>
+<p><strong>Code version:</strong> 45f4d02</p>
 <!-- Add your analysis here -->
-<p>Logo plot is based on the position weight matrix(PWM), which is transformed from the position frequency matrix(PFM). PFM consists of the counts for each base at each position. This is a typical example of compositional data, which is used to describe the constituents of discrete sample space.</p>
-<p>Suppose for a specific position of a TFBS, the compositional data is <span class="math display">\[ (A, C, G, T) : = (6, 1, 2, 1) \]</span> and one another case is <span class="math display">\[ (A, C, G, T) : = (600, 100, 200, 100). \]</span> And the background probability is assumed to be equal for the four bases. If we transform the counts data into PWM by using the sample proportion, then the estimated proportions for the four bases are the same in both cases. However, in the second case, we have total 1000 samples while only 10 samples in the first case. Hence, we would consider to shrink the estimates to the background probability more strongly in the first case than that in the second case, for the reason that the force of data is stronger in the second scenarios.</p>
+<p>Typically logo plots are used to represent the position weight matrix (PWM). However, the PWM is often generated from underlying position frequency matrix (PFM). PFM stores the compositional data - the frequencies of the symbols at each position. Given a PFM matrix however, we also have knowledge of the scale of the frequencies for each position. This additional information can be used to get a better logo plot representation compared to the usual PWM-based logo plots.</p>
+<p>Suppose for a specific position in a sequence, the compositional data is <span class="math display">\[ (A, C, G, T) : = (6, 1, 2, 1) \]</span> and in another case, it is <span class="math display">\[ (A, C, G, T) : = (600, 100, 200, 100). \]</span>. We assume that the background probability is equal for the four bases. If we transform the positional frequencies into PWM by taking the sample proportion, then the estimated PWM would be same for the two cases and would correspond to the same logo plot representation. However, in the second case, we have a total frequency of 1000 for all symbols while for the first case, it is only 10. Hence, it makes sense to shrink the PWM estimate to the background probability more strongly in the first case than that in the second case.</p>
+<p>This is what we accomplish in an adaptive fashion using <code>dash</code> (Dirichlet Adaptive Shrinkage). We discuss the model formulation next.</p>
 <div id="model-formulation" class="section level2">
 <h2>Model formulation</h2>
-<p>To address these questions, we propose Dirichlet adaptive shrinkage(dash) for compositional data. Assume that there are <span class="math inline">\(L\)</span> constituents in the compositional mix. <span class="math inline">\(L\)</span> equals <span class="math inline">\(4\)</span> (corresponding to A,C, G and T bases) for the transcription factor data and <span class="math inline">\(20\)</span> corresponding to the amino acids for the protein sequence data.</p>
-<p>Suppose there are <span class="math inline">\(L\)</span> categories and <span class="math inline">\(n\)</span> compositional samples. Here, <span class="math inline">\(n\)</span> represents the number of positions for a TF. We model these compositional counts vectors as follows</p>
+<p>Assume that there are <span class="math inline">\(L\)</span> constituents in the compositional mix. <span class="math inline">\(L\)</span> equals <span class="math inline">\(4\)</span> (corresponding to A,C, G and T bases) for the DNa sequence motif data and <span class="math inline">\(20\)</span> corresponding to the amino acids for the protein sequence data.</p>
+<p>Suppose there are <span class="math inline">\(L\)</span> categories and <span class="math inline">\(n\)</span> positions. We model these compositional counts vectors as follows</p>
 <p><span class="math display">\[ (c_{n1}, c_{n2}, \cdots, c_{nL}) \sim Mult \left ( c_{n+} : p_{n1}, p_{n2}, \cdots, p_{nL} \right ) \]</span></p>
-<p>where <span class="math inline">\(c_{n+}\)</span> is the total frequency of the different constituents of the compositional data observed for the <span class="math inline">\(n\)</span> th base. <span class="math inline">\(p_{nl}\)</span> here represents the compositional probabilities such that</p>
+<p>where <span class="math inline">\(c_{n+}\)</span> is the total frequency of the different constituents of the compositional data observed for the <span class="math inline">\(n\)</span> th base. <span class="math inline">\(p_{nl}\)</span> here represents the compositional probability for the <span class="math inline">\(l\)</span> th base in the position <span class="math inline">\(n\)</span>. We have</p>
 <p><span class="math display">\[ p_{nl} &gt;= 0 \hspace {1 cm} \sum_{l=1}^{L} p_{nl} = 1 \]</span></p>
-<p>We then choose the Dirichlet prior distribution on the <span class="math inline">\((p_{n1}, p_{n2}, \cdots, p_{nL})\)</span>. In order to achieve the adaptive shrinkage property, we assume a mixture of known Dirichlet priors, each having mean same as the background mean but with varying amounts of concentration, along with unknown mixture proportions to be estimated from the data. <span class="math display">\[ \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right ) : = \sum_{k=1}^{K} \pi_{k} Dir \left (\alpha_{k} \mu_{k1}, \alpha_{k} \mu_{k2}, \cdots, \alpha_{k} \mu_{kL} \right ) \hspace {1 cm} \alpha_{k} &gt; 0 \hspace{1 cm} \sum_{l=1}^{L} \mu_{kl} = 1 \]</span> We assume a prior of <span class="math inline">\(\pi_{k}\)</span> to be Dirichlet</p>
+<p>We choose the Dirichlet prior distribution on the compositional probability vector <span class="math inline">\((p_{n1}, p_{n2}, \cdots, p_{nL})\)</span>. In order to perform adaptive shrinkage, we assume a mixture of known Dirichlet priors, each having mean to be the background mean probability vector ( <em>{1}, </em>{2}, , _{L} ), but with varying amounts of concentration, which need to be estimated along with the unknown mixture proportions from the data. <span class="math display">\[ \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right ) : = \sum_{k=1}^{K} \pi_{k} Dir \left (\alpha_{k} \mu_{1}, \alpha_{k} \mu_{2}, \cdots, \alpha_{k} \mu_{L} \right ) \hspace {1 cm} \alpha_{k} &gt; 0 \hspace{1 cm} \sum_{l=1}^{L} \mu_{l} = 1 \]</span> We assume a prior of <span class="math inline">\(\pi_{k}\)</span> to be Dirichlet</p>
 <p><span class="math display">\[ f(\pi) : = \prod_{k=1}^{K} {\pi_{k}}^{\lambda_{k}-1} \]</span></p>
 </div>
 <div id="default-parameters" class="section level2">
 <h2>Default parameters</h2>
-<p>We choose a default set of <span class="math inline">\(\alpha_{k}\)</span> to be <span class="math inline">\((Inf, 100, 50, 20, 10, 2, 1, 0.1, 0.01)\)</span>. In this case <span class="math inline">\(\alpha_{k}=Inf\)</span> corresponds essentially to point mass at the prior means, and then the subsequent choices of <span class="math inline">\(\alpha_{k}\)</span> have lower degree of concentration. $_{k} = $ corresponds to the most uniform scenario, whereas <span class="math inline">\(\alpha_{k} &lt; 1\)</span> correspond to cases with probability masses at the edges of the simplex but with the mean at the prior mean. These components would help to direct the points close to the corners towards the corners and away from the center, resulting in clearer separation of the points closer to the mean with the ones away from it.</p>
-<p>We choose the prior amount of shrinkage of <span class="math inline">\(\pi_{k}\)</span>, namely <span class="math inline">\(\lambda_{k}\)</span> to be <span class="math inline">\(\left( 10, 1, 1, 1, \cdots, 1 \right )\)</span>.</p>
+<p>We choose a default set of <span class="math inline">\(\alpha_{k}\)</span> to be <span class="math inline">\((Inf, 100, 50, 20, 10, 2, 1, 0.1, 0.01)\)</span>. In this case <span class="math inline">\(\alpha_{k}=Inf\)</span> corresponds essentially to point mass at the prior mean or background mean ( <em>{1}, </em>{2}, , _{L} ), and then the subsequent choices of <span class="math inline">\(\alpha_{k}\)</span> have lower degree of concentration. <span class="math inline">\(\alpha_{k} = 1\)</span> corresponds to the most uniform scenario, whereas <span class="math inline">\(\alpha_{k} &lt; 1\)</span> correspond to cases with probability masses at the edges of the simplex but with the mean at the prior mean. The latter components would direct the points close to the corners towards the corners and away from the center, resulting in clearer separation of the points closer to the mean with the ones away from it.</p>
+<p>We choose the default prior amount of shrinkage of <span class="math inline">\(\pi_{k}\)</span>, namely <span class="math inline">\(\lambda_{k}\)</span> to be <span class="math inline">\(\left( 1, 1, 1, 1, \cdots, 1 \right )\)</span>. The user may want to increase the weight on the first term (corresponding to ( _{k} = Inf ) ) to enforce stronger shrinkage.</p>
 </div>
-<div id="dash-examples" class="section level2">
-<h2>Dash examples</h2>
+<div id="examples-of-dash" class="section level2">
+<h2>Examples of dash</h2>
 <p>We apply dash to PFMs with small, medium and high total frequencies(<span class="math inline">\(c_{n+}\)</span>). The total frequencies in the three cases are 5,20 and 114. Firstly, the logo plots are compared and then negative logo plot.</p>
 <p>Logo plots:</p>
 <pre class="r"><code>library(Logolas)
@@ -159,7 +161,8 @@ logomaker(pfm1,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = &#39;low freq&#39;)
+          pop_name = &#39;low freq&#39;,
+          control = list(gap_xlab = 3))
 seekViewport(paste0(&#39;plotlogo&#39;,2))
 pfm1dash=t(dash(t(pfm1),optmethod = &#39;mixEM&#39;)$posmean)
 rownames(pfm1dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
@@ -169,7 +172,8 @@ logomaker(pfm1dash,
           frame_width = 1,
           newpage=F,
           yscale_change = F,
-          pop_name = &#39;low freq, dash&#39;)
+          pop_name = &#39;low freq, dash&#39;,
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 3))
 logomaker(pfm2,
@@ -177,7 +181,8 @@ logomaker(pfm2,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = &#39;medium freq&#39;)
+          pop_name = &#39;medium freq&#39;,
+          control = list(gap_xlab = 3))
 seekViewport(paste0(&#39;plotlogo&#39;,4))
 pfm2dash=t(dash(t(pfm2),optmethod = &#39;mixEM&#39;)$posmean)
 rownames(pfm2dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
@@ -187,7 +192,8 @@ logomaker(pfm2dash,
           frame_width = 1,
           newpage=F,
           yscale_change = F,
-          pop_name = &#39;medium freq, dash&#39;)
+          pop_name = &#39;medium freq, dash&#39;,
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 5))
 logomaker(pfm3,
@@ -195,7 +201,8 @@ logomaker(pfm3,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = &#39;high freq&#39;)
+          pop_name = &#39;high freq&#39;,
+          control = list(gap_xlab = 3))
 seekViewport(paste0(&#39;plotlogo&#39;,6))
 pfm3dash=t(dash(t(pfm3),optmethod = &#39;mixEM&#39;)$posmean)
 rownames(pfm3dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
@@ -205,9 +212,10 @@ logomaker(pfm3dash,
           frame_width = 1,
           newpage=F,
           yscale_change = F,
-          pop_name = &#39;high freq, dash&#39;)</code></pre>
+          pop_name = &#39;high freq, dash&#39;,
+          control = list(gap_xlab = 3))</code></pre>
 <p><img src="figure/dashtutor.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Negative logo plots:</p>
+<p>The corresponding negative Logolas plots are given below.</p>
 <pre class="r"><code>grid.newpage()
 layout.rows &lt;- 3
 layout.cols &lt;- 2
@@ -232,7 +240,8 @@ nlogomaker(pfm1,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = &#39;low freq&#39;)
+          pop_name = &#39;low freq&#39;,
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0(&#39;plotlogo&#39;,2))
 pfm1dash=t(dash(t(pfm1),optmethod = &#39;mixEM&#39;)$posmean)
@@ -243,7 +252,8 @@ nlogomaker(pfm1dash,
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
-          pop_name = &#39;low freq, dash&#39;)
+          pop_name = &#39;low freq, dash&#39;,
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 3))
 nlogomaker(pfm2,
@@ -251,7 +261,8 @@ nlogomaker(pfm2,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = &#39;medium freq&#39;)
+          pop_name = &#39;medium freq&#39;,
+          control = list(gap_xlab = 3))
 seekViewport(paste0(&#39;plotlogo&#39;,4))
 pfm2dash=t(dash(t(pfm2),optmethod = &#39;mixEM&#39;)$posmean)
 rownames(pfm2dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
@@ -261,7 +272,8 @@ nlogomaker(pfm2dash,
           logoheight = &#39;log_odds&#39;,
           frame_width = 1,
           newpage=F,
-          pop_name = &#39;medium freq, dash&#39;)
+          pop_name = &#39;medium freq, dash&#39;,
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 5))
 nlogomaker(pfm3,
@@ -269,7 +281,8 @@ nlogomaker(pfm3,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = &#39;high freq&#39;)
+          pop_name = &#39;high freq&#39;,
+          control = list(gap_xlab = 3))
 seekViewport(paste0(&#39;plotlogo&#39;,6))
 pfm3dash=t(dash(t(pfm3),optmethod = &#39;mixEM&#39;)$posmean)
 rownames(pfm3dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
@@ -279,29 +292,20 @@ nlogomaker(pfm3dash,
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
-          pop_name = &#39;high freq, dash&#39;)</code></pre>
+          pop_name = &#39;high freq, dash&#39;,
+          control = list(gap_xlab = 3))</code></pre>
 <p><img src="figure/dashtutor.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dash-and-background-probability" class="section level2">
+<h2>Dash and background probability</h2>
 <p>The default background probability is uniform for each compositional class. User could also specify the background probability in the functions including <code>dash</code>,<code>logomaker</code>,<code>nlogomaker</code>.</p>
 <p>Here, we present the comparisons of logo plots and negative logo plots from 4 different PWMs of one PFM generated in the following way:</p>
-<table>
-<thead>
-<tr class="header">
-<th>1</th>
-<th align="center">2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>same bg, no dash</td>
-<td align="center">same bg, dash</td>
-</tr>
-<tr class="even">
-<td>varying bg, no dash</td>
-<td align="center">varying bg, dash</td>
-</tr>
-</tbody>
-</table>
-<p>Logo plots:</p>
+<ul>
+<li>uniform background probability for all positions + no dash</li>
+<li>uniform background probability for all positions + dash</li>
+<li>non-uniform and specified background probability + no dash</li>
+<li>non-uniform and specified background probability + dash</li>
+</ul>
 <pre class="r"><code>bg=c(0.3141, 0.1859, 0.1859, 0.3141)
 grid.newpage()
 layout.rows &lt;- 2
@@ -327,7 +331,8 @@ logomaker(pfm2,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = &#39;same bg, no dash&#39;)
+          pop_name = &#39;same bg, no dash&#39;,
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 2))
 logomaker(pfm2dash,
@@ -335,7 +340,8 @@ logomaker(pfm2dash,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = &#39;same bg, dash&#39;)
+          pop_name = &#39;same bg, dash&#39;,
+          control = list(gap_xlab = 3))
 
 
 seekViewport(paste0(&quot;plotlogo&quot;, 3))
@@ -345,7 +351,8 @@ logomaker(pfm2,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = &#39;varying bg, no dash&#39;)
+          pop_name = &#39;varying bg, no dash&#39;,
+          control = list(gap_xlab = 3))
 
 pfm2dashbg=t(dash(t(pfm2),optmethod = &#39;mixEM&#39;,mode = bg)$posmean)
 rownames(pfm2dashbg)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
@@ -358,7 +365,8 @@ logomaker(pfm2dashbg,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = &#39;varying bg, dash&#39;)</code></pre>
+          pop_name = &#39;varying bg, dash&#39;,
+          control = list(gap_xlab = 3))</code></pre>
 <p><img src="figure/dashtutor.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Negative logo plots:</p>
 <pre class="r"><code>grid.newpage()
@@ -388,7 +396,8 @@ nlogomaker(pfm2,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = &#39;same bg, no dash&#39;)
+          pop_name = &#39;same bg, no dash&#39;,
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 2))
 nlogomaker(pfm2dash,
@@ -396,7 +405,8 @@ nlogomaker(pfm2dash,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = &#39;same bg, dash&#39;)
+          pop_name = &#39;same bg, dash&#39;,
+          control = list(gap_xlab = 3))
 
 
 seekViewport(paste0(&quot;plotlogo&quot;, 3))
@@ -406,7 +416,8 @@ nlogomaker(pfm2,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = &#39;varying bg, no dash&#39;)
+          pop_name = &#39;varying bg, no dash&#39;,
+          control = list(gap_xlab = 3))
 
 pfm2dashbg=t(dash(t(pfm2),optmethod = &#39;mixEM&#39;,mode = bg)$posmean)
 rownames(pfm2dashbg)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
@@ -419,7 +430,8 @@ nlogomaker(pfm2dashbg,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = &#39;varying bg, dash&#39;)</code></pre>
+          pop_name = &#39;varying bg, dash&#39;,
+          control = list(gap_xlab = 3))</code></pre>
 <p><img src="figure/dashtutor.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="session-information" class="section level2">

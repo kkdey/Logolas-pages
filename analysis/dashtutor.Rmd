@@ -41,18 +41,18 @@ where \(c_{n+}\) is the total frequency of the different constituents of the com
 
 \[ p_{nl} >= 0 \hspace {1 cm} \sum_{l=1}^{L} p_{nl} = 1 \]
 
-We choose the Dirichlet prior distribution on the compositional probability vector \((p_{n1}, p_{n2}, \cdots, p_{nL})\). In order to perform adaptive shrinkage, we assume a mixture of known Dirichlet priors, each having mean to be the background mean probability vector \( \mu_{1}, \mu_{2}, \cdots, \mu_{L} \), but with varying amounts of concentration, which need to be estimated along with the unknown mixture proportions from the data. \[ \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right ) : = \sum_{k=1}^{K} \pi_{k} Dir \left (\alpha_{k} \mu_{k1}, \alpha_{k} \mu_{k2}, \cdots, \alpha_{k} \mu_{kL} \right ) \hspace {1 cm} \alpha_{k} > 0 \hspace{1 cm} \sum_{l=1}^{L} \mu_{kl} = 1 \] 
+We choose the Dirichlet prior distribution on the compositional probability vector \((p_{n1}, p_{n2}, \cdots, p_{nL})\). In order to perform adaptive shrinkage, we assume a mixture of known Dirichlet priors, each having mean to be the background mean probability vector \( \mu_{1}, \mu_{2}, \cdots, \mu_{L} \), but with varying amounts of concentration, which need to be estimated along with the unknown mixture proportions from the data. \[ \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right ) : = \sum_{k=1}^{K} \pi_{k} Dir \left (\alpha_{k} \mu_{1}, \alpha_{k} \mu_{2}, \cdots, \alpha_{k} \mu_{L} \right ) \hspace {1 cm} \alpha_{k} > 0 \hspace{1 cm} \sum_{l=1}^{L} \mu_{l} = 1 \] 
 We assume a prior of \(\pi_{k}\) to be Dirichlet
 
 \[ f(\pi) : = \prod_{k=1}^{K} {\pi_{k}}^{\lambda_{k}-1} \]
 
-##Default parameters
+## Default parameters
 
-We choose a default set of \(\alpha_{k}\) to be \((Inf, 100, 50, 20, 10, 2, 1, 0.1, 0.01)\). In this case \(\alpha_{k}=Inf\) corresponds essentially to point mass at the prior means, and then the subsequent choices of \(\alpha_{k}\) have lower degree of concentration. $_{k} = $ corresponds to the most uniform scenario, whereas \(\alpha_{k} < 1\) correspond to cases with probability masses at the edges of the simplex but with the mean at the prior mean. These components would help to direct the points close to the corners towards the corners and away from the center, resulting in clearer separation of the points closer to the mean with the ones away from it.
+We choose a default set of \(\alpha_{k}\) to be \((Inf, 100, 50, 20, 10, 2, 1, 0.1, 0.01)\). In this case \(\alpha_{k}=Inf\) corresponds essentially to point mass at the prior mean or background mean \( \mu_{1}, \mu_{2}, \cdots, \mu_{L} \), and then the subsequent choices of \(\alpha_{k}\) have lower degree of concentration. $\alpha_{k} = 1$ corresponds to the most uniform scenario, whereas \(\alpha_{k} < 1\) correspond to cases with probability masses at the edges of the simplex but with the mean at the prior mean. The latter components would direct the points close to the corners towards the corners and away from the center, resulting in clearer separation of the points closer to the mean with the ones away from it.
 
-We choose the prior amount of shrinkage of \(\pi_{k}\), namely \(\lambda_{k}\) to be \(\left( 10, 1, 1, 1, \cdots, 1 \right )\).
+We choose the default prior amount of shrinkage of \(\pi_{k}\), namely \(\lambda_{k}\) to be \(\left( 1, 1, 1, 1, \cdots, 1 \right )\). The user may want to increase the weight on the first term (corresponding to \( \alpha_{k} = Inf \)  ) to enforce stronger shrinkage. 
 
-##Dash examples
+## Examples of dash 
   
 We apply dash to PFMs with small, medium and high total frequencies($c_{n+}$). The total frequencies in the three cases are 5,20 and 114. Firstly, the logo plots are compared and then negative logo plot.
 
@@ -99,7 +99,8 @@ logomaker(pfm1,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = 'low freq')
+          pop_name = 'low freq',
+          control = list(gap_xlab = 3))
 seekViewport(paste0('plotlogo',2))
 pfm1dash=t(dash(t(pfm1),optmethod = 'mixEM')$posmean)
 rownames(pfm1dash)=c('A','C','G','T')
@@ -109,7 +110,8 @@ logomaker(pfm1dash,
           frame_width = 1,
           newpage=F,
           yscale_change = F,
-          pop_name = 'low freq, dash')
+          pop_name = 'low freq, dash',
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0("plotlogo", 3))
 logomaker(pfm2,
@@ -117,7 +119,8 @@ logomaker(pfm2,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = 'medium freq')
+          pop_name = 'medium freq',
+          control = list(gap_xlab = 3))
 seekViewport(paste0('plotlogo',4))
 pfm2dash=t(dash(t(pfm2),optmethod = 'mixEM')$posmean)
 rownames(pfm2dash)=c('A','C','G','T')
@@ -127,7 +130,8 @@ logomaker(pfm2dash,
           frame_width = 1,
           newpage=F,
           yscale_change = F,
-          pop_name = 'medium freq, dash')
+          pop_name = 'medium freq, dash',
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0("plotlogo", 5))
 logomaker(pfm3,
@@ -135,7 +139,8 @@ logomaker(pfm3,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = 'high freq')
+          pop_name = 'high freq',
+          control = list(gap_xlab = 3))
 seekViewport(paste0('plotlogo',6))
 pfm3dash=t(dash(t(pfm3),optmethod = 'mixEM')$posmean)
 rownames(pfm3dash)=c('A','C','G','T')
@@ -145,12 +150,13 @@ logomaker(pfm3dash,
           frame_width = 1,
           newpage=F,
           yscale_change = F,
-          pop_name = 'high freq, dash')
+          pop_name = 'high freq, dash',
+          control = list(gap_xlab = 3))
 
 ```
 
+The corresponding negative Logolas plots are given below.
 
-Negative logo plots:
 ```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 
 grid.newpage()
@@ -177,7 +183,8 @@ nlogomaker(pfm1,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = 'low freq')
+          pop_name = 'low freq',
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0('plotlogo',2))
 pfm1dash=t(dash(t(pfm1),optmethod = 'mixEM')$posmean)
@@ -188,7 +195,8 @@ nlogomaker(pfm1dash,
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
-          pop_name = 'low freq, dash')
+          pop_name = 'low freq, dash',
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0("plotlogo", 3))
 nlogomaker(pfm2,
@@ -196,7 +204,8 @@ nlogomaker(pfm2,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = 'medium freq')
+          pop_name = 'medium freq',
+          control = list(gap_xlab = 3))
 seekViewport(paste0('plotlogo',4))
 pfm2dash=t(dash(t(pfm2),optmethod = 'mixEM')$posmean)
 rownames(pfm2dash)=c('A','C','G','T')
@@ -206,7 +215,8 @@ nlogomaker(pfm2dash,
           logoheight = 'log_odds',
           frame_width = 1,
           newpage=F,
-          pop_name = 'medium freq, dash')
+          pop_name = 'medium freq, dash',
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0("plotlogo", 5))
 nlogomaker(pfm3,
@@ -214,7 +224,8 @@ nlogomaker(pfm3,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = 'high freq')
+          pop_name = 'high freq',
+          control = list(gap_xlab = 3))
 seekViewport(paste0('plotlogo',6))
 pfm3dash=t(dash(t(pfm3),optmethod = 'mixEM')$posmean)
 rownames(pfm3dash)=c('A','C','G','T')
@@ -224,20 +235,22 @@ nlogomaker(pfm3dash,
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
-          pop_name = 'high freq, dash')
+          pop_name = 'high freq, dash',
+          control = list(gap_xlab = 3))
 
 ```
+
+## Dash and background probability 
 
 The default background probability is uniform for each compositional class. User could also specify the background probability in the functions including `dash`,`logomaker`,`nlogomaker`.
 
 Here, we present the comparisons of logo plots and negative logo plots from 4 different PWMs of one PFM generated in the following way:
 
-|           1           |            2          |
-| -------------------- |:--------------------:|
-| same bg, no dash     |    same bg, dash     |
-| varying bg, no dash  |     varying bg, dash  | 
+- uniform background probability for all positions + no dash 
+- uniform background probability for all positions + dash
+- non-uniform and specified background probability + no dash 
+- non-uniform and specified background probability + dash 
 
-Logo plots:
 
 ```{r,message=FALSE,warning=FALSE,fig.height=7,fig.width=7}
 bg=c(0.3141, 0.1859, 0.1859, 0.3141)
@@ -265,7 +278,8 @@ logomaker(pfm2,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = 'same bg, no dash')
+          pop_name = 'same bg, no dash',
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0("plotlogo", 2))
 logomaker(pfm2dash,
@@ -273,7 +287,8 @@ logomaker(pfm2dash,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = 'same bg, dash')
+          pop_name = 'same bg, dash',
+          control = list(gap_xlab = 3))
 
 
 seekViewport(paste0("plotlogo", 3))
@@ -283,7 +298,8 @@ logomaker(pfm2,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = 'varying bg, no dash')
+          pop_name = 'varying bg, no dash',
+          control = list(gap_xlab = 3))
 
 pfm2dashbg=t(dash(t(pfm2),optmethod = 'mixEM',mode = bg)$posmean)
 rownames(pfm2dashbg)=c('A','C','G','T')
@@ -296,7 +312,8 @@ logomaker(pfm2dashbg,
           frame_width = 1,
           newpage = F,
           yscale_change = F,
-          pop_name = 'varying bg, dash')
+          pop_name = 'varying bg, dash',
+          control = list(gap_xlab = 3))
 
 ```
 
@@ -330,7 +347,8 @@ nlogomaker(pfm2,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = 'same bg, no dash')
+          pop_name = 'same bg, no dash',
+          control = list(gap_xlab = 3))
 
 seekViewport(paste0("plotlogo", 2))
 nlogomaker(pfm2dash,
@@ -338,7 +356,8 @@ nlogomaker(pfm2dash,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = 'same bg, dash')
+          pop_name = 'same bg, dash',
+          control = list(gap_xlab = 3))
 
 
 seekViewport(paste0("plotlogo", 3))
@@ -348,7 +367,8 @@ nlogomaker(pfm2,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = 'varying bg, no dash')
+          pop_name = 'varying bg, no dash',
+          control = list(gap_xlab = 3))
 
 pfm2dashbg=t(dash(t(pfm2),optmethod = 'mixEM',mode = bg)$posmean)
 rownames(pfm2dashbg)=c('A','C','G','T')
@@ -361,7 +381,8 @@ nlogomaker(pfm2dashbg,
           color_profile = color_profile,
           frame_width = 1,
           newpage = F,
-          pop_name = 'varying bg, dash')
+          pop_name = 'varying bg, dash',
+          control = list(gap_xlab = 3))
 
 ```
 
