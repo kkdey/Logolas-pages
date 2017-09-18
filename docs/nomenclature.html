@@ -93,101 +93,29 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-09-17</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 8a1bced</p>
+<p><strong>Code version:</strong> 90f71a1</p>
 <!-- Add your analysis here -->
 <p>Using the negative Logolas plot repreentation, the user can get a consensus sequence of the logos along the positions. For the DNA sequence data, the consensus sequence is usually coded by the IUPAC code, in which the bases are represented by the first letters of their names: [G]uanine, [C]ytosine, [A]denine, and [T]hymine (check the <code>getIUPAC</code> in the <a href="https://github.com/chandlerzuo/atSNP">atSNP</a> package). For the amino acid sequence, the Prosite syntax is commonly used.</p>
 <p>Based on the logo heights from the Negative Logolas plot, we develop an algorithm to generate a consensus sequence, which can be used for prediction purposes to check if a given sequence matches with the underlying PWM matrix. Unlike the IUPAC and the Prosite nomenclatures that only decide on the consensus sequence using logo enrichment, the Logolas nomenclature uses both enrichment and depletion of the symbols.</p>
 <p>In the Logolas nomenclature, we use uppercase of the symbol to depict enrichment and lowercase of a symbol to depict depletion of that symbol. We present an example below to demonstrate how Logolas nomenclature can be used.</p>
-<pre class="r"><code>GetMotif=function(pwm,seqmotif,bg=NULL){
-  library(Logolas)
-  if(is.null(bg)){bg=rep(1/nrow(pwm),nrow(pwm))}
-  ll=get_logo_heights_log(pwm,depletion_weight = 0,epsilon = 0.01,bg=bg)
-  pp=c();for (i in 1:ncol(pwm)){pp=cbind(pp,ll$pos_ic[i]*ll$table_mat_pos_norm[,i])};
-  nn=c();for(i in 1:ncol(pwm)){nn=cbind(nn,ll$neg_ic[i]*ll$table_mat_neg_norm[,i])};
-  #codes=matrix(nrow = length(bases),ncol = ncol(pwm))
-  code=c()
-  if(seqmotif==&#39;nucleotide&#39;){
-    bases=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-    based=tolower(bases)
-  for(i in 1:ncol(pwm)){
-    codes=c()
-    #stringent on calling just A,C,G,T
-  #based on (0.6,0.4,0.1,0.1)
-  #if one is larger than 1.1, call it enrichment
-    if(sum(pp[,i]&gt;=0.8)==1){codes=c(codes,bases[which.max(pwm[,i])])}
-    #codes[1,i]=bases[which.max(pwm[,i])]
-    #based on (0.4,0.4,0.1,0.1)
-    if(sum(pp[,i]&gt;=0.4)==2){codes=c(codes,paste(bases[pp[,i]&gt;=0.4],collapse =&#39;&#39;))}
-    #codes[2,i]=paste(bases[pp[,i]&gt;=0.4],collapse =&#39;&#39;)
-    #based on (0.8,0.1,0.1,0)
-    if(sum(nn[,i]&gt;=0.45)==1){codes=c(codes,based[nn[,i]&gt;=0.45])}
-    #codes[3,i]=based[nn[,i]&gt;=0.45]
-    #based on (0.3,0.3,0.2,0.2)
-    #else{codes[4,i]=&#39;N&#39;}
-    if(is.null(codes)){codes=c(codes,&#39;N&#39;)}
-    if(length(codes)&gt;1){codes=paste0(&#39;[&#39;,paste0(codes,collapse = &#39;|&#39;),&#39;]&#39;,sep=&#39;&#39;)}
-    code[i]=codes
-  }
-  }
-  
-  if(seqmotif==&#39;protein&#39;){
-   bases=rownames(pwm)
-  based=tolower(bases)
-  for(i in 1:ncol(pwm)){
-    codes=c()
-    #based on (0.6,0.4)
-    if(sum(pp[,i]&gt;=1.1)&gt;0){codes=c(codes,paste(bases[pp[,i]&gt;=0.4],collapse =&#39;&#39;))}
-    if(sum(nn[,i]&gt;=0.45)&gt;0){codes=c(codes,paste(based[nn[,i]&gt;=0.4],collapse =&#39;&#39;))}
-    if(is.null(codes)){codes=c(codes,&#39;N&#39;)}
-    if(length(codes)&gt;1){codes=paste0(&#39;[&#39;,paste0(codes,collapse = &#39;|&#39;),&#39;]&#39;,sep=&#39;&#39;)}
-    code[i]=codes
-  } 
-  }
-  
-  
-  return(paste(code,collapse=&#39; &#39;))
-  
-}</code></pre>
-<p>The way we give the consensus sequence is intuitive if we have a look at the logo plot.</p>
-<pre class="r"><code>pwm=matrix(c(0.8,0.1,0.1,0,0.9,0.1,0,0,0.9,0.05,0.05,0,0.5,0.4,0,0.1,0.6,0.4,0,0,0.4,0.4,0.1,0.1,0.5,0,0.2,0.3,0.35,0.35,0.06,0.24,0.4,0.3,0.2,0.1,0.4,0.2,0.2,0.2,0.28,0.24,0.24,0.24,0.5,0.16,0.17,0.17),nrow = 4,byrow = F)
+<p>Compared with traditional way to get the consensus sequence for nucleotide sequence, for example the <code>GetIUPACSequence</code> function from the <code>atSNP</code> package, our new method gives a better representation of the sequence.</p>
+<pre class="r"><code>library(Logolas)
+library(atSNP)
+
+pwm=matrix(c(0.8,0.1,0.1,0,0.9,0.1,0,0,0.9,0.05,0.05,0,0.5,0.4,0,0.1,0.6,0.4,0,0,0.4,0.4,0.1,0.1,0.5,0,0.2,0.3,0.35,0.35,0.06,0.24,0.4,0.3,0.2,0.1,0.4,0.2,0.2,0.2,0.28,0.24,0.24,0.24,0.5,0.16,0.17,0.17,0.6,0.13,0.13,0.14,0.7,0.15,0.15,0),nrow = 4,byrow = F)
 rownames(pwm)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
 colnames(pwm)=1:ncol(pwm)
-color_profile=list(&quot;type&quot; = &quot;per_row&quot;,&quot;col&quot; = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;))
-GetMotif(pwm,&#39;nucleotide&#39;)</code></pre>
-<pre><code>[1] &quot;[A|t] AC [A|t] AC AC AC [A|c] g t A N A&quot;</code></pre>
-<pre class="r"><code>logomaker(pwm,color_profile = color_profile,frame_width = 1)</code></pre>
+
+GetIUPACSequence(t(pwm))</code></pre>
+<pre><code>[1] &quot;AAAMMMWMMAAAAA&quot;</code></pre>
+<pre class="r"><code>GetConsensusSeq(pwm)</code></pre>
+<pre><code>[1] &quot;A A A (AC) (AC) (AC) c g N N N A A (At)&quot;</code></pre>
+<p>The way we give the consensus sequence is intuitive if we have a look at the logo plot.</p>
+<pre class="r"><code>color_profile=list(&quot;type&quot; = &quot;per_row&quot;,&quot;col&quot; = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;))
+logomaker(pwm,color_profile = color_profile,frame_width = 1)</code></pre>
 <p><img src="figure/nomenclature.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>#nlogomaker(pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1,control = list(depletion_weight=0))</code></pre>
-<p>Also, it works well with the protein seqence.</p>
-<pre class="r"><code>counts_mat &lt;- rbind(c(0, 0, 100, 1, 2), c(4, 3, 30, 35, 2),
-c(100, 0, 10, 2, 7),rep(0,5),
-c(4, 2, 3, 7, 70), c(1, 8, 0, 60, 3),
-rep(0, 5), c(4, 2, 100, 1, 1),
-c(12, 8, 16, 7, 20), c(55, 0, 1, 0, 12),
-rep(0,5), c(rep(0,3), 20, 0),
-rep(0,5), c(0, 0, 30, 0, 22),
-c(1, 0, 12, 3, 10), rep(0,5),
-c(0, 1, 0, 34, 1), c(0, 1, 12, 35, 1),
-c(0, 30, 1, 10, 2), c(0, 1, 4, 100, 2))
-
-rownames(counts_mat) &lt;- c(&quot;A&quot;, &quot;R&quot;, &quot;N&quot;, &quot;D&quot;,&quot;C&quot;, &quot;E&quot;, &quot;Q&quot;, &quot;G&quot;,
-&quot;H&quot;, &quot;I&quot;, &quot;L&quot;, &quot;K&quot;, &quot;M&quot;, &quot;F&quot;, &quot;P&quot;, &quot;S&quot;,
-&quot;T&quot;, &quot;W&quot;, &quot;Y&quot;, &quot;V&quot;)
-colnames(counts_mat) &lt;- c(&quot;Pos 1&quot;, &quot;Pos 2&quot;, &quot;Pos 3&quot;, &quot;Pos 4&quot;, &quot;Pos 5&quot;)
-
-GetMotif(counts_mat,&#39;protein&#39;)</code></pre>
-<pre><code>[1] &quot;RNCEGHIP RCEGHTWYV [ARNGHFPWV|deqlkmst] [RCEHKTWYV|adqgilmfs] [NCHIFP|dqglkmstw]&quot;</code></pre>
-<pre class="r"><code>cols1 &lt;- c(rev(RColorBrewer::brewer.pal(12, &quot;Paired&quot;))[c(3,4,7,8,11,12,5,6,9,10)],
-RColorBrewer::brewer.pal(12, &quot;Set3&quot;)[c(1,2,5,8,9)],
-RColorBrewer::brewer.pal(9, &quot;Set1&quot;)[c(9,7)],
-RColorBrewer::brewer.pal(8, &quot;Dark2&quot;)[c(3,4,8)])
-color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
-&quot;col&quot; = cols1)
-
-logomaker(counts_mat,
-color_profile = color_profile,
-frame_width = 1)</code></pre>
-<p><img src="figure/nomenclature.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>nlogomaker(pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1)</code></pre>
+<p><img src="figure/nomenclature.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="session-information" class="section level2">
 <h2>Session information</h2>
 <!-- Insert the session information into the document -->
@@ -200,19 +128,37 @@ locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+ [1] grid      stats4    parallel  stats     graphics  grDevices utils    
+ [8] datasets  methods   base     
 
 other attached packages:
-[1] Logolas_1.1.2
+ [1] atSNP_1.0            motifStack_1.18.0    Biostrings_2.42.1   
+ [4] XVector_0.14.1       ade4_1.7-6           MotIV_1.30.0        
+ [7] grImport_0.9-0       XML_3.98-1.9         GenomicRanges_1.26.4
+[10] GenomeInfoDb_1.10.3  IRanges_2.8.2        S4Vectors_0.12.2    
+[13] BiocGenerics_0.20.0  doParallel_1.0.10    iterators_1.0.8     
+[16] foreach_1.4.3        data.table_1.10.4    Rcpp_0.12.12        
+[19] Logolas_1.1.2       
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.12         digest_0.6.12        rprojroot_1.2       
- [4] grid_3.3.3           backports_1.0.5      git2r_0.18.0        
- [7] magrittr_1.5         evaluate_0.10        stringi_1.1.5       
-[10] LaplacesDemon_16.0.1 rmarkdown_1.6        RColorBrewer_1.1-2  
-[13] tools_3.3.3          stringr_1.2.0        parallel_3.3.3      
-[16] yaml_2.1.14          SQUAREM_2016.8-2     htmltools_0.3.6     
-[19] knitr_1.16          </code></pre>
+ [1] RColorBrewer_1.1-2         plyr_1.8.4                
+ [3] git2r_0.18.0               bitops_1.0-6              
+ [5] tools_3.3.3                zlibbioc_1.20.0           
+ [7] digest_0.6.12              evaluate_0.10             
+ [9] lattice_0.20-34            BSgenome_1.42.0           
+[11] Matrix_1.2-10              yaml_2.1.14               
+[13] LaplacesDemon_16.0.1       seqLogo_1.40.0            
+[15] rtracklayer_1.34.2         stringr_1.2.0             
+[17] knitr_1.16                 rprojroot_1.2             
+[19] Biobase_2.34.0             BiocParallel_1.8.2        
+[21] rGADEM_2.22.0              rmarkdown_1.6             
+[23] magrittr_1.5               scales_0.4.1              
+[25] GenomicAlignments_1.10.1   Rsamtools_1.26.2          
+[27] backports_1.0.5            codetools_0.2-15          
+[29] htmltools_0.3.6            SummarizedExperiment_1.4.0
+[31] colorspace_1.3-2           stringi_1.1.5             
+[33] munsell_0.4.3              RCurl_1.95-4.8            
+[35] SQUAREM_2016.8-2          </code></pre>
 </div>
 
 <hr>

@@ -97,7 +97,7 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-09-17</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 45f4d02</p>
+<p><strong>Code version:</strong> 90f71a1</p>
 <!-- Add your analysis here -->
 <p>Typically logo plots are used to represent the position weight matrix (PWM). However, the PWM is often generated from underlying position frequency matrix (PFM). PFM stores the compositional data - the frequencies of the symbols at each position. Given a PFM matrix however, we also have knowledge of the scale of the frequencies for each position. This additional information can be used to get a better logo plot representation compared to the usual PWM-based logo plots.</p>
 <p>Suppose for a specific position in a sequence, the compositional data is <span class="math display">\[ (A, C, G, T) : = (6, 1, 2, 1) \]</span> and in another case, it is <span class="math display">\[ (A, C, G, T) : = (600, 100, 200, 100). \]</span>. We assume that the background probability is equal for the four bases. If we transform the positional frequencies into PWM by taking the sample proportion, then the estimated PWM would be same for the two cases and would correspond to the same logo plot representation. However, in the second case, we have a total frequency of 1000 for all symbols while for the first case, it is only 10. Hence, it makes sense to shrink the PWM estimate to the background probability more strongly in the first case than that in the second case.</p>

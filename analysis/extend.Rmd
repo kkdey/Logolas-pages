@@ -216,7 +216,6 @@ logomaker(table,
 
 Another coloring option is `per_column`, in which we have a specific color for a specific column. This sort of coloring might be useful when the user wants to highlight the difference between columns. We provide an example of this next.
 
-[ECOLOGICAL Logo plot]
 
 ## Full string plots
 

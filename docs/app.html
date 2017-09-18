@@ -86,18 +86,19 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 <div id="TOC">
 <ul>
-<li><a href="#tfbs">TFBS</a><ul>
-<li><a href="#dimer-case">Dimer case</a></li>
-<li><a href="#plant-tf">Plant TF</a></li>
-<li><a href="#combined-dash">Combined dash</a></li>
+<li><a href="#transcription-factor-binding-sites-tfbs">Transcription Factor Binding Sites (TFBS)</a><ul>
+<li><a href="#dimerized-transcription-factors">Dimerized Transcription Factors</a></li>
+<li><a href="#plant-transcription-factors">Plant Transcription Factors</a></li>
+<li><a href="#application-of-dash-in-tfbs-data">Application of dash in TFBS data</a></li>
 </ul></li>
-<li><a href="#protein">Protein</a><ul>
+<li><a href="#amino-acids-motifs">Amino Acids Motifs</a><ul>
 <li><a href="#dash-on-protein-pfm">Dash on protein PFM</a></li>
 </ul></li>
 <li><a href="#mutation-signature">Mutation Signature</a></li>
 <li><a href="#umi-data">UMI data</a></li>
 <li><a href="#arxiv-data">aRxiv data</a></li>
-<li><a href="#creating-logos">Creating logos</a><ul>
+<li><a href="#ecological-abundance-logo-plot">Ecological Abundance Logo Plot</a></li>
+<li><a href="#creating-new-logos">Creating New Logos</a><ul>
 <li><a href="#session-information">Session information</a></li>
 </ul></li>
 </ul>
@@ -107,16 +108,22 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-16</p>
+<p><strong>Last updated:</strong> 2017-09-17</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> abb7b35</p>
+<p><strong>Code version:</strong> 90f71a1</p>
 <!-- Add your analysis here -->
 <p>We now proceed to demonstrate various applications of Logolas.</p>
-<div id="tfbs" class="section level1">
-<h1>TFBS</h1>
-<p>Transcription factor binding site(TFBS) data are available from several databases, e.g. JASPAR2014, Encode, HOCOMOCO, etc. Common methods to obtain these data include Chip-seq, Chip-Chip, HT-SELEX, etc.</p>
-<p>The figure below shows the application of Logolas on the TFBS data from Chip-seq and HT-SELEX. The data of these examples are from JASPAR2014. JASPAR is a collection of transcription factor DNA-binding preferences.</p>
+<div id="transcription-factor-binding-sites-tfbs" class="section level1">
+<h1>Transcription Factor Binding Sites (TFBS)</h1>
+<p>Logo plots have the most widespread use in modeling Transcription Factor Binding Sites (TFBS). We also present here applications of the Logolas plots under different settings to the TFBS data available from several databases: e.g.</p>
+<ul>
+<li><a href="https://bioconductor.org/packages/release/data/experiment/html/JASPAR2014.html">JASPAR2014</a></li>
+<li><a href="https://genome.ucsc.edu/encode/">ENCODE</a></li>
+<li><a href="http://hocomoco11.autosome.ru/">HOCOMOCO</a></li>
+</ul>
+<p>Common methods to obtain TFBS data include Chip-seq, Chip-Chip, HT-SELEX, etc.</p>
+<p>The figure below shows the application of Logolas on the TFBS data from Chip-seq and HT-SELEX. The data of these examples are from JASPAR2014.</p>
 <pre class="r"><code>library(JASPAR2014)
 library(TFBSTools)
 library(Logolas)
@@ -174,7 +181,7 @@ logomaker(pfm2,xlab = &#39;position&#39;,color_profile = color_profile,
           pop_name = &#39;Logo plot, HT-SELEX&#39;
           )</code></pre>
 <p><img src="figure/app.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>One may notice that the number of positions of TFBS from Chip-seq is usually larger than that from HT-SELEX. A comparison of this is shown in the figure below. The data are from JASPAR2014.</p>
+<p>We notice that the number of positions of TFBS from Chip-seq is usually larger than that from HT-SELEX. A comparison of this is shown in the figure below. The data are from JASPAR2014.</p>
 <pre class="r"><code>library(ggplot2)
 library(plyr)
 ns = lapply(pfm_ht,function(x) dim(x)[2])
@@ -186,9 +193,9 @@ ggplot(dat,aes(x = number, fill = method)) +
     geom_histogram(binwidth = 1, alpha = 0.5, position=&quot;identity&quot;) +
     geom_vline(data=mdat,aes(xintercept = nummean,colour = method),linetype=&quot;dashed&quot;, size=1)</code></pre>
 <p><img src="figure/app.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="dimer-case" class="section level2">
-<h2>Dimer case</h2>
-<p>One kind of logo plots that are of particular interests is the dimer, in which the depleitons are in the middle and the enrichments are in the two sides. An example is the EBF1 family. The data are from <a href="http://compbio.mit.edu/encode-motifs/motifs.txt">Manollis Kellis webpage</a>.</p>
+<div id="dimerized-transcription-factors" class="section level2">
+<h2>Dimerized Transcription Factors</h2>
+<p>One kind of logo plots that are of particular interests are the Transcription Factors which bind to the binding site in a dimer form. In such cases, often we show enrichment of bases at the two ends of the binding site with depletion in the middle. An example is the EBF1 family. The data are from <a href="http://compbio.mit.edu/encode-motifs/motifs.txt">Manollis Kellis webpage</a>.</p>
 <pre class="r"><code>pfm_mk=LoadMotifLibrary(&#39;http://compbio.mit.edu/encode-motifs/motifs.txt&#39;,tag = &quot;&gt;&quot;,transpose = F, field = 1, sep = c(&quot;\t&quot;, &quot; &quot;, &quot;&gt;&quot;), skipcols = 1, skiprows = 1, pseudocount = 0)
 EBF1_disc1=t(pfm_mk[[52]]);rownames(EBF1_disc1)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;);colnames(EBF1_disc1)=1:10
 EBF1_known4=t(pfm_mk[[1325]]);rownames(EBF1_known4)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;);colnames(EBF1_known4)=1:14
@@ -226,10 +233,10 @@ nlogomaker(EBF1_known4,logoheight = &#39;log_odds&#39;,
            newpage = F,
            pop_name = &#39;EBF1_known4&#39;)</code></pre>
 <p><img src="figure/app.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Notice that both of the plots show the pattern TCCC–GGGA, with G and C depleted in the middle. The typical case is that there is depleted ‘gaps’ in the middle of palindromic sequences.</p>
+<p>Notice that both of the plots show the enrichment pattern TCCC–GGGA, with G and C depleted in the middle. The typical case is that there is depletion ‘gap’ of G and C in the middle of the palindromic sequence.</p>
 </div>
-<div id="plant-tf" class="section level2">
-<h2>Plant TF</h2>
+<div id="plant-transcription-factors" class="section level2">
+<h2>Plant Transcription Factors</h2>
 <p>While we usually assume the uniform background probability(bg) for all symbols, there are some databases providing specific bg for each species, for example, the <a href="http://planttfdb.cbi.pku.edu.cn/">PlantTFDB</a>. The database plantTFDB provides transcription factors of more than 160 species, including main lineages of green plants. The figures below show the logo plot and negative logo plot of TF motif from Vigna radiata.</p>
 <pre class="r"><code>suppressWarnings(suppressMessages(Vra &lt;- get(load(system.file(&quot;extdata&quot;, &quot;Vra_plant_TFDB.Rdata&quot;, package = &quot;Logolas&quot;)))))
 library(grid)
@@ -291,8 +298,8 @@ nlogomaker(Vra$pwm_dash[[12]],
           control = list(viewport.margin.left = 5))</code></pre>
 <p><img src="figure/app.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="combined-dash" class="section level2">
-<h2>Combined dash</h2>
+<div id="application-of-dash-in-tfbs-data" class="section level2">
+<h2>Application of dash in TFBS data</h2>
 <p>In plantTFDB, the transcription factors from the same species have the same background probability. There are two ways to apply dash. One is to apply dash to each PFM, called signature wise dash. The second way is to firstly combine all the PFM then apply dash to the combined PFM. For example, we have three PFMs, with 5,6,7 positions respectively. After combining the three PFMs, we get a large combined PFM with 18 positions. The dash is applied to this combined PFM and then restore the PWM by separating the result given by dash. In this combined way, the “sample size”(number of positions) is larger. It turns out that the combined dash shrinks less than the signature wise dash.</p>
 <p>For example, the original PFM is</p>
 <pre class="r"><code>Vra$pfm[[12]]</code></pre>
@@ -318,10 +325,43 @@ T 0.166 0.027 0.083 0.064 0.208 0.978 0.059 0.737 0.232 0.375</code></pre>
 <p>The background probability is (A,C,G,T)=</p>
 <pre class="r"><code>Vra$bg</code></pre>
 <pre><code>[1] 0.339 0.161 0.161 0.339</code></pre>
+<pre class="r"><code>grid.newpage()
+layout.rows &lt;- 1
+layout.cols &lt;- 2
+top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
+                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
+                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
+
+plot_reg &lt;- vpList()
+l &lt;- 1
+for(i in 1:layout.rows){
+  for(j in 1:layout.cols){
+    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
+    l &lt;- l+1
+  }
+}
+
+
+plot_tree &lt;- vpTree(top.vp, plot_reg)
+
+pushViewport(plot_tree)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+
+nlogomaker(round(Vra$pwm_dash[[12]],3),logoheight = &#39;log&#39;,
+           color_profile = color_profile,frame_width = 1,
+           newpage = F,
+           pop_name = &#39;signature wise dash&#39;)
+
+seekViewport(paste0(&quot;plotlogo&quot;, 2))
+nlogomaker(round(Vra$pwm_cbdash[[12]],3),logoheight = &#39;log&#39;,
+           color_profile = color_profile,frame_width = 1,
+           newpage = F,
+           pop_name = &#39;combined dash&#39;)</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
-<div id="protein" class="section level1">
-<h1>Protein</h1>
+<div id="amino-acids-motifs" class="section level1">
+<h1>Amino Acids Motifs</h1>
 <p>Another application of logo plot is for the protein sequence motif. Protein is composed of 20 amino acid.</p>
 <p>Protein sequence motif can be found in <a href="http://caps.ncbs.res.in/3pfdb/">3PFDB</a> database. The database provides the multiple alignment data, PSSM, PWM(weighted observed percentages), etc. It does not give the PFM directly, but we could recover it from the PWM as well as the number of reference sequences.</p>
 <p>user could make logo plot and negative plot of protein sequence motif using Logolas.</p>
@@ -371,7 +411,7 @@ nlogomaker(pwm,logoheight = &#39;log_odds&#39;,
            frame_width = 1,
            bg=bg,
            newpage = F)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="dash-on-protein-pfm" class="section level2">
 <h2>Dash on protein PFM</h2>
 <p>One may also apply dash to some protein family PFMs, which have very few sequences mapped. The figure below shows the logo plot and negative logo plot of the same PFM as the one in above figure.</p>
@@ -410,12 +450,12 @@ nlogomaker(pwm_dash,logoheight = &#39;log_odds&#39;,
            bg=bg,
            color_profile = color_profile,
            newpage = F)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="mutation-signature" class="section level1">
 <h1>Mutation Signature</h1>
-<p>As discussed in the <a href="https://dongyuexie.github.io/Sequence-Motif-Depletion/extend.html">entended feature of Logolas</a>, one important feature of Logolas is that it could plot the patterns of somatic mutation or “mutation signature”.</p>
+<p>As discussed in the <a href="https://kkdey.github.io/Logolas-pages/extend.html">extended feature of Logolas</a>, one important feature of Logolas is that it could plot the patterns of somatic mutation or “mutation signature”.</p>
 <p>Shiraishi <em>et al.</em>(2015) proposed a parsimonious approach to model the mutation signatures, by assuming independence across mutation patterns, and applied the model to somatic mutation data from Alexander <em>et al</em>.(2013), which analyzed mutations from 7042 cancers and found more than 20 distinct mutational signatures.</p>
 <p>The model in Shiraishi <em>et al.</em>(2015) assumes each mutation arose from one of K mutation signatures. The number of signatures, K, for each cancer types is selected by examining the likelihood, bootstrap errors and correlation of membership parameters. There are 27 mutation signatures identified. The visualization of signatures are in the Figure 4 of the paper.</p>
 <p>Here, we propose a new approach to visualize these mutation signatures. The new approach clearly shows the enrichment of the mutation and bases while also presents the depletion. The figure below is the mutation signature 16, which corresponds to the Ovary cancer.</p>
@@ -479,11 +519,11 @@ nlogomaker(table,
           newpage = FALSE,
           xlab = &quot;Position&quot;,
           ylab = &quot;Information content&quot;)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-14-1.png" width="768" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>library(pmsignature)
 suppressWarnings(suppressMessages(load(system.file(&quot;extdata&quot;, &quot;Ovary.3.Rdata&quot;, package = &quot;Logolas&quot;))))
 visPMSignature(resultForSave[[1]],1,isScale=T)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-14-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-15-1.png" width="480" style="display: block; margin: auto;" /></p>
 <p>We also apply the <code>nlogomaker</code> to some of the mutation signatures from Alexandrov <em>et al.</em>(2013).</p>
 <pre class="r"><code>grid.newpage()
 layout.rows &lt;- 1
@@ -553,21 +593,25 @@ nlogomaker(table,
           pop_name = &#39;Bladder&#39;,
           newpage = F
           )</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="umi-data" class="section level1">
 <h1>UMI data</h1>
+<p>Single cell sequencing has become increasingly popular in recent times. Once characteristic feature of single cell sequencing is the addition of a unique molecular identifier (UMI) to the front of the reads. Reads coming from the same molecule, owing to amplification, have the same UMI and therefore one can remove these reads before processing and avoid over-counting.</p>
+<p>We looked at the UMI-based single cell data due to Tung et al (2016) and from the FASTQ file, we observed the composition of the bases along the reads for the first few positions of the read. Note that these reads are from the FASTQ file and hence contain the information of the UMI and other barcodes appended to the read.</p>
+<p>We noted from the authors of Tung et al (2016) that the first six positions of the read correspond to the UMI, followed by a barcode GGG, and then the sequence.</p>
+<p>When the base composition data for the start of the reads is plotted in a Logolas plot, we see that there seems to be an enrichment of purines in the UMIs bound to the reads. Also there seems to be an excess of T’s in the positions along the read possibly because many reads are drawn from the poly-A tails and would eventually get filtered in the post-processing.</p>
 <pre class="r"><code>suppressWarnings(suppressMessages(load(system.file(&quot;extdata&quot;, &quot;count_table_19101.3.B12.AGCCACTT.L004.R1.C6WYKACXX.rda&quot;, package = &quot;Logolas&quot;))))
 nlogomaker(mat,
            logoheight = &#39;log&#39;,
            color_profile = color_profile,
            frame_width = 1,
            xlab = &#39;UMI base position&#39;)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="arxiv-data" class="section level1">
 <h1>aRxiv data</h1>
-<p>We have showed the logo plot for field categories of professors in the document mining section. Here we describe it in more details.</p>
+<p>We have shown the logo plot for field categories of professors in <a href="https://kkdey.github.io/Logolas-pages/extend.html">chapter 3</a>. Here we describe it in more details.</p>
 <p>One way to get the data of professors’ field categories is to summarize the categories of their publications. The aRxiv is a repository of e-prints of scientific papers and the package <code>aRxiv</code> can easily fetch the data from the repository. A tutorial of <code>aRxiv</code> package is <a href="https://ropensci.org/tutorials/arxiv_tutorial.html">here</a>.</p>
 <p>For a set of professor’ names, we firstly get their most recent publications that have been put on aRxiv and limit the number of publications to be 50, using the function <code>arxiv_search</code>. Then extract the primary categories of the publications. So now we have a set of field categories(without replications). Next, for each professor, we count the number of publications in each category. Finally, a table is formulated with field categories as rows and the professor’s name as columns. This is analogous to the position frequency matrix.</p>
 <p>User has the option to apply dash to this kind of string logo based data, which is illustrated by the figure below.</p>
@@ -657,10 +701,29 @@ nlogomaker(tab_data_dash,
         ylab = &quot;Information content&quot;,
         xaxis_fontsize=5,
         newpage = F)</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="creating-logos" class="section level1">
-<h1>Creating logos</h1>
+<div id="ecological-abundance-logo-plot" class="section level1">
+<h1>Ecological Abundance Logo Plot</h1>
+<p>The fact that Logolas can plot string symbols comes handy in logo representation of species names for ecological data. In the following example, we look at the composition of different bird species in three blocks or clusters of regions in the Himalayas. The full abundance data can be ontained from the package <a href="https://github.com/kkdey/ecostructure">ecostructure</a>.</p>
+<p>Here we use logos for the family names of the bird species. Through this application, we also provide an example use of the <code>per_column</code> type of the <code>color_profile</code> argument in the <code>logomaker()</code> function.</p>
+<pre class="r"><code>suppressWarnings(suppressMessages(himalayan_fauna_3_clusters &lt;- get(load(system.file(&quot;extdata&quot;, &quot;himalayan_fauna_3_clusters.rda&quot;, package = &quot;Logolas&quot;)))))
+
+color_profile &lt;- list(&quot;type&quot; = &quot;per_column&quot;,
+                      &quot;col&quot; = sample(RColorBrewer::brewer.pal(10,name = &quot;Spectral&quot;),
+                       dim(himalayan_fauna_3_clusters)[2], replace=TRUE))
+logomaker(himalayan_fauna_3_clusters,
+          color_profile = color_profile,
+          frame_width = 1,
+          ic.scale = TRUE,
+          pop_name = &quot;Bird family abundance across clusters&quot;,
+          xlab = &quot;Clusters&quot;,
+          ylab = &quot;Information content&quot;)</code></pre>
+<pre><code>using a background with equal probability for all symbols</code></pre>
+<p><img src="figure/app.Rmd/unnamed-chunk-19-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="creating-new-logos" class="section level1">
+<h1>Creating New Logos</h1>
 <p>Logolas provides users the freedom to create specific logos. Take the symbol “Lambda” for example. Firstly, create the function for it:</p>
 <pre class="r"><code>LAMBDAletter &lt;- function(plot=FALSE,
                          fill_symbol = TRUE,
@@ -695,7 +758,7 @@ grid::grid.polygon(lambda$x, lambda$y,
                    id=lambda$id,
                    gp=grid::gpar(fill=lambda$fill,
                                  lwd=10))</code></pre>
-<p><img src="figure/app.Rmd/unnamed-chunk-19-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p><img src="figure/app.Rmd/unnamed-chunk-21-1.png" width="384" style="display: block; margin: auto;" /></p>
 <p>The user can then add this symbol to the library. To use lambda as part of a string, the user has to put lambda inside ”/…/” to make sure that the function reads it as a new symbol and not general English alphabets or numbers. We provide an example below.</p>
 <pre class="r"><code>counts_mat &lt;- rbind(c(0, 10, 100, 60, 20),
                     c(40, 30, 30, 35, 20),

@@ -29,76 +29,47 @@ Based on the logo heights from the Negative Logolas plot, we develop an algorith
 
 In the Logolas nomenclature, we use uppercase of the symbol to depict enrichment and lowercase of a symbol to depict depletion of that symbol. We present an example below to demonstrate how Logolas nomenclature can be used. 
 
-```{r}
-GetMotif=function(pwm,seqmotif,bg=NULL){
-  library(Logolas)
-  if(is.null(bg)){bg=rep(1/nrow(pwm),nrow(pwm))}
-  ll=get_logo_heights_log(pwm,depletion_weight = 0,epsilon = 0.01,bg=bg)
-  pp=c();for (i in 1:ncol(pwm)){pp=cbind(pp,ll$pos_ic[i]*ll$table_mat_pos_norm[,i])};
-  nn=c();for(i in 1:ncol(pwm)){nn=cbind(nn,ll$neg_ic[i]*ll$table_mat_neg_norm[,i])};
-  #codes=matrix(nrow = length(bases),ncol = ncol(pwm))
-  code=c()
-  if(seqmotif=='nucleotide'){
-    bases=c('A','C','G','T')
-    based=tolower(bases)
-  for(i in 1:ncol(pwm)){
-    codes=c()
-    #stringent on calling just A,C,G,T
-  #based on (0.6,0.4,0.1,0.1)
-  #if one is larger than 1.1, call it enrichment
-    if(sum(pp[,i]>=0.8)==1){codes=c(codes,bases[which.max(pwm[,i])])}
-    #codes[1,i]=bases[which.max(pwm[,i])]
-    #based on (0.4,0.4,0.1,0.1)
-    if(sum(pp[,i]>=0.4)==2){codes=c(codes,paste(bases[pp[,i]>=0.4],collapse =''))}
-    #codes[2,i]=paste(bases[pp[,i]>=0.4],collapse ='')
-    #based on (0.8,0.1,0.1,0)
-    if(sum(nn[,i]>=0.45)==1){codes=c(codes,based[nn[,i]>=0.45])}
-    #codes[3,i]=based[nn[,i]>=0.45]
-    #based on (0.3,0.3,0.2,0.2)
-    #else{codes[4,i]='N'}
-    if(is.null(codes)){codes=c(codes,'N')}
-    if(length(codes)>1){codes=paste0('[',paste0(codes,collapse = '|'),']',sep='')}
-    code[i]=codes
-  }
-  }
-  
-  if(seqmotif=='protein'){
+Compared with traditional way to get the consensus sequence for nucleotide sequence, for example the `GetIUPACSequence` function from the `atSNP` package, our new method gives a better representation of the sequence. 
+
+```{r,message=FALSE,warning=FALSE}
+library(Logolas)
+library(atSNP)
+
+pwm=matrix(c(0.8,0.1,0.1,0,0.9,0.1,0,0,0.9,0.05,0.05,0,0.5,0.4,0,0.1,0.6,0.4,0,0,0.4,0.4,0.1,0.1,0.5,0,0.2,0.3,0.35,0.35,0.06,0.24,0.4,0.3,0.2,0.1,0.4,0.2,0.2,0.2,0.28,0.24,0.24,0.24,0.5,0.16,0.17,0.17,0.6,0.13,0.13,0.14,0.7,0.15,0.15,0),nrow = 4,byrow = F)
+rownames(pwm)=c('A','C','G','T')
+colnames(pwm)=1:ncol(pwm)
+
+GetIUPACSequence(t(pwm))
+GetConsensusSeq(pwm)
+```
+
+The way we give the consensus sequence is intuitive if we have a look at the logo plot.
+```{r,message=FALSE,warning=FALSE}
+color_profile=list("type" = "per_row","col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
+logomaker(pwm,color_profile = color_profile,frame_width = 1)
+nlogomaker(pwm,logoheight = 'log',color_profile = color_profile,frame_width = 1)
+```
+
+
+
+```{r,message=FALSE,warning=FALSE,eval=FALSE,include=FALSE}
+#discarded protein part
+
+if(seqmotif=='protein'){
    bases=rownames(pwm)
   based=tolower(bases)
   for(i in 1:ncol(pwm)){
     codes=c()
     #based on (0.6,0.4)
-    if(sum(pp[,i]>=1.1)>0){codes=c(codes,paste(bases[pp[,i]>=0.4],collapse =''))}
+    if(sum(pp[,i]>=1.1)>0){codes=c(codes,paste(bases[pp[,i]>=1.1],collapse =''))}
     if(sum(nn[,i]>=0.45)>0){codes=c(codes,paste(based[nn[,i]>=0.4],collapse =''))}
     if(is.null(codes)){codes=c(codes,'N')}
     if(length(codes)>1){codes=paste0('[',paste0(codes,collapse = '|'),']',sep='')}
     code[i]=codes
   } 
   }
-  
-  
-  return(paste(code,collapse=' '))
-  
-}
 
-```
-
-The way we give the consensus sequence is intuitive if we have a look at the logo plot.
-
-```{r,message=FALSE,warning=FALSE}
-pwm=matrix(c(0.8,0.1,0.1,0,0.9,0.1,0,0,0.9,0.05,0.05,0,0.5,0.4,0,0.1,0.6,0.4,0,0,0.4,0.4,0.1,0.1,0.5,0,0.2,0.3,0.35,0.35,0.06,0.24,0.4,0.3,0.2,0.1,0.4,0.2,0.2,0.2,0.28,0.24,0.24,0.24,0.5,0.16,0.17,0.17),nrow = 4,byrow = F)
-rownames(pwm)=c('A','C','G','T')
-colnames(pwm)=1:ncol(pwm)
-color_profile=list("type" = "per_row","col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
-GetMotif(pwm,'nucleotide')
-logomaker(pwm,color_profile = color_profile,frame_width = 1)
-#nlogomaker(pwm,logoheight = 'log',color_profile = color_profile,frame_width = 1,control = list(depletion_weight=0))
-```
-
-
-Also, it works well with the protein seqence.
-
-```{r,message=FALSE,warning=FALSE}
+#Also, it works well with the protein seqence.
 counts_mat <- rbind(c(0, 0, 100, 1, 2), c(4, 3, 30, 35, 2),
 c(100, 0, 10, 2, 7),rep(0,5),
 c(4, 2, 3, 7, 70), c(1, 8, 0, 60, 3),

@@ -101,7 +101,7 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-09-17</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 8a1bced</p>
+<p><strong>Code version:</strong> 90f71a1</p>
 <!-- Add your analysis here -->
 <div id="first-illustration" class="section level2">
 <h2>First Illustration</h2>
@@ -245,9 +245,9 @@ logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
 <div id="algorithm-for-nlogomaker-height-detection" class="section level2">
 <h2>Algorithm for nlogomaker height detection</h2>
 <p>Following are the steps to determine the heights of the logos for <code>log</code> based approach.</p>
-<p>Let $q_{*,i} = ((q_{b, i} )) $ be the relative frequency vector of bases at position <span class="math inline">\(i\)</span> and <span class="math inline">\(p\)</span> be the background probabiltiy vector.</p>
+<p>Let $ q_{*,i} = ((q_{b, i} )) $ be the relative frequency vector of bases at position <span class="math inline">\(i\)</span> and <span class="math inline">\(p\)</span> be the background probabiltiy vector.</p>
 <ol style="list-style-type: decimal">
-<li>Take <span class="math inline">\(\log_2\)</span> of <span class="math inline">\((q_i + \epsilon)/(p+\epsilon)\)</span> where <span class="math inline">\(\epsilon\)</span> is a small number (default 0.01) meant to prevent log (0) type errors.</li>
+<li>Take $ log_2 $ of $ (q_i + )/(p+) $ where $ $ is a small number (default 0.01) meant to prevent log (0) type errors.</li>
 <li>Subtract the median to get relative PWM scores :</li>
 </ol>
 <p>For the <code>log</code> approach</p>
@@ -255,14 +255,14 @@ logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
 <p>For the <code>log_odds</code> approach,</p>
 <p><span class="math display">\[ f_i=\log_2\frac{q_i (1-p) + \epsilon}{p (1-q_i) + \epsilon}-median \left (\log_2\frac{q_i (1-p) + \epsilon}{p (1-q_i) + \epsilon} \right ) \]</span></p>
 <ol start="3" style="list-style-type: decimal">
-<li><p>Determine $f^{+}_{i} = max (f_i, 0) $ and <span class="math inline">\(f^{-}_{i} = max(-f_i, 0)\)</span>.</p></li>
-<li><p>For the <code>log</code> or the <code>log_odds</code> approaches, <span class="math inline">\(f^{+}_{i}\)</span> scores are plotted on the positive Y axis for the <span class="math inline">\(i\)</span> th position, whereas <span class="math inline">\(f^{-}_{i}\)</span> scores are plotted along the negative Y axis for the same position.</p></li>
+<li><p>Determine $ f^{+}<em>{i} = max (f_i, 0) $ and $ f^{-}</em>{i} = max(-f_i, 0) $.</p></li>
+<li><p>For the <code>log</code> or the <code>log_odds</code> approaches, $ f^{+}<em>{i} $ scores are plotted on the positive Y axis for the <span class="math inline">\(i\)</span> th position, whereas $ f^{-}</em>{i} $ scores are plotted along the negative Y axis for the same position.</p></li>
 <li><p>For the <code>ic</code> approach, we also calculate the IC measure for the <span class="math inline">\(i\)</span>th measure as in the positive Logolas plot using Shannon entropy or some Renyi entropy measure.</p></li>
-<li><p>Normalize both <span class="math inline">\(f^{+}_{i}\)</span> and <span class="math inline">\(f^{-}_{i}\)</span> so that each sums up to 1.</p></li>
+<li><p>Normalize both $ f^{+}<em>{i} $ and $ f^{-}</em>{i} $ so that each sums up to 1.</p></li>
 </ol>
-<p>7.Caluclate $IC^{+}<em>{i} = IC</em>{i} * f^{+}<em>{i} $ and $IC^{-}</em>{i} = IC_{i} * f^{-}_{i} $.</p>
+<p>7.Caluclate $ IC^{+}<em>{i} = IC</em>{i} * f^{+}<em>{i} $ and $ IC^{-}</em>{i} = IC_{i} * f^{-}_{i} $.</p>
 <ol start="8" style="list-style-type: decimal">
-<li>The <span class="math inline">\(IC^{+}_{i}\)</span> scores are plotted on the positive Y axis for the <span class="math inline">\(i\)</span> th position, whereas the <span class="math inline">\(IC^{-}_{i}\)</span> scores are plotted along the negative Y axis for the same position.</li>
+<li>The $ IC^{+}<em>{i} $ scores are plotted on the positive Y axis for the <span class="math inline">\(i\)</span> th position, whereas the $ IC^{-}</em>{i} $ scores are plotted along the negative Y axis for the same position.</li>
 </ol>
 <p>Below we show the negative Logolas plot using <code>ic</code>, <code>log</code> and <code>log-odds</code> heights for the same example as above, along with the positive Logolas plot.</p>
 <pre class="r"><code>grid.newpage()

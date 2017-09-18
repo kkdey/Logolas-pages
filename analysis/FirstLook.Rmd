@@ -189,9 +189,9 @@ The negative Logolas plot shows the relative change of base frequencies at a eac
 
 Following are the steps to determine the heights of the logos for `log` based approach.
 
-Let $q_{*,i} = ((q_{b, i} )) $ be the relative frequency vector of bases at position $i$ and $p$ be the background probabiltiy vector.
+Let $ q_{*,i} = ((q_{b, i} )) $ be the relative frequency vector of bases at position $i$ and $p$ be the background probabiltiy vector.
 
-1. Take $\log_2$ of $(q_i + \epsilon)/(p+\epsilon)$ where $\epsilon$ is a small number (default 0.01) meant to prevent log (0) type errors. 
+1. Take $ log_2 $ of  $ (q_i + \epsilon)/(p+\epsilon) $ where  $ \epsilon $ is a small number (default 0.01) meant to prevent log (0) type errors. 
 2. Subtract the median to get relative PWM scores : 
 
 For the `log` approach
@@ -202,17 +202,17 @@ For the `log_odds` approach,
 
 $$ f_i=\log_2\frac{q_i (1-p) + \epsilon}{p (1-q_i) + \epsilon}-median \left (\log_2\frac{q_i (1-p) + \epsilon}{p (1-q_i) + \epsilon} \right ) $$
 
-3. Determine $f^{+}_{i} = max (f_i, 0) $ and $f^{-}_{i} = max(-f_i, 0)$. 
+3. Determine $ f^{+}_{i} = max (f_i, 0) $ and $ f^{-}_{i} = max(-f_i, 0) $. 
 
-4. For the `log` or the `log_odds` approaches, $f^{+}_{i}$ scores are plotted on the positive Y axis for the $i$ th position, whereas $f^{-}_{i}$ scores are plotted along the negative Y axis for the same position.
+4. For the `log` or the `log_odds` approaches, $ f^{+}_{i} $ scores are plotted on the positive Y axis for the $i$ th position, whereas $ f^{-}_{i} $ scores are plotted along the negative Y axis for the same position.
 
 5. For the `ic` approach, we also calculate the IC measure for the $i$th measure as in the positive Logolas plot using Shannon entropy or some Renyi entropy measure. 
 
-6. Normalize both $f^{+}_{i}$ and $f^{-}_{i}$ so that each sums up to 1. 
+6. Normalize both $ f^{+}_{i} $ and $ f^{-}_{i} $ so that each sums up to 1. 
 
-7.Caluclate $IC^{+}_{i} = IC_{i} * f^{+}_{i} $ and $IC^{-}_{i} = IC_{i} * f^{-}_{i} $.
+7.Caluclate $ IC^{+}_{i} = IC_{i} * f^{+}_{i} $ and $ IC^{-}_{i} = IC_{i} * f^{-}_{i} $.
 
-8. The $IC^{+}_{i}$ scores are plotted on the positive Y axis for the $i$ th position, whereas the $IC^{-}_{i}$ scores are plotted along the negative Y axis for the same position. 
+8. The $ IC^{+}_{i} $ scores are plotted on the positive Y axis for the $i$ th position, whereas the $ IC^{-}_{i} $ scores are plotted along the negative Y axis for the same position. 
 
 Below we show the negative Logolas plot using `ic`, `log` and `log-odds` heights for the same example as above, along with the positive Logolas plot.
 
