@@ -108,10 +108,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-17</p>
+<p><strong>Last updated:</strong> 2017-09-21</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 90f71a1</p>
+<p><strong>Code version:</strong> 56a94be</p>
 <!-- Add your analysis here -->
 <p>We now proceed to demonstrate various applications of Logolas.</p>
 <div id="transcription-factor-binding-sites-tfbs" class="section level1">
@@ -711,7 +711,7 @@ nlogomaker(tab_data_dash,
 
 color_profile &lt;- list(&quot;type&quot; = &quot;per_column&quot;,
                       &quot;col&quot; = sample(RColorBrewer::brewer.pal(10,name = &quot;Spectral&quot;),
-                       dim(himalayan_fauna_3_clusters)[2], replace=TRUE))
+                       dim(himalayan_fauna_3_clusters)[2], replace=FALSE))
 logomaker(himalayan_fauna_3_clusters,
           color_profile = color_profile,
           frame_width = 1,
