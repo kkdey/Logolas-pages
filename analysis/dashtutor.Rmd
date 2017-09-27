@@ -102,9 +102,7 @@ logomaker(pfm1,
           pop_name = 'low freq',
           control = list(gap_xlab = 3))
 seekViewport(paste0('plotlogo',2))
-pfm1dash=t(dash(t(pfm1),optmethod = 'mixEM')$posmean)
-rownames(pfm1dash)=c('A','C','G','T')
-colnames(pfm1dash)=1:ncol(pfm1)
+pfm1dash=dash(pfm1,optmethod = 'mixEM')$posmean
 logomaker(pfm1dash,
           color_profile = color_profile,
           frame_width = 1,
@@ -122,9 +120,7 @@ logomaker(pfm2,
           pop_name = 'medium freq',
           control = list(gap_xlab = 3))
 seekViewport(paste0('plotlogo',4))
-pfm2dash=t(dash(t(pfm2),optmethod = 'mixEM')$posmean)
-rownames(pfm2dash)=c('A','C','G','T')
-colnames(pfm2dash)=1:ncol(pfm2)
+pfm2dash=dash(pfm2,optmethod = 'mixEM')$posmean
 logomaker(pfm2dash,
           color_profile = color_profile,
           frame_width = 1,
@@ -142,9 +138,8 @@ logomaker(pfm3,
           pop_name = 'high freq',
           control = list(gap_xlab = 3))
 seekViewport(paste0('plotlogo',6))
-pfm3dash=t(dash(t(pfm3),optmethod = 'mixEM')$posmean)
-rownames(pfm3dash)=c('A','C','G','T')
-colnames(pfm3dash)=1:ncol(pfm3)
+pfm3dash=dash(pfm3,optmethod = 'mixEM')$posmean
+
 logomaker(pfm3dash,
           color_profile = color_profile,
           frame_width = 1,
@@ -184,19 +179,18 @@ nlogomaker(pfm1,
           frame_width = 1,
           newpage = F,
           pop_name = 'low freq',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 seekViewport(paste0('plotlogo',2))
-pfm1dash=t(dash(t(pfm1),optmethod = 'mixEM')$posmean)
-rownames(pfm1dash)=c('A','C','G','T')
-colnames(pfm1dash)=1:ncol(pfm1)
+pfm1dash=dash(pfm1,optmethod = 'mixEM')$posmean
+
 nlogomaker(pfm1dash,
           logoheight = 'log_odds',
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
           pop_name = 'low freq, dash',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 seekViewport(paste0("plotlogo", 3))
 nlogomaker(pfm2,
@@ -205,18 +199,17 @@ nlogomaker(pfm2,
           frame_width = 1,
           newpage = F,
           pop_name = 'medium freq',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 seekViewport(paste0('plotlogo',4))
-pfm2dash=t(dash(t(pfm2),optmethod = 'mixEM')$posmean)
-rownames(pfm2dash)=c('A','C','G','T')
-colnames(pfm2dash)=1:ncol(pfm2)
+pfm2dash=dash(pfm2,optmethod = 'mixEM')$posmean
+
 nlogomaker(pfm2dash,
           color_profile = color_profile,
           logoheight = 'log_odds',
           frame_width = 1,
           newpage=F,
           pop_name = 'medium freq, dash',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 seekViewport(paste0("plotlogo", 5))
 nlogomaker(pfm3,
@@ -225,18 +218,17 @@ nlogomaker(pfm3,
           frame_width = 1,
           newpage = F,
           pop_name = 'high freq',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 seekViewport(paste0('plotlogo',6))
-pfm3dash=t(dash(t(pfm3),optmethod = 'mixEM')$posmean)
-rownames(pfm3dash)=c('A','C','G','T')
-colnames(pfm3dash)=1:ncol(pfm3)
+pfm3dash=dash(pfm3,optmethod = 'mixEM')$posmean
+
 nlogomaker(pfm3dash,
            logoheight = 'log_odds',
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
           pop_name = 'high freq, dash',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 ```
 
@@ -301,9 +293,7 @@ logomaker(pfm2,
           pop_name = 'varying bg, no dash',
           control = list(gap_xlab = 3))
 
-pfm2dashbg=t(dash(t(pfm2),optmethod = 'mixEM',mode = bg)$posmean)
-rownames(pfm2dashbg)=c('A','C','G','T')
-colnames(pfm2dashbg)=1:ncol(pfm2)
+pfm2dashbg=dash(pfm2,optmethod = 'mixEM',mode = bg)$posmean
 
 seekViewport(paste0("plotlogo", 4))
 logomaker(pfm2dashbg,
@@ -348,7 +338,7 @@ nlogomaker(pfm2,
           frame_width = 1,
           newpage = F,
           pop_name = 'same bg, no dash',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 seekViewport(paste0("plotlogo", 2))
 nlogomaker(pfm2dash,
@@ -357,7 +347,7 @@ nlogomaker(pfm2dash,
           frame_width = 1,
           newpage = F,
           pop_name = 'same bg, dash',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 
 seekViewport(paste0("plotlogo", 3))
@@ -368,11 +358,9 @@ nlogomaker(pfm2,
           frame_width = 1,
           newpage = F,
           pop_name = 'varying bg, no dash',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
-pfm2dashbg=t(dash(t(pfm2),optmethod = 'mixEM',mode = bg)$posmean)
-rownames(pfm2dashbg)=c('A','C','G','T')
-colnames(pfm2dashbg)=1:ncol(pfm2)
+pfm2dashbg=dash(pfm2,optmethod = 'mixEM',mode = bg)$posmean
 
 seekViewport(paste0("plotlogo", 4))
 nlogomaker(pfm2dashbg,
@@ -382,7 +370,7 @@ nlogomaker(pfm2dashbg,
           frame_width = 1,
           newpage = F,
           pop_name = 'varying bg, dash',
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 ```
 

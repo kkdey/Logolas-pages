@@ -108,10 +108,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-21</p>
+<p><strong>Last updated:</strong> 2017-09-27</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 56a94be</p>
+<p><strong>Code version:</strong> 9febfe5</p>
 <!-- Add your analysis here -->
 <p>We now proceed to demonstrate various applications of Logolas.</p>
 <div id="transcription-factor-binding-sites-tfbs" class="section level1">
@@ -415,9 +415,9 @@ nlogomaker(pwm,logoheight = &#39;log_odds&#39;,
 <div id="dash-on-protein-pfm" class="section level2">
 <h2>Dash on protein PFM</h2>
 <p>One may also apply dash to some protein family PFMs, which have very few sequences mapped. The figure below shows the logo plot and negative logo plot of the same PFM as the one in above figure.</p>
-<pre class="r"><code>pwm_dash=t(dash(t(pfm),optmethod = &#39;mixEM&#39;,mode = bg)$posmean)
-rownames(pwm_dash)=c(&#39;A&#39; ,&#39;R&#39;,&#39;N&#39;,&#39;D&#39;,   &#39;C&#39; ,  &#39;Q&#39;,   &#39;E&#39; ,  &#39;G&#39;,   &#39;H&#39; ,  &#39;I&#39;,   &#39;L&#39; , &#39;K&#39;  , &#39;M&#39; ,  &#39;F&#39;,   &#39;P&#39; ,  &#39;S&#39;  , &#39;T&#39; ,  &#39;W&#39;,   &#39;Y&#39;,   &#39;V&#39;)
-colnames(pwm_dash)=1:ncol(pwm_dash)
+<pre class="r"><code>pwm_dash=dash(pfm,optmethod = &#39;mixEM&#39;,mode = bg)$posmean
+# rownames(pwm_dash)=c(&#39;A&#39; ,&#39;R&#39;,&#39;N&#39;,&#39;D&#39;,   &#39;C&#39; ,  &#39;Q&#39;,   &#39;E&#39; ,  &#39;G&#39;,   &#39;H&#39; ,  &#39;I&#39;,   &#39;L&#39; , &#39;K&#39;  , &#39;M&#39; ,  &#39;F&#39;,   &#39;P&#39; ,  &#39;S&#39;  , &#39;T&#39; ,  &#39;W&#39;,   &#39;Y&#39;,   &#39;V&#39;)
+# colnames(pwm_dash)=1:ncol(pwm_dash)
 
 grid.newpage()
 layout.rows &lt;- 1
@@ -626,13 +626,7 @@ color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
 &quot;col&quot; = RColorBrewer::brewer.pal(dim(tab_data)[1],
 name = &quot;Spectral&quot;))
 
-tab_data_dash=t(dash(t(tab_data),optmethod = &#39;mixEM&#39;)$posmean)
-colnames(tab_data_dash) &lt;- c(&quot;Matthew \n Stephens&quot;,
-&quot;John \n Lafferty&quot;,
-&quot;Wei \n Biao Wu&quot;,
-&quot;Peter \n McCullagh&quot;)
-
-rownames(tab_data_dash)=rownames(tab_data)
+tab_data_dash=dash(tab_data,optmethod = &#39;mixEM&#39;)$posmean
 
 grid.newpage()
 layout.rows &lt;- 2
@@ -792,15 +786,14 @@ attached base packages:
 
 other attached packages:
  [1] pmsignature_0.2.0    tidyr_0.6.1          dplyr_0.5-1         
- [4] dash_0.99.0          SQUAREM_2016.8-2     plyr_1.8.4          
- [7] ggplot2_2.2.1        atSNP_1.0            motifStack_1.18.0   
-[10] ade4_1.7-6           MotIV_1.30.0         grImport_0.9-0      
-[13] XML_3.98-1.9         GenomicRanges_1.26.4 GenomeInfoDb_1.10.3 
-[16] doParallel_1.0.10    iterators_1.0.8      foreach_1.4.3       
-[19] data.table_1.10.4    Rcpp_0.12.12         Matrix_1.2-10       
-[22] Logolas_1.1.2        TFBSTools_1.15.4     JASPAR2014_1.10.0   
-[25] Biostrings_2.42.1    XVector_0.14.1       IRanges_2.8.2       
-[28] S4Vectors_0.12.2     BiocGenerics_0.20.0 
+ [4] plyr_1.8.4           ggplot2_2.2.1        atSNP_1.0           
+ [7] motifStack_1.18.0    ade4_1.7-6           MotIV_1.30.0        
+[10] grImport_0.9-0       XML_3.98-1.9         GenomicRanges_1.26.4
+[13] GenomeInfoDb_1.10.3  doParallel_1.0.10    iterators_1.0.8     
+[16] foreach_1.4.3        data.table_1.10.4    Rcpp_0.12.12        
+[19] Matrix_1.2-10        Logolas_1.1.2        TFBSTools_1.15.4    
+[22] JASPAR2014_1.10.0    Biostrings_2.42.1    XVector_0.14.1      
+[25] IRanges_2.8.2        S4Vectors_0.12.2     BiocGenerics_0.20.0 
 
 loaded via a namespace (and not attached):
  [1] bitops_1.0-6                DirichletMultinomial_1.16.0
@@ -814,29 +807,29 @@ loaded via a namespace (and not attached):
 [17] git2r_0.18.0                Biobase_2.34.0             
 [19] rtracklayer_1.34.2          labeling_0.3               
 [21] caTools_1.17.1              scales_0.4.1               
-[23] readr_1.1.1                 stringr_1.2.0              
-[25] digest_0.6.12               Rsamtools_1.26.2           
-[27] rmarkdown_1.6               R.utils_2.5.0              
-[29] pkgconfig_2.0.1             htmltools_0.3.6            
-[31] BSgenome_1.42.0             rlang_0.1.1.9000           
-[33] RSQLite_2.0                 VGAM_1.0-3                 
-[35] BiocParallel_1.8.2          gtools_3.5.0               
-[37] R.oo_1.21.0                 RCurl_1.95-4.8             
-[39] magrittr_1.5                GO.db_3.4.0                
-[41] munsell_0.4.3               R.methodsS3_1.7.1          
-[43] stringi_1.1.5               yaml_2.1.14                
-[45] SummarizedExperiment_1.4.0  zlibbioc_1.20.0            
-[47] blob_1.1.0                  CNEr_1.10.2                
-[49] lattice_0.20-34             splines_3.3.3              
-[51] annotate_1.52.0             hms_0.3                    
-[53] KEGGREST_1.14.1             knitr_1.16                 
-[55] reshape2_1.4.2.9000         codetools_0.2-15           
-[57] TFMPvalue_0.0.6             evaluate_0.10              
-[59] png_0.1-7                   gtable_0.2.0               
-[61] poweRlaw_0.70.1             assertthat_0.2.0           
-[63] xtable_1.8-2                tibble_1.3.4               
-[65] GenomicAlignments_1.10.1    AnnotationDbi_1.36.0       
-[67] memoise_1.1.0              </code></pre>
+[23] SQUAREM_2016.8-2            readr_1.1.1                
+[25] stringr_1.2.0               digest_0.6.12              
+[27] Rsamtools_1.26.2            rmarkdown_1.6              
+[29] R.utils_2.5.0               pkgconfig_2.0.1            
+[31] htmltools_0.3.6             BSgenome_1.42.0            
+[33] rlang_0.1.1.9000            RSQLite_2.0                
+[35] VGAM_1.0-3                  BiocParallel_1.8.2         
+[37] gtools_3.5.0                R.oo_1.21.0                
+[39] RCurl_1.95-4.8              magrittr_1.5               
+[41] GO.db_3.4.0                 munsell_0.4.3              
+[43] R.methodsS3_1.7.1           stringi_1.1.5              
+[45] yaml_2.1.14                 SummarizedExperiment_1.4.0 
+[47] zlibbioc_1.20.0             blob_1.1.0                 
+[49] CNEr_1.10.2                 lattice_0.20-34            
+[51] splines_3.3.3               annotate_1.52.0            
+[53] hms_0.3                     KEGGREST_1.14.1            
+[55] knitr_1.16                  reshape2_1.4.2.9000        
+[57] codetools_0.2-15            TFMPvalue_0.0.6            
+[59] evaluate_0.10               png_0.1-7                  
+[61] gtable_0.2.0                poweRlaw_0.70.1            
+[63] assertthat_0.2.0            xtable_1.8-2               
+[65] tibble_1.3.4                GenomicAlignments_1.10.1   
+[67] AnnotationDbi_1.36.0        memoise_1.1.0              </code></pre>
 </div>
 </div>
 

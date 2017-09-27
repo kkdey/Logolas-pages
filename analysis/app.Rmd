@@ -168,7 +168,6 @@ While we usually assume the uniform background probability(bg) for all symbols, 
 
 ```{r,echo=FALSE}
 plantTF=function(path,cb){
-  library(dash)
   #read all the TF names from the infomation page
   nam=list.files(path)
   
@@ -205,16 +204,12 @@ for(i in 1:length(nam)){
   }
   npos[i]=ncol(pwm)
   pfm_indi[[i]]=pfm
-  pwm=dash(t(pfm),optmethod = 'mixEM',mode = bg)
-  pwm=t(pwm$posmean)
-  rownames(pwm)=c('A','C','G','T')
-  colnames(pwm)=1:ncol(pwm)
+  pwm=dash(pfm,optmethod = 'mixEM',mode = bg)$posmean
   pwm_dash[[i]]=pwm
 }
 
 if(cb==T){
-  pwm_cbdash=dash(t(pfm_cb),mode=bg,optmethod = 'mixEM')
-  pwm_cbdash=t(pwm_cbdash$posmean)
+  pwm_cbdash=dash(pfm_cb,mode=bg,optmethod = 'mixEM')$posmean
   pwm_cb=list()
 for(i in 1:length(npos)){
   pwm=pwm_cbdash[,1:npos[i]]
@@ -364,7 +359,6 @@ user could make logo plot and negative plot of protein sequence motif using Logo
 ```{r,echo=FALSE}
 
 readprotein=function(file,skip=3,nrows,nsites,bg=bg,adash,mat){
-  library(dash)
   rawdata=read.table(file = file,skip = skip,nrows = nrows)
   if(mat=='pwm'){
     pwm=as.matrix(rawdata[,23:42]/100)
@@ -443,9 +437,9 @@ One may also apply dash to some protein family PFMs, which have very few sequenc
 mapped. The figure below shows the logo plot and negative logo plot of the same PFM as the one in above figure. 
 
 ```{r,warning=FALSE,message=FALSE,fig.width=7,fig.height=7}
-pwm_dash=t(dash(t(pfm),optmethod = 'mixEM',mode = bg)$posmean)
-rownames(pwm_dash)=c('A' ,'R','N','D',   'C' ,  'Q',   'E' ,  'G',   'H' ,  'I',   'L' , 'K'  , 'M' ,  'F',   'P' ,  'S'  , 'T' ,  'W',   'Y',   'V')
-colnames(pwm_dash)=1:ncol(pwm_dash)
+pwm_dash=dash(pfm,optmethod = 'mixEM',mode = bg)$posmean
+# rownames(pwm_dash)=c('A' ,'R','N','D',   'C' ,  'Q',   'E' ,  'G',   'H' ,  'I',   'L' , 'K'  , 'M' ,  'F',   'P' ,  'S'  , 'T' ,  'W',   'Y',   'V')
+# colnames(pwm_dash)=1:ncol(pwm_dash)
 
 grid.newpage()
 layout.rows <- 1
@@ -677,13 +671,7 @@ color_profile <- list("type" = "per_row",
 "col" = RColorBrewer::brewer.pal(dim(tab_data)[1],
 name = "Spectral"))
 
-tab_data_dash=t(dash(t(tab_data),optmethod = 'mixEM')$posmean)
-colnames(tab_data_dash) <- c("Matthew \n Stephens",
-"John \n Lafferty",
-"Wei \n Biao Wu",
-"Peter \n McCullagh")
-
-rownames(tab_data_dash)=rownames(tab_data)
+tab_data_dash=dash(tab_data,optmethod = 'mixEM')$posmean
 
 grid.newpage()
 layout.rows <- 2

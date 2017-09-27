@@ -94,10 +94,10 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-21</p>
+<p><strong>Last updated:</strong> 2017-09-27</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 56a94be</p>
+<p><strong>Code version:</strong> 9febfe5</p>
 <!-- Add your analysis here -->
 <p>Typically logo plots are used to represent the position weight matrix (PWM). However, the PWM is often generated from underlying position frequency matrix (PFM). PFM stores the compositional data - the frequencies of the symbols at each position. Given a PFM matrix however, we also have knowledge of the scale of the frequencies for each position. This additional information can be used to get a better logo plot representation compared to the usual PWM-based logo plots.</p>
 <p>Suppose for a specific position in a sequence, the compositional data is <span class="math display">\[ (A, C, G, T) : = (6, 1, 2, 1) \]</span> and in another case, it is <span class="math display">\[ (A, C, G, T) : = (600, 100, 200, 100). \]</span>. We assume that the background probability is equal for the four bases. If we transform the positional frequencies into PWM by taking the sample proportion, then the estimated PWM would be same for the two cases and would correspond to the same logo plot representation. However, in the second case, we have a total frequency of 1000 for all symbols while for the first case, it is only 10. Hence, it makes sense to shrink the PWM estimate to the background probability more strongly in the first case than that in the second case.</p>
@@ -164,9 +164,7 @@ logomaker(pfm1,
           pop_name = &#39;low freq&#39;,
           control = list(gap_xlab = 3))
 seekViewport(paste0(&#39;plotlogo&#39;,2))
-pfm1dash=t(dash(t(pfm1),optmethod = &#39;mixEM&#39;)$posmean)
-rownames(pfm1dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-colnames(pfm1dash)=1:ncol(pfm1)
+pfm1dash=dash(pfm1,optmethod = &#39;mixEM&#39;)$posmean
 logomaker(pfm1dash,
           color_profile = color_profile,
           frame_width = 1,
@@ -184,9 +182,7 @@ logomaker(pfm2,
           pop_name = &#39;medium freq&#39;,
           control = list(gap_xlab = 3))
 seekViewport(paste0(&#39;plotlogo&#39;,4))
-pfm2dash=t(dash(t(pfm2),optmethod = &#39;mixEM&#39;)$posmean)
-rownames(pfm2dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-colnames(pfm2dash)=1:ncol(pfm2)
+pfm2dash=dash(pfm2,optmethod = &#39;mixEM&#39;)$posmean
 logomaker(pfm2dash,
           color_profile = color_profile,
           frame_width = 1,
@@ -204,9 +200,8 @@ logomaker(pfm3,
           pop_name = &#39;high freq&#39;,
           control = list(gap_xlab = 3))
 seekViewport(paste0(&#39;plotlogo&#39;,6))
-pfm3dash=t(dash(t(pfm3),optmethod = &#39;mixEM&#39;)$posmean)
-rownames(pfm3dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-colnames(pfm3dash)=1:ncol(pfm3)
+pfm3dash=dash(pfm3,optmethod = &#39;mixEM&#39;)$posmean
+
 logomaker(pfm3dash,
           color_profile = color_profile,
           frame_width = 1,
@@ -241,19 +236,18 @@ nlogomaker(pfm1,
           frame_width = 1,
           newpage = F,
           pop_name = &#39;low freq&#39;,
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 seekViewport(paste0(&#39;plotlogo&#39;,2))
-pfm1dash=t(dash(t(pfm1),optmethod = &#39;mixEM&#39;)$posmean)
-rownames(pfm1dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-colnames(pfm1dash)=1:ncol(pfm1)
+pfm1dash=dash(pfm1,optmethod = &#39;mixEM&#39;)$posmean
+
 nlogomaker(pfm1dash,
           logoheight = &#39;log_odds&#39;,
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
           pop_name = &#39;low freq, dash&#39;,
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 3))
 nlogomaker(pfm2,
@@ -262,18 +256,17 @@ nlogomaker(pfm2,
           frame_width = 1,
           newpage = F,
           pop_name = &#39;medium freq&#39;,
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 seekViewport(paste0(&#39;plotlogo&#39;,4))
-pfm2dash=t(dash(t(pfm2),optmethod = &#39;mixEM&#39;)$posmean)
-rownames(pfm2dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-colnames(pfm2dash)=1:ncol(pfm2)
+pfm2dash=dash(pfm2,optmethod = &#39;mixEM&#39;)$posmean
+
 nlogomaker(pfm2dash,
           color_profile = color_profile,
           logoheight = &#39;log_odds&#39;,
           frame_width = 1,
           newpage=F,
           pop_name = &#39;medium freq, dash&#39;,
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 5))
 nlogomaker(pfm3,
@@ -282,18 +275,17 @@ nlogomaker(pfm3,
           frame_width = 1,
           newpage = F,
           pop_name = &#39;high freq&#39;,
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 seekViewport(paste0(&#39;plotlogo&#39;,6))
-pfm3dash=t(dash(t(pfm3),optmethod = &#39;mixEM&#39;)$posmean)
-rownames(pfm3dash)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-colnames(pfm3dash)=1:ncol(pfm3)
+pfm3dash=dash(pfm3,optmethod = &#39;mixEM&#39;)$posmean
+
 nlogomaker(pfm3dash,
            logoheight = &#39;log_odds&#39;,
           color_profile = color_profile,
           frame_width = 1,
           newpage=F,
           pop_name = &#39;high freq, dash&#39;,
-          control = list(gap_xlab = 3))</code></pre>
+          control = list(gap_xlab = 3, gap_ylab = 3.5))</code></pre>
 <p><img src="figure/dashtutor.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="dash-and-background-probability" class="section level2">
@@ -354,9 +346,7 @@ logomaker(pfm2,
           pop_name = &#39;varying bg, no dash&#39;,
           control = list(gap_xlab = 3))
 
-pfm2dashbg=t(dash(t(pfm2),optmethod = &#39;mixEM&#39;,mode = bg)$posmean)
-rownames(pfm2dashbg)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-colnames(pfm2dashbg)=1:ncol(pfm2)
+pfm2dashbg=dash(pfm2,optmethod = &#39;mixEM&#39;,mode = bg)$posmean
 
 seekViewport(paste0(&quot;plotlogo&quot;, 4))
 logomaker(pfm2dashbg,
@@ -397,7 +387,7 @@ nlogomaker(pfm2,
           frame_width = 1,
           newpage = F,
           pop_name = &#39;same bg, no dash&#39;,
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 seekViewport(paste0(&quot;plotlogo&quot;, 2))
 nlogomaker(pfm2dash,
@@ -406,7 +396,7 @@ nlogomaker(pfm2dash,
           frame_width = 1,
           newpage = F,
           pop_name = &#39;same bg, dash&#39;,
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
 
 seekViewport(paste0(&quot;plotlogo&quot;, 3))
@@ -417,11 +407,9 @@ nlogomaker(pfm2,
           frame_width = 1,
           newpage = F,
           pop_name = &#39;varying bg, no dash&#39;,
-          control = list(gap_xlab = 3))
+          control = list(gap_xlab = 3, gap_ylab = 3.5))
 
-pfm2dashbg=t(dash(t(pfm2),optmethod = &#39;mixEM&#39;,mode = bg)$posmean)
-rownames(pfm2dashbg)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
-colnames(pfm2dashbg)=1:ncol(pfm2)
+pfm2dashbg=dash(pfm2,optmethod = &#39;mixEM&#39;,mode = bg)$posmean
 
 seekViewport(paste0(&quot;plotlogo&quot;, 4))
 nlogomaker(pfm2dashbg,
@@ -431,7 +419,7 @@ nlogomaker(pfm2dashbg,
           frame_width = 1,
           newpage = F,
           pop_name = &#39;varying bg, dash&#39;,
-          control = list(gap_xlab = 3))</code></pre>
+          control = list(gap_xlab = 3, gap_ylab = 3.5))</code></pre>
 <p><img src="figure/dashtutor.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="session-information" class="section level2">
@@ -450,15 +438,16 @@ attached base packages:
 [8] base     
 
 other attached packages:
-[1] dash_0.99.0      SQUAREM_2016.8-2 Logolas_1.1.2   
+[1] dash_0.99.0          LaplacesDemon_16.0.1 SQUAREM_2016.8-2    
+[4] Logolas_1.1.2       
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.12         digest_0.6.12        rprojroot_1.2       
- [4] backports_1.0.5      git2r_0.18.0         magrittr_1.5        
- [7] evaluate_0.10        stringi_1.1.5        LaplacesDemon_16.0.1
-[10] rmarkdown_1.6        RColorBrewer_1.1-2   tools_3.3.3         
-[13] stringr_1.2.0        parallel_3.3.3       yaml_2.1.14         
-[16] htmltools_0.3.6      knitr_1.16          </code></pre>
+ [1] Rcpp_0.12.12       digest_0.6.12      rprojroot_1.2     
+ [4] backports_1.0.5    git2r_0.18.0       magrittr_1.5      
+ [7] evaluate_0.10      stringi_1.1.5      rmarkdown_1.6     
+[10] RColorBrewer_1.1-2 tools_3.3.3        stringr_1.2.0     
+[13] parallel_3.3.3     yaml_2.1.14        htmltools_0.3.6   
+[16] knitr_1.16        </code></pre>
 </div>
 
 <hr>
