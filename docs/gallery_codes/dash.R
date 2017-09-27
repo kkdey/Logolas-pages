@@ -11,7 +11,7 @@ colnames(pfm2)=1:ncol(pfm2)
 rownames(pfm3)=c('A','C','G','T')
 colnames(pfm3)=1:ncol(pfm3)
 
-color_profile = list("type" = "per_row", 
+color_profile = list("type" = "per_row",
                      "col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
 
 grid.newpage()
@@ -40,9 +40,8 @@ logomaker(pfm1,
           yscale_change = F,
           pop_name = 'low freq')
 seekViewport(paste0('plotlogo',2))
-pfm1dash=t(dash(t(pfm1),optmethod = 'mixEM')$posmean)
-rownames(pfm1dash)=c('A','C','G','T')
-colnames(pfm1dash)=1:ncol(pfm1)
+pfm1dash=dash(pfm1,optmethod = 'mixEM')$posmean
+
 logomaker(pfm1dash,
           color_profile = color_profile,
           frame_width = 1,
@@ -58,9 +57,8 @@ logomaker(pfm2,
           yscale_change = F,
           pop_name = 'medium freq')
 seekViewport(paste0('plotlogo',4))
-pfm2dash=t(dash(t(pfm2),optmethod = 'mixEM')$posmean)
-rownames(pfm2dash)=c('A','C','G','T')
-colnames(pfm2dash)=1:ncol(pfm2)
+pfm2dash=dash(pfm2,optmethod = 'mixEM')$posmean
+
 logomaker(pfm2dash,
           color_profile = color_profile,
           frame_width = 1,
@@ -76,9 +74,8 @@ logomaker(pfm3,
           yscale_change = F,
           pop_name = 'high freq')
 seekViewport(paste0('plotlogo',6))
-pfm3dash=t(dash(t(pfm3),optmethod = 'mixEM')$posmean)
-rownames(pfm3dash)=c('A','C','G','T')
-colnames(pfm3dash)=1:ncol(pfm3)
+pfm3dash=dash(pfm3,optmethod = 'mixEM')$posmean
+
 logomaker(pfm3dash,
           color_profile = color_profile,
           frame_width = 1,
