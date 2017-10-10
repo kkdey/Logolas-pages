@@ -1,0 +1,4 @@
+
+
+###############    String Logo representation     ####################
+

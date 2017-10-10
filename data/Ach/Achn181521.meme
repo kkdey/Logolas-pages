@@ -1,0 +1,22 @@
+MEME version 4.4
+
+ALPHABET= ACGT
+
+strands: + -
+
+Background letter frequencies (from file `../../promoter_background/Ach.bg'):
+A 0.31410 C 0.18590 G 0.18590 T 0.31410 
+
+MOTIF Achn181521 MP00133
+
+letter-probability matrix: alength= 4 w= 7 nsites= 95 E= 9.5e-034
+  0.000000	  0.000000	  0.000000	  1.000000	
+  0.000000	  0.000000	  1.000000	  0.000000	
+  1.000000	  0.000000	  0.000000	  0.000000	
+  1.000000	  0.000000	  0.000000	  0.000000	
+  1.000000	  0.000000	  0.000000	  0.000000	
+  1.000000	  0.000000	  0.000000	  0.000000	
+  0.231579	  0.315789	  0.252632	  0.200000	
+
+URL http://planttfdb.cbi.pku.edu.cn/tf.php?sp=Ach&did=Achn181521#bind_motif
+

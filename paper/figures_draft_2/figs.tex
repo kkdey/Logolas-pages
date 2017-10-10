@@ -1,0 +1,32 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+\usepackage{bibentry}
+
+% Text layout specific to Supplemental Materials
+\topmargin 0.0cm
+\oddsidemargin 0.5cm
+\evensidemargin 0.5cm
+\textwidth 16cm
+\textheight 21cm
+
+\setlength{\parskip}{1em}
+
+\input{header.tex}
+\pagestyle{empty} %%in order to delete the number at the bottom of the page
+
+
+\begin{document}
+
+\section*{Figures}
+\newpage
+
+\begin{figure*}[h!]
+\centering
+\includegraphics[height=6in, width=7in]{figures2.split/figures2_1.pdf}
+\caption{\textbf{EDLogo representation and its performance comparison to standard logo plots}
+      We present a comparative study of the \textit{EDLogo} representation with respect to the standard logo plots, through three examples. In the first example (panel (A)), we compare the \textit{EDLogo} representation (\textit{right}) with the standard information content based logo plot  (\textit{left}) for modeling the transcription factor binding site of EBF1-disc1 transcription factor. We observe that the \textit{EDLogo} plot identifies the depletion in the middle of the sequence much better than the standard plot. In panel (B), we compare the \textit{EDLogo} plot with the position speciifc scoring matrix (PSSM) plot of the binding sequence of the Bacterial transcription activator, effector binding domain protein PF06445 (motif 4, Start=153 Length=8). We observe that the \textit{EDLogo} representation is much more visually parsimonious and detailed than the PSSM plot. In panel (C), we present the standard logo and the \text{EDLogo} representation of the mutational signature profile of the all mutations in lymphoma B cells, where the data is due to Alexandrov et al 2013 \cite{Alexandrov2013}. We observe that the depletion of G to the right of the mutation - possibly occurring due to methylated CpG sites being less prone to mutation - much more clearly in the \textit{EDLogo} representation compared to the standard logo plot.}
+\label{fig:fig1}
+\end{figure*}
+
+\end{document}
+

@@ -1,0 +1,666 @@
+%% BioMed_Central_Tex_Template_v1.06
+%%                                      %
+%  bmc_article.tex            ver: 1.06 %
+%                                       %
+
+%%IMPORTANT: do not delete the first line of this template
+%%It must be present to enable the BMC Submission system to
+%%recognise this template!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                     %%
+%%  LaTeX template for BioMed Central  %%
+%%     journal article submissions     %%
+%%                                     %%
+%%          <8 June 2012>              %%
+%%                                     %%
+%%                                     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% For instructions on how to fill out this Tex template           %%
+%% document please refer to Readme.html and the instructions for   %%
+%% authors page on the biomed central website                      %%
+%% http://www.biomedcentral.com/info/authors/                      %%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%% BioMed Central currently use the MikTex distribution of         %%
+%% TeX for Windows) of TeX and LaTeX.  This is available from      %%
+%% http://www.miktex.org                                           %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% additional documentclass options:
+%  [doublespacing]
+%  [linenumbers]   - put the line numbers on margins
+
+%%% loading packages, author definitions
+
+%\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
+\documentclass{bmcart}
+
+%%% Load packages
+%\usepackage{amsthm,amsmath}
+%\RequirePackage{natbib}
+%\RequirePackage[authoryear]{natbib}% uncomment this for author-year bibliography
+%\RequirePackage{hyperref}
+\usepackage[utf8]{inputenc} %unicode support
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{cite}
+\usepackage{nameref,hyperref}
+
+\newfloat{suppfig}{tbh}{losf}
+\floatname{suppfig}{\textbf{Supplementary Figure}}
+
+%\usepackage[applemac]{inputenc} %applemac support if unicode package fails
+%\usepackage[latin1]{inputenc} %UNIX support if unicode package fails
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                             %%
+%%  If you wish to display your graphics for   %%
+%%  your own use using includegraphic or       %%
+%%  includegraphics, then comment out the      %%
+%%  following two lines of code.               %%
+%%  NB: These line *must* be included when     %%
+%%  submitting to BMC.                         %%
+%%  All figure files must be submitted as      %%
+%%  separate graphics through the BMC          %%
+%%  submission process, not included in the    %%
+%%  submitted article.                         %%
+%%                                             %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\def\includegraphic{}
+\def\includegraphics{}
+
+
+
+%%% Put your definitions there:
+\startlocaldefs
+\endlocaldefs
+
+
+%%% Begin ...
+\begin{document}
+
+%%% Start of article front matter
+\begin{frontmatter}
+
+\begin{fmbox}
+\dochead{SOFTWARE}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the title of your article here     %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Logolas : New Frontiers in sequence Logo visualization}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the authors here                   %%
+%%                                          %%
+%% Specify information, if available,       %%
+%% in the form:                             %%
+%%   <key>={<id1>,<id2>}                    %%
+%%   <key>=                                 %%
+%% Comment or delete the keys which are     %%
+%% not used. Repeat \author command as much %%
+%% as required.                             %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\author[
+   addressref={aff1},                   % id's of addresses, e.g. {aff1,aff2}
+   corref={aff1},                       % id of corresponding address, if any
+   email={kkdey@uchicago.edu}   % email address
+]{\inits{KKD}\fnm{Kushal K} \snm{Dey}}
+\author[
+   addressref={aff1},
+   email={dyxie@uchicago.edu}
+]{\inits{DX}\fnm{Dongyue} \snm{Xie}}
+\author[
+   addressref={aff1, aff2},
+   email={mstephens@uchicago.edu}
+]{\inits{MS}\fnm{Matthew} \snm{Stephens}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the authors' addresses here        %%
+%%                                          %%
+%% Repeat \address commands as much as      %%
+%% required.                                %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\address[id=aff1]{%                           % unique id
+  \orgname{Department of Statistics, University of Chicago}, % university, etc   
+  \postcode{60637},% post or zip code
+  \city{Chicago},                              % city
+  \cny{USA}                                    % country
+}
+\address[id=aff2]{%
+  \orgname{Department of Human Genetics, university of Chicago},
+  \postcode{60637},
+  \city{Chicago},
+  \cny{USA}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter short notes here                   %%
+%%                                          %%
+%% Short notes will be after addresses      %%
+%% on first page.                           %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{artnotes}
+% %\note{Sample of title note}     % note to the article
+% \note[id=n1]{Equal contributor} % note, connected to author
+% \end{artnotes}
+
+\end{fmbox}% comment this for two column layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The Abstract begins here                 %%
+%%                                          %%
+%% Please refer to the Instructions for     %%
+%% authors on http://www.biomedcentral.com  %%
+%% and include the section headings         %%
+%% accordingly for your article type.       %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstractbox}
+
+\begin{abstract} % abstract
+\parttitle{Background} %if any
+
+Sequence logo plots have developed into a standard graphical tool for identifying sequence motifs in DNA, RNA or protein sequences, largely because of the ease of interpretation and the visual appeal. However standard logo plots are limited in its applicability owing to limited set of symbols it can plot. Also standard logo plots tend to be biased towards highlight enrichment of symbols, thereby occasionally missing out on finer motif patterns. 
+
+\parttitle{Results} 
+
+In this article, we present an R package Logolas which allows the user to plot any string comprising of alphabets, numerics, punctuations, dots, dashes etc-  which extends the scope of logo plots to most compositional data with labels that are strings. We show applications of string logos for visualizing mutation signature profiles, histone marks composition across different regions of DNA, ecological abundance patterns etc. Also, Logolas provides a new logo representation that highlights both enrichment as well as depletion of symbols at each position, resulting in a more parsimonious visualization of logos. Logolas also provides an adaptive method to scale the position weights based on positional frequency scales, leading to more accurate representation of logos. 
+
+\parttitle{Conclusions} 
+
+Logolas is easy to use and provides a handful of customizations for generating the logo visualizations. Also, Logolas widens the scope of logos by extending its use beyond the domain of DNA, RNA and protein sequence analysis, and also allows for more accurate and more visually appealing representation.
+
+
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The keywords begin here                  %%
+%%                                          %%
+%% Put each keyword in separate \kwd{}.     %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{keyword}
+\kwd{Logo plots}
+\kwd{String Logos}
+\kwd{Depletion}
+\kwd{Sparse Logos}
+\kwd{Dirichlet Adaptive Shrinkage}
+\kwd{Applications}
+\end{keyword}
+
+% MSC classifications codes, if any
+%\begin{keyword}[class=AMS]
+%\kwd[Primary ]{}
+%\kwd{}
+%\kwd[; secondary ]{}
+%\end{keyword}
+
+\end{abstractbox}
+%
+%\end{fmbox}% uncomment this for twcolumn layout
+
+\end{frontmatter}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The Main Body begins here                %%
+%%                                          %%
+%% Please refer to the instructions for     %%
+%% authors on:                              %%
+%% http://www.biomedcentral.com/info/authors%%
+%% and include the section headings         %%
+%% accordingly for your article type.       %%
+%%                                          %%
+%% See the Results and Discussion section   %%
+%% for details on how to create sub-sections%%
+%%                                          %%
+%% use \cite{...} to cite references        %%
+%%  \cite{koon} and                         %%
+%%  \cite{oreg,khar,zvai,xjon,schn,pond}    %%
+%%  \nocite{smith,marg,hunn,advi,koha,mouse}%%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% start of article main body
+% <put your article body there>
+
+%%%%%%%%%%%%%%%%
+%% Background %%
+%%
+\section*{Background}
+
+Sequence motifs are short conserved patterns in DNA, RNA and protein sequences that are believed to have biological significance. Such motifs can be used to identify transcription factor binding sites (TFBS), binding sites of proteins such as nucleases, splice sites etc. Such motifs can be identified through multiple alignment of DNA, RNA and amino acids, which provides a position specific frequency (or weight) for each nucleotide or amino acid that is subsequently stored as a column (per position) in a matrix called the Position Frequency (Weight) Matrix. A Position Frequency Matrix (PFM) or Position Weight Matrix (PWM) is often graphically represented by a sequence logo plot \cite{Schneider1990}. A sequence logo displays for each position a stack of  symbols where each symbols corresponds to a base in a DNA/RNA sequence or an amino acid in a protein sequence. The height of the stack is determined by the information content of the position and the relative sizes of the letters correspond to the frequency of the symbols. \\[3 pt]
+
+Sequence logos have proved to be an effective tool in informative visualization of sequence motifs in varied applications - for identifying Transcription Factor Binding Site motifs via \textit{TFBStools} (Tan and Lenhard 2016) \cite{Tan2016}, visualization of sequence variation of protein complexes (Bryson et al 2009) \cite{Bryson2009}, proteolytic cleavage sites (Mahrus et al 2008) \cite{Mahrus2008}, splice sites (Emmert et al 2001)\cite{Emmert2001} and patterns in BLOCKS protein sequences (Henikoff et al 1995, Henikoff et al 1999) \cite{Henikoff1995,Henikoff1999} etc. One of the first and most extensively used  sequence logo visualization packages is \textit{seqLogo} \cite{Bembom2017}, which is exclusively targeted to DNA sequence motif visualization and has a library of only 4 symbols - A, C, G and T - corresponding to the four bases. Web servers like  \textit{WebLogo} (Crooks et al 2004) \cite{Crooks2004}, \textit{Seq2Logo} (Thomsen and Nielsen 2012) \cite{Thomsen2012}, \textit{WebLogo} python package  and \textit{RWebLogo} R package (Wagih 2014) \cite{Wagih2014} allow the user to plot custom logo plots for both nucleotides and amino acids and have a library comprising of all English alphabets. \\[3 pt]
+
+Several alternative ways of visualizing sequence logos have been suggested in recent years. R package \textit{motifStack} (Ou and Zhu 2015) \cite{Ou2015} proposes novel ways to graphically stack and compare multiple sequence motifs for a DNA, RNA or protein sequence.  R package \textit{DiffLogo} (Nettling et al 2015) \cite{Nettling2015} provides tools to visualize the pairwise differences in motif patterns in case of multiple motifs for a transcription factor or protein domain. \textit{PWMenrich} (Stojnic and Diez 2015) \cite{Stojnic2015} performs motif scanning and enrichment of motifs with subsequent visualization of the enrichment. \textit{iceLogo} (Coalert el al 2009) \cite{Coalert2009} is a Java based web service that determines the logo stack heights using probability theory instead of information theory. ggseqlogo (Wagih 2017) \cite{Wagih2017} aggregates ggplot2 graphics with sequence logos to generate publication ready plots. \\[3 pt]
+
+We introduce here another logo visualization package, \textit{Logolas}, which addresses several limitations of the above packages and makes logo visualization a more generic tool with potential applications in a much wider scope of problems. The standard sequence logo visualization based on Information Content tends to highlight primarily the enrichment of the symbols (bases or amino acids) at each position. seq2Logo allows the user to plot position specific scores instead of position weights which highlight both enrichment and depletion but the representation is not parsimonious \cite{Thomsen2012}. Logolas allows the user to highlight both the enrichment as well as depletion of symbols in a logo plot, but in a more parsimonious and visually appealing way. Also, unlike standard logo making softwares which are limited in their library size to either A, C, G and T or just English alphabets, Logolas allows the user to any string, comprising of alphabets, numerics, punctuations, dots and dashes, which basically encompasses almost all possible strings. As a result, Logolas can be used for graphical representation of almost all compositional data, well beyond the DNA, RNA and protein based PWM models. Standard logo plotting tools plot logos based on the PWM and fail to adapt to the scale of positional frequencies (PFM). Logolas provides a method, called dash (Dirichlet Adaptive Shrinkage) for adaptive scaling of the heights of the logos based on the positional frequencies, thereby providing more reliable logo plots when the alignment frequency for a position is low.
+
+%\cite{koon,oreg,khar,zvai,xjon,schn,pond,smith,marg,hunn,advi,koha,mouse}
+
+\section*{Implementation}
+
+In this section, we discuss the implementation details of the three primary functions in \textbf{Logolas} - \textit{logomaker}, used for plotting the standard logo plot, \textit{nlogomaker} used for sparse logo representation and \textit{dash} for performing adaptive scaling of position weights.
+
+\subsection*{Standard Logos}
+
+For the standard logo plot, \textit{Logolas} uses information content to determine the height of the stack of symbols per position. This approach is similar to most standard logo plotting softwares like \textit{seqLogo}, \textit{WebLogo} etc. The information content at position n is given by  
+
+\begin{equation}\label{ic_def}
+IC (n) : = \log_{2} (B) - H (n) ,   \hspace{1 cm} H(n) : = - \sum_{b} p_{b,n} \log_{2} p_{b,n}
+\end{equation}
+
+$B$ here represents the number of possible symbols ($B=4$ corresponding to 4 nucleotides for DNA sequences and $B=20$ for protein amino acids). $H(n)$ is the Shannon entropy at position $n$ with $p_{b,n}$ being the probability of symbol $b$ at position $n$. The inherent assumption with this definition of information content is that all symbols are a priori considered to be equally likely at each position, which is not always true. In case of DNA sequences, some genomes have less GC content (S. Cerevisiae - $38\%$, Plasmodium falciparum - $19 \%$) compared to humans ($41 \%$) and hence are expected to have lower probability of G and C in their background probability compared to humans. For some plants, the background probability is very non-uniform - for example, \textit{Actinidia chinensis}  has a background probability of  $ q = (q_A, q_C, q_G, q_T) = (0.3141, 0.1859, 0.1859, 0.3141)$. When the background probability is not uniform, Kullback-Leibler divergence can be used for determining stack heights. 
+
+\begin{equation}\label{kl_def}
+ \hspace{3 cm} IC (n) : = \sum_{b} p_{b,n} \log_{2} \frac{p_{b,n}}{q_{b,n}} 
+\end{equation}
+
+where $q_{b,n}$ represents the background probability of base $b$ at position $n$. 
+\textit{Logolas} allows the user to choose a probability matrix $ Q = ((q_{b,n} )) $ as background, where the entry at $(b,n)$ is $q_{b,n}$. Alternatively, one can also choose a vector $q = \left ( q_{b} : b = 1,2,\ldots, B \right)$ when the background probability is same at each position, i.e. $q_{b,n} = q_{b}$ for all $n$, as proposed by Stormo \cite{Stormo2000}.
+
+A comparison of standard logo plot under uniform background assumption and the species based background information (based on the GC content of the species) for a plant transcription factor  Achn021211 in \textit{Actinidia chinensis} is presented in \textbf{Supplementary Figure 1}. 
+
+\subsection*{Illustration of Sparse Logo Representation}
+
+Sequence logos based on information content typically highlight the enriched bases. But in some cases, the bases that are depleted are of greater interest. As an illustration, say for a specific position, the relative frequencies are $ p = (p_A, p_C, p_G, p_T) = (0.33, 0.33, 0.33, 0.01)$. A standard logo will show three equally high symbols A, C, G stacked vertically with T at the bottom having negligible height (see Fig 1b). An alternative parsimonious and probably more meaningful representation is to show the depletion of T instead, since that is the base that has changed from normal while the other bases have remained as is (for example Fig 1c). This problem is further aggravated when a position with depletion is surrounded by highly enriched bases. The information content being biased towards enrichment leads to high stack heights for the enriched bases, which makes the depletion hard to see (see Fig 1e). Sparse Logo representation shows the enrichment of bases along the positive Y axis and the depletion of bases along the negative Y axis, thereby providing a more accurate yet parsimonious depiction of the sequence logo (see Fig 1f).  
+
+\subsection*{Algorithm for Sparse Logo Representation}
+
+There are several options for generating sparse logo representations - \textit{log}, \textit{log-odds}, \textit{ratio} and also information content counterparts of these options, namely \textit{ic-log}, \textit{ic-log-odds}, \textit{ic-ratio}. We discuss the algorithm for computing the heights of enrichment and/or depletion of bases in a sparse logo representation for each of the eight options listed above.  \\[3 pt]
+
+Let $p_{n} = \left( p_{n1}, p_{n2}, \ldots, p_{nB} \right)$ be the position weights of the symbols at position $n$  and $q_{n} =\left( q_{n1}, q_{n2}, \ldots, q_{nB} \right)$ be the background probability of symbols at position $n$. Typically we encounter $q_{n}$ to be same for all positions $n$ ( $ q_{n} \equiv q$ ). 
+
+We first define a score vector $f_{n}$ for each $n$. Each option varies in its definition of $f_{n}$.
+
+\begin{itemize}
+
+\item \textit{log} approach
+
+\begin{equation}\label{log_f}
+\qquad f_{nb} = \log_2 \frac{p_{nb} + \epsilon}{q_{nb} + \epsilon} - median \left ( \left \{ \log_2 \frac{p_{nb} + \epsilon}{q_{nb} + \epsilon} : b = 1, 2, \ldots, B \right \} \right )
+\end{equation}
+
+\item \textit{log-odds} approach
+
+\begin{equation}\label{log_odds_f}
+f_{nb} = \log_2 \frac{p_{nb}/(1 - p_{nb}) + \epsilon}{q_{nb}/(1 - q_{nb}) + \epsilon} - median \left ( \left \{ \log_2 \frac{p_{nb}/(1 - p_{nb}) + \epsilon}{q_{nb}/(1 - q_{nb}) + \epsilon} : b = 1, 2, \ldots, B \right \} \right )
+\end{equation}
+
+\item \textit{ratio} approach
+
+\begin{equation}\label{log_ratio_f}
+\qquad \qquad f_{nb} =  \frac{p_{nb} + \epsilon}{q_{nb} + \epsilon} - median \left ( \left \{  \frac{p_{nb} + \epsilon}{q_{nb} + \epsilon} : b = 1, 2, \ldots, B \right \} \right )
+\end{equation}
+
+% \item \textit{difference} approach
+
+% \begin{equation}\label{log_diff_f}
+% \qquad \qquad f_{nb} =  \left( p_{nb} - q_{nb} \right )- median \left ( \left \{  p_{nb} - q_{nb}  : b = 1, 2, \ldots, B \right \} \right )
+% \end{equation}
+
+\end{itemize}
+
+
+We next compute $f^{+}_{nb} =  f_{nb} \mathbf{I} ( f_{nb} \geq 0 )$ and $f^{-}_{nb} =  f_{nb} \mathbf{I} ( f_{nb} < 0 )$ where $\mathbf{I} $ is the indicator function.
+
+For the \textit{ic} based approaches (\textit{ic-log}, \textit{ic-log-odds} and  \textit{ic-ratio}), we additionally compute the information content for each position $IC(n)$ and then redefine the $f^{+}_{nb}$ and $f^{-}_{nb}$ scores 
+
+\begin{equation}\label{f_plus_minus}
+\qquad  f^{+}_{nb} \leftarrow IC(n) \times \frac{f^{+}_{nb}}{\sum_{b} \left( f^{+}_{nb} + f^{-}_{nb} \right) } \hspace{1 cm} f^{-}_{nb} \leftarrow IC(n) \times \frac{f^{-}_{nb}}{\sum_{b} \left( f^{+}_{nb} + f^{-}_{nb} \right)}
+\end{equation}
+
+For each position $n$, we plot the $f^{+}_{nb}$ values along the positive Y axis and the $f^{-}_{nb}$ values along the negative Y axis. The above formulation ensures that for a base $b$, one of $f^{+}_{nb}$ and $f^{-}_{nb}$ is zero. For a base $b$ enriched at position $n$, $f^{+}_{nb}$ value will be large resulting in large size of the symbol for base $b$ in the positive Y axis of the logo plot. For a base $b$ depleted at position $n$, $f^{-}_{nb}$ value will be large resulting large size of the symbol for the base $b$ in the negative Y axis of the logo plot
+
+
+
+
+
+
+\subsection*{Illustration of dash}
+
+Both the sequence logo and sparse logo representations are determined by the position weight matrix (PWM) and do not account for the underlying frequency scale of the position frequency matrix (PFM) from which position weights are obtained. Suppose that the background probability is equal for all 4 bases A, C, G, T and in one case, the positional frequencies at a particular positions are (6, 1, 2, 1). In another case, say the positional frequencies at a position are (600, 100, 200, 100). Both these positional frequency vectors will have largely similar representation in the logo plot as they have almost similar positional weights, except for the pseudo-count adjustment. However, in the first case, the total frequency of aligned sequences is only 10 while it is 1000 in the second case. In such a scenario, it is reasonable to shrink the estimated position weights more strongly towards the background probability in the first case compared to the second. At the same time, one would want to determine the amount of shrinkage adaptively. Here we propose an approach called Dirichlet Adaptive Shrinkage (dash) that automatically learns the degree of scaling of position weights for each position based on the underlying scale of the frequencies. This approach is based on the adaptive shrinkage (ash) method due to Stephens (2016) \cite{Stephens2016} for modeling false discovery rates.
+
+\subsection*{Modeling Framework of dash}
+
+We explain the modeling framework of Dirichlet Adaptive shrinkage (dash) for a generic compositional data, including the position frequency matrices for DNA, RNA and proteins.
+
+Suppose we have observe the counts of the constituents for $L$ categories for $N$ compositional samples. For a transcription factor, $N$ would represent  the number of binding site positions and $L$ would be equal to $4$ corresponding to the bases A, C, G and T.We model these compositional counts vector for each sample $n$ as follows 
+
+\begin{equation}
+ \hspace{1 cm} c_n=(c_{n1}, c_{n2}, \cdots, c_{nL}) \sim Mult \left ( c_{n+} : p_{n1}, p_{n2}, \cdots, p_{nL} \right ),  
+\end{equation}
+where $n=1,2,...,N$, $c_{n+}$ is the total frequency of the constituents observed for the $n$th sample and $p_{nl}$, $l=1,2,...,L$, represents the compositional probabilities such that 
+\begin{equation}
+ \hspace{3 cm} p_{nl}  >= 0 \hspace {1 cm} \sum_{l=1}^{L} p_{nl} = 1 .
+\end{equation}
+
+In the \textit{dash} model, we assume a mixture Dirichlet distribution for $p_{n}= \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right) $. 
+
+\begin{equation}\label{dir_prior}
+\hspace{1 cm} \left ( p_{n1}, p_{n2}, \cdots, p_{nL} \right ) \sim \sum_{k=1}^{K} \pi_{k} Dir \left (\alpha_{k} \mu_{1}, \alpha_{k} \mu_{2}, \cdots, \alpha_{k} \mu_{L} \right )  ,
+\end{equation}
+
+where $\mu = \left ( \mu_1, \mu_2, \ldots, \mu_L \right) $ is the known background mean probability ( $\mu_{l} \geq 0$, $\sum_{l=1}^{L} \mu_{l} = 1 $) and $\alpha_k (> 0)$ determines the scale of the concentration parameter for the $k$ th component Dirichlet distribution. $K$ can be chosen as large as possible ideally, however for computational ease, we restrict $K$ to be $10$. We define the vector of concentrations $\alpha$ for the $K$ th components as follows 
+
+\begin{equation}\label{alpha}
+\hspace{2 cm} \alpha = ( Inf, 100, 50, 20, 10, 5, 2, 1, 0.1, 0.001) 
+\end{equation}
+
+$\alpha_{k} = Inf$ corresponds to point mass at the background mean $\mu$, $\alpha_{k}=1$ corresponds to the most uniform looking Dirichlet distribution and $\alpha_{k} < 1$ allows for components with concentration of mass at the edges of the simplex. \textit{Logolas} allows the user to specify the choice of $K$ and the concentration vector $\alpha$ as well as the background mean probability $\mu$. The details of the estimation of this model are provided in Supplementary Methods. 
+
+
+\subsection*{R package}
+
+\textit{Logolas} is available as an R package on Bioconductor (\url{https://bioconductor.org/packages/release/bioc/html/Logolas.html}) and is also under active development on Github (\url{https://github.com/kkdey/Logolas}). For drawing the symbols, \textit{Logolas} builds on the skeleton used by \textit{seqLogo} \cite{Bembom2017} to create logos for all alphabets, numerics, punctuations etc and combine them to form strings. \textit{Logolas} also provides an easy interface for the user to create symbolic logo representations of new characters and even add them to strings. For string logo plots, Logolas provides three different color palettes - string-specific coloring (see Fig 4a),  character specific coloring (see Fig 3a) and column or position specific coloring (see Fig 4b). The two core functions of Logolas - \textit{logomaker} and \textit{nlogomaker} plot the standard  logo and the sparse representations of the logo on a PFM or a PWM matrix respectively. The function \textit{dash} performs Dirichlet Adaptive Shrinkage on a PFM matrix. Logolas also allows the user to use different fill and border styles for enriched and depleted symbols (see Supplementary Figure 8) and determine stack heights in multiple ways - using standard Shannon entropy based information content or Renyi entropy based information content at different scales or just based on relative frequencies as in a stacked bar chart (see Supplementary Figure 9). Logolas also enables plotting logos in multiple panels in the graphics window and combining logo plots with external ggplot2 graphics. 
+
+
+
+\section*{Results}
+
+Sequence logos have been used extensively in visualizing transcription factor binding motifs (TFBSs). Typically such representations tend to highlight the enrichment of bases at different positions of the sequence, which is indeed the more common feature. However some transcription factors tend to show signals of depletion of bases at specific positions. In Figure \ref{fig:fig1}, we present the standard logo and the sparse logo representations (log approach) of the Early B cell factor 1 disc 1 (EBF1-disc1) transcription factor. Based on the sequence logo, EBF1-disc1 seems to recognize a palindromic sequence of bases TCCCg - cGGGA to get activated, where lowercase letters are used to represent depletion and uppercase case letters stand for enrichment.  Not only does the sequence motif show strong depletion signals of bases G and C in the center but the depletion is also a part of the palindrome. Note that this depletion signal is hard to see in the standard logo plot (panel (a)) because it is flanked by strong enrichments, but the sparse logo representation (panel (b)) highlights it clearly.
+In Supplementary Figure 2, we present the sequence logos of all the members of the EBF1 family and the signal depletion of G and C at the center of the palindromic sequence is also observed in EBF1 - known3 and EBF1 - known4, besides EBF1-disc1 transcription factor. \\[3 pt]
+
+
+As described in the previous section, the stack composition and stack heights for a sparse logo representation can be defined in a number of ways. In Figure \ref{fig:fig2}, we present the different sparse logo representations of the binding sequence of the Effector domain protein.  We compare the sparse logo representations in Figure 2 with the PSSM profile representation of the same protein in Supplementary Figure 3. It is evident that the sparse logo representation is much more parsimonious and interpretable than the PSSM representation. Both the position weight matrix (PWM) and position specific scoring matrix (PSSM) for this protein have been fetched from 3PFDB webpage \url{http://caps.ncbs.res.in/3pfdb/} \cite{Shameer2009} \cite{Joseph2014}. In Supplementary Figure 4, we compare how the depletion signal in the middle of its binding sequence motif of EBF1-disc1 transcription factor gets differentially highlighted by the different sparse logo representations. \\ [3 pt]
+
+In Figure \ref{fig:fig3}, we present two applications of string logo representations of \textit{Logolas}. Koch \textit{et al} (2007) \cite{Koch2007} recorded the number of different types of histone modifications at sites that overlap with an intergenic sequence, intron, exon, gene start and gene end for a lymphoblastoid cell line, GM06990 using ChIP-chip data. Figure \ref{fig:fig3} panel (a) presents the standard logo plot representation of the histone marks compositional data, where histone mark names - for example H3K4ME1 - are alphanumeric strings and therefore, are ideal fit for string logo representation. In Figure \ref{fig:fig3} panel (b), we present the logo plot representation of the Himalayan bird species abundance compositional data due to White \textit{et al}, restricted to three regions of the Himalayas. Here we use the bird species names, which are strings, as the symbols in the logo plot. \\[3 pt]
+
+One important application of both the string logo feature and the sparse logo representation of \textit{Logolas} is in visualizing mutation signature profiles. Each mutation signature is usually represented by the type of mutation at the center ($C \rightarrow T$, $C \rightarrow A$, $C \rightarrow G$, $T \rightarrow A$, $T \rightarrow C$, $T \rightarrow G$) flanked by bases to the left and right. The string logo feature is used here to plot the symbols for the mutation types ($ X \rightarrow Y$). In Figure \ref{fig:fig4}, we present the sparse logo representation (ratio) of 24 mutational signature profiles across different tissues, analyzed using mutational data from 7042 cancers by Alexandrov et al (2013) \cite{Alexandrov2013}. This plot is a \textit{Logolas} version of the Supplementary Figure 3 plot from Shiraishi et al (2015) \cite{Shiraishi2015}. Shiraishi et al \cite{Shiraishi2015} proposed a grade of membership model to show that each mutational signature arises from one of $K$ distinct signature profiles, where $K$ was chosen to be $27$. In Supplementary Figure 5, we present the sparse logo representations of all the $27$ signature profiles. In Supplementary Figure 6, we compare the \textit{Logolas} representation of signature profile $16$ with the \textit{pmsignature} visual representation in Shiraishi et al \cite{Shiraishi2015} and it is evident that the logo plot representation depicts the overall features of the mutation signature more clearly. For example, it is much easier to identify the depletion of G on the right flanking base (possibly occurring due to methylated CpG sites being less prone to mutation) in the logo plot representation compared to the \textit{pmsignature} plot. \\ [3 pt]
+
+Many current transcription factor databases for animal and plant transcription factors like HOCOMOCO (\url{http://hocomoco11.autosome.ru/}) \cite{Kulakovskiy2013} \cite{Kulakovskiy2016}, PlantTFDB  v4.0 (\url{http://caps.ncbs.res.in/3pfdb/}) \cite{Jin2015}, \cite{Jin2017} \cite{Jin2014}, JASPAR (\url{http://jaspar.genereg.net/}) \cite{Sandelin2004}, \cite{Mathelier2014} etc store the transcription factor binding site models in terms of positional frequencies (PFM). In some cases, the number of matched sequences used to generate the PFM matrix for a transcription factor is quite small.  Some transcription factors with low frequency scales in the total number of matched sequences for generating the PFM matrix are  \begin{verb} EGR3_HUMAN.H10MO.D \end{verb} (frequency scale = 8), \begin{verb} EPAS1_HUMAN.H10MO.D \end{verb} (frequency scale = 12), \begin{verb} EGR4_HUMAN.H10MO.D \end{verb} (frequency scale = 6), \begin{verb} ERF_HUMAN.H10MO.D (frequency scale = 7) \end{verb} etc (\url{http://hocomoco11.autosome.ru/final_bundle/hocomoco11/core/HUMAN/mono/HOCOMOCOv11_core_HUMAN_mono_jaspar_format.txt}). \\ [3 pt]
+
+This emphasizes the need to scale the position weights appropriately taking the frequency scale into account, which is accounted for in \textit{dash}. In order to validate the dash approach, we first take the positional frequency matrix of the Aryl hydrocarbon receptor (\begin{verb} AHR_HUMAN.H11MO.0.B \end{verb} in HOCOMOCO), which has a frequency scale of $154$, a number large enough to trust the position weights computed from it. We use the PWM matrix for this transcription factor as the base and generate two random subsamples of sequences from this position weight matrix - one of size 5 and the other of size 30. In Figure \ref{fig:fig5}, we show how the \textit{dash} scaling produces a sequence logo plot (panel (c)) which is a closer approximation to the original logo plot (panel (a)), compared to the pre-dash scaled version (panel (b)), in particular for the first subsample of size 5. \\ [3 pt]
+
+So far, we have considered applying \textit{dash}
+each PFM separately. However, owing to the small number of positions observed in general in a TFBS model for a particular transcription factor, the amount of shrinkage the method learns from data is limited. However, one way to bypass this problem is to combine the position frequency data across all positions for all transcription factors in a species and run \textit{dash} on the pooled data to learn the mixture proportions in Eqn \ref{dir_prior} and then update the position weights of each transcription factor based on the fitted model from the pooled data. We apply this combined \textit{dash} approach on 290 transcription factors of \textit{Actinidia chinensis}, with the data collected from PlantTFDB \cite{Jin2017} \cite{Jin2015} \cite{Jin2014}. The position weight scaling for each position of the SBP family protein transcription factor \textit{Achn185971} with combined \textit{dash} and uncombined \textit{dash}, corresponding to the specified GC content ($37 \%$) based background probability for \textit{Actinidia chinensis}, is compared in Supplementary Figure 7.  
+
+
+\section*{Discussion}
+
+The \textit{Logolas} package builds on top of existing softwares like \textit{seqLogo}, \textit{WebLogo} \cite{Crooks2004} \cite{Bembom2017} to introduce novel features like the sparse logo representation, string logos and the adaptive scaling of positional weights based on the frequency scale in \textit{dash}. The aim here is to not only improve the visual informativeness of a logo plot but also to make logo plots a more generic tool applicable in viewing general compositional data beyond the DNA, RNA and protein sequence position weight matrices - as depicted in our example applications like mutational signature profile, histone marks composition visualization etc. \\ [3 pt]
+
+A string logo can be viewed as an alternative visual representation to a stacked bar chart where each color stack is plotted instead as a symbol logo. The string logo plot is more preferable to stacked bar chart representation when the number of columns or bars are relatively small and the number of stacks per bar are moderate or large, in which case the string symbols look more appealing than colors and color legends. However, when the number of columns or bars are very large compared to the number of stacks per bar, as in case of the STRUCTURE plot representation \cite{Rosenberg2002} \cite{Dey2017}, colors and color legends are more preferred to symbols. \\ [3 pt]
+
+We have suggested a number of options for generating the sparse logo representation of a position weight matrix. In terms of performance, the \textit{log} and \textit{log-odds} tend to highlight the depletion signal more. On the other hand, all the \textit{ic} based options - \textit{ic-log}, \textit{ic-log-odds} and \textit{ic-ratio} are slightly biased towards the enrichment signal. The \textit{ratio} approach seems to be a bit more balanced in representing both enrichment and depletion. Also, we have mostly found the \textit{log} and \textit{log-odds} (also \textit{ic-log} and \textit{ic-log-odds}) to be largely equivalent in its representation. We suggest the user to present the sparse logo representations for \textit{log} (or \textit{log -odds}), \textit{ic-log} (or \textit{ic-log-odds}), \textit{ratio} and \textit{ic-ratio} methods for a fair comparison. \\ [3 pt]
+
+
+Various softwares focus on downstream analysis of the position weight matrix by using it for motif discovery and motif matching ( R package \textit{motifcounter} \cite{Kopp2017} ), comparing motif patterns across multiple motifs ( R packages \textit{motifStack} \cite{Ou2015} and DiffLogo \cite{Nettling2015}), regulatory SNP detection for testing for transcription factor binding affinity (R package \textit{atSNP} \cite{Zuo2015}) etc. \textit{Logolas} provides the heights of the bases along the positive and negative Y-axes, which can be used as scores for many of these downstream analysis. These scores will contain signals for both enrichment and depletion and may improve the accuracy of some of these motif based analyses. This is one of the future directions we would like to pursue. \\ [3 pt]
+
+
+\section*{Conclusion}
+
+We present a new R/Bioconductor package named \textit{Logolas}, an easy to use and flexible tool which opens some new avenues in logo visualization. We propose a new parsimonious representation of logos aimed at highlighting both enrichment and depletion of symbols or bases at different positions, unlike the standard information content based approach which is biased towards the enrichment of bases. \textit{Logolas} also allows the user to plot strings as symbols in logo plots and we show various applications of such string logos in viewing mutational signature profile, histone marks composition and ecological composition data. We also propose a technique called Dirichlet Adaptive Shrinkage (\textit{dash}) that adaptively scales the positional weights of a PWM matrix based on the underlying frequency scales thereby providing more robust logo plots.  \\ [3 pt]
+
+\textit{Logolas} is currently released on Bioconductor (\url{https://bioconductor.org/packages/release/bioc/html/Logolas.html}) and is also under active development on Github (\url{https://github.com/kkdey/Logolas}). The website for the \textit{Logolas} project is hosted on \url{https://kkdey.github.io/Logolas-pages/} and all the codes for plotting the figures in this paper are available on \url{https://kkdey.github.io/Logolas-pages/Paper}. 
+
+
+
+% \subsection*{Sub-heading for section}
+% Text for this sub-heading \ldots
+% \subsubsection*{Sub-sub heading for section}
+% Text for this sub-sub-heading \ldots
+% \paragraph*{Sub-sub-sub heading for section}
+% Text for this sub-sub-sub-heading \ldots
+% In this section we examine the growth rate of the mean of $Z_0$, $Z_1$ and $Z_2$. In
+% addition, we examine a common modeling assumption and note the
+% importance of considering the tails of the extinction time $T_x$ in
+% studies of escape dynamics.
+% We will first consider the expected resistant population at $vT_x$ for
+% some $v>0$, (and temporarily assume $\alpha=0$)
+% %
+% \[
+%  E \bigl[Z_1(vT_x) \bigr]= E
+% \biggl[\mu T_x\int_0^{v\wedge
+% 1}Z_0(uT_x)
+% \exp \bigl(\lambda_1T_x(v-u) \bigr)\,du \biggr].
+% \]
+% %
+% If we assume that sensitive cells follow a deterministic decay
+% $Z_0(t)=xe^{\lambda_0 t}$ and approximate their extinction time as
+% $T_x\approx-\frac{1}{\lambda_0}\log x$, then we can heuristically
+% estimate the expected value as
+% %
+% \begin{eqnarray}\label{eqexpmuts}
+% E\bigl[Z_1(vT_x)\bigr] &=& \frac{\mu}{r}\log x
+% \int_0^{v\wedge1}x^{1-u}x^{({\lambda_1}/{r})(v-u)}\,du
+% \nonumber\\
+% &=& \frac{\mu}{r}x^{1-{\lambda_1}/{\lambda_0}v}\log x\int_0^{v\wedge
+% 1}x^{-u(1+{\lambda_1}/{r})}\,du
+% \nonumber\\
+% &=& \frac{\mu}{\lambda_1-\lambda_0}x^{1+{\lambda_1}/{r}v} \biggl(1-\exp \biggl[-(v\wedge1) \biggl(1+
+% \frac{\lambda_1}{r}\biggr)\log x \biggr] \biggr).
+% \end{eqnarray}
+% %
+% Thus we observe that this expected value is finite for all $v>0$ (also see \cite{koon,khar,zvai,xjon,marg}).
+%\nocite{oreg,schn,pond,smith,marg,hunn,advi,koha,mouse}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Backmatter begins here                   %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{backmatter}
+
+\section*{Competing interests}
+  The authors declare that they have no competing interests.
+
+\section*{Author's contributions}
+   KKD and MS conceived the idea.  KKD implemented the package. KKD and DX tested Logolas on the data applications. KKD, DX and MS wrote the manuscript. 
+
+\section*{Acknowledgements}
+  The authors would like to acknowledge Yuichi Shiraishi, John Blischak, Peter Carbonetto and Hussein Al-Asadi for their valuable feedback and helpful discussions. The authors would also like to thank Alexander White and Trevor Price for the ecological data application. 
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                  The Bibliography                       %%
+%%                                                         %%
+%%  Bmc_mathpys.bst  will be used to                       %%
+%%  create a .BBL file for submission.                     %%
+%%  After submission of the .TEX file,                     %%
+%%  you will be prompted to submit your .BBL file.         %%
+%%                                                         %%
+%%                                                         %%
+%%  Note that the displayed Bibliography will not          %%
+%%  necessarily be rendered by Latex exactly as specified  %%
+%%  in the online Instructions for Authors.                %%
+%%                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% if your bibliography is in bibtex format, use those commands:
+\bibliographystyle{bmc-mathphys} % Style BST file (bmc-mathphys, vancouver, spbasic).
+\bibliography{bmc_article}      % Bibliography file (usually '*.bib' )
+% for author-year bibliography (bmc-mathphys or spbasic)
+% a) write to bib file (bmc-mathphys only)
+% @settings{label, options="nameyear"}
+% b) uncomment next line
+%\nocite{label}
+
+% or include bibliography directly:
+% \begin{thebibliography}
+% \bibitem{b1}
+% \end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Figures                       %%
+%%                               %%
+%% NB: this is for captions and  %%
+%% Titles. All graphics must be  %%
+%% submitted separately and NOT  %%
+%% included in the Tex document  %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%
+%% Do not use \listoffigures as most will included as separate files
+
+\section*{Figures}
+
+ \begin{figure}[h!] 
+  \caption{\csentence{Standard Logo plot with uniform and non-uniform backgrounds.}
+      Logo plot representation of the plant transcription factor Achn021211 (MYB family protein) in \textit{Actinidia chinensis}. The background probability for this species based on GC content is $q = \left (q_A, q_C, q_G, q_T \right) = \left (0.3141, 0.1859, 0.1859, 0.3141 \right )$. The PWM matrix is obtained from PlantTFDB site (\url{http://planttfdb.cbi.pku.edu.cn/tf.php?sp=Ach&did=Achn021211}) \cite{Jin2017}. In panel (a), we present the standard logo plot of the PWM matrix with uniform background for all 4 bases. In panel (b), we present the standard logo plot with the above specified background probability.}
+ \label{fig:fig0}
+\end{figure}
+
+
+\begin{figure}[h!] 
+  \caption{\csentence{Application of sparse logo in detecting depletion patterns in Transcription Factor Binding sites (TFBS).}
+      We present the standard logo and the sparse logo representation of a transcription factor EBF1-disc1. The logo standard logo plot in panel (a) seems to indicate that the transcription factor binds in a dimerized form to its binding site. However, it fails to capture the depletion of G and C in the two positions in the middle of the dimer, which is apparently captured by the sparse logo representation in panel (b). The stack heights in the sparse logo representation in this plot has been determined by the \textit{log} approach. The PWM data for EBF1-disc1, computed from the ENCODE TF Chip-seq datasets, is hosted on the webpage \url{http://compbio.mit.edu/encode-motifs/}\cite{Kheradpour2013}}    
+\label{fig:fig1}
+\end{figure}
+
+
+\begin{figure}[h!] 
+  \caption{\csentence{Various sparse logo representations of protein sequence motif.}
+ The sparse logo representation under various stack height and stack composition methods - \textit{log}, \textit{log-odds}, \textit{ratio}, \textit{ic-log}, \textit{ic-log-odds} and \textit{ic-ratio} for the Bacterial transcription activator, effector binding domain protein PF06445 (motif 4, Start=153 Length=8). The data is fetched from the 3PFDB website \url{http://caps.ncbs.res.in/cgi-bin/mini/databases/3pfdb/get_entry.cgi?id=PF06445}.}    
+ \label{fig:fig2}
+\end{figure}
+
+
+\begin{figure}[h!] 
+  \caption{\csentence{Example applications of string logo plots.}
+      We present two example biological applications of string logo plots.
+In panel (a), we present the logo plot representation of the composition of histone modification types that overlap with an intergenic region, intron, exon, gene start or gene end for the lymphoblastoid cell line GM06990 as reported in Koch et al 2007 \cite{Koch2007}. In panel (b), we present the logo plot representation of the abundance compositions of bird species  families in three different regions of the Himalayas - colored red, green and blue. The data has been taken from White et al 2017 [ref].}
+\label{fig:fig3}
+\end{figure}
+
+
+\begin{figure}[h!] 
+  \caption{\csentence{Logolas representation of cancer mutational signature profiles in alexandrov et al (2013).}
+      We present the sparse logo representations of the cancer mutational signature profiles across a number of tissues where the mutational signature data has been  collected from 7042 cancers by Alexandrov et al (2013) \cite{Alexandrov2013}.  Each mutational signature profile has the mutation type at the center and is flanked by two bases to the left and two bases to the right.}
+\label{fig:fig4}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+  \caption{\csentence{Subsampling experiment to validate the performance of Dirichlet Adaptive Shrinkage (dash).}
+      In panel (a), we present the standard logo plot representation of the position frequency matrix (PFM) of the Aryl hydrocardon receptor. This PFM matrix is then used to define the position weights and two random subsamples, A of size 5 and B of size 30 are generated from this position weight matrix. Panels (b) and (c) demonstrate the logo plot representation estimated position weight matrix from the 5 symbols in the subsample A before applying dash and post dash scaling. Panels (d) and (e) show the same results for subsample B, with size 30. We notice that for subsample A case, the dash scaled PWM in panel (c) is a closer approximation of the original PWM in panel (a) compared to the pre-dash version in panel (b). However, the effect of dash is comparatively lower for subsample B, since the subsample size (30) is much larger and both the pre-dash and post-dash PWMs of subsampled symbols in panels (d) and (e) are good approximations to the original PWM.}
+\label{fig:fig5}
+\end{figure}
+
+
+
+\newpage
+
+\section*{Supplementary Figures}
+
+\paragraph*{S1 Fig.}
+\label{fig:suppfig1}
+ \textbf{Standard Logo plot comparison under uniform and non-uniform background base probabilities .}
+      Logo plot representation of the plant transcription factor Achn021211 (MYB family protein) in \textit{Actinidia chinensis}. The background probability for this species based on GC content is $q = \left (q_A, q_C, q_G, q_T \right) = \left (0.3141, 0.1859, 0.1859, 0.3141 \right )$. The PWM matrix is obtained from PlantTFDB site (\url{http://planttfdb.cbi.pku.edu.cn/tf.php?sp=Ach&did=Achn021211}). In panel (a), we present the standard logo plot of the PWM matrix with uniform background for all 4 bases. In panel (b), we present the standard logo plot with the above specified background probability.
+      
+      
+\paragraph*{S2 Fig.}
+\label{fig:suppfig2}
+\textbf{Sparse logo representation of the members of the EBF1 family of transcription factors}: We present the sparse logo representation for the binding sites of 6 transcription factors in the EBF1 family. EBF1-known4 and EBF1-disc1, and also to some extent EBF1-known3 seem to show the depletion of G and C in the middle of the binding site. The PWM data for all the transcription factors have been obtained from the ENCODE TF Chip-seq datasets and are hosted on the webpage \url{http://compbio.mit.edu/encode-motifs/} \cite{Kheradpour2013}.   
+
+\paragraph*{S3 Fig.}
+\label{fig:suppfig3}
+\textbf{PSSM logo plot for protein sequence motif}: The logo representation of the position specific scoring matrix (PSSM) for the Bacterial transcription activator, effector binding domain protein PF06445 (motif 4, Start=153 Length=8). The data is fetched from the 3PFDB website \url{http://caps.ncbs.res.in/cgi-bin/mini/databases/3pfdb/get_entry.cgi?id=PF06445}. 
+ 
+
+\paragraph*{S4 Fig.}
+\label{fig:suppfig4}  
+\textbf{Various approaches of sparse logo representations for a transcription factor} : The sparse logo representation under various stack height and stack composition methods - \textit{log}, \textit{log-odds}, \textit{ratio}, \textit{ic-log}, \textit{ic-log-odds} and \textit{ic-ratio} for the Early B cell factor 1 disc 1 (EBF1-disc1) transcription factor. The data is fetched from the CompBio website of MIT \url{http://compbio.mit.edu/encode-motifs/}.
+
+
+\paragraph*{S5 Fig.}
+\label{fig:suppfig5}   
+\textbf{Logolas plots for the mutational signature profiles for 27 clusters in Shiraishi et al (2015)}: 
+We present the sparse logo representations (ratio) method for the 27 cluster signature profiles obtained from fitting a grade of membership model on the cancer mutational signature data across 30 cancer types by Shiraishi et al (2015) \cite{Shiraishi2015}. This plot is an alternative logo plot based representation of Figure 4 in Shiraishi et al (2015) \cite{Shiraishi2015}. 
+
+\paragraph*{S6 Fig.}
+\label{fig:suppfig6}   
+\textbf{Comparison of Logolas sparse logo plot with pmsignature representation for cancer mutation signatures}: 
+We compare the sparse logo plot representation and the pmsignature representation due to Shiraishi et al (2015) \cite{Shiraishi2015} for mutation signature profile of cluster 16 in their paper. The position 0 corresponds to the mutation. Positions $-1$ and $-2$ correspond to the the two left flanking bases with respect to the mutation. Positions $1$ and $2$ correspond to the the two right flanking bases with respect to the mutation. Clearly, the logo plot representation shows the depletion of G at the right flanking base more clearly than the pmsignature plot. Also, overall, the logo plot representation is more interpretable and visually appealing in highlighting the mutation signature patterns compared to the pmsignature plot.
+
+\paragraph*{S7 Fig.}
+\label{fig:suppfig7}   
+\textbf{Dirichlet Adaptive Shrinkage (dash) training on combined transcription factor data for a species}: 
+We compare the two versions of Dirichlet Adaptive Shrinkage (dash) applied to the SBP protein transcription factor Achn185791 in \textit{Actinidia chinensis}. In one case, the parameters of the \textit{dash} model are learnt from the positional frequency data from Achn185791, while in the other case, the the parameters are learnt from the pooled positional frequency data across all 290 transcription factors of \textit{Actinidia chinensis}, which we refer to as \textit{combo dash} in this plot. The background probability of the bases for this species are $ q = \left( q_A, q_C, q_G, q_T \right ) = \left (0.3141, 0.1859, 0.1859, 0.3141 \right ) $. The transcription factor data for 
+\textit{Actinidia chinensis} along with the background probability information are derived from the PlantTFDB v4.0 database \url{http://planttfdb.cbi.pku.edu.cn/index.php?sp=Ach}. 
+
+
+\paragraph*{S8 Fig.}
+\label{fig:suppfig8} 
+\textbf{Fill and border styles in Logolas.}:
+A demonstration of how fill and border styles can be used to distinguish between the enrichment and depletion of symbols at a position in a sparse logo plot.
+      
+\paragraph*{S9 Fig.}
+\label{fig:suppfig9} 
+ \textbf{Stack heights in Logolas.} : 
+ A demonstration of how stack height for a position in a standard logo plot can be determined in various ways in \textit{Logolas}. In panel (a), the standard Shannon entropy based Information content is used to determine the height of the stack of symbols at each position. For panels (b) and (c), we use Renyi entropy based information content for two levels of tuning paramter $\alpha$, one when $\alpha = 0.1$ is small and the other when $\alpha =100$ is large. In panel (d), a relative frequency based stacked bar chart representation using logos is implemented. All these options can be passed as input arguments and control arguments to the \textit{logomaker} functon in \textit{Logolas}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Tables                        %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Use of \listoftables is discouraged.
+%%
+% \section*{Tables}
+% \begin{table}[h!]
+% \caption{Sample table title. This is where the description of the table should go.}
+%       \begin{tabular}{cccc}
+%         \hline
+%            & B1  &B2   & B3\\ \hline
+%         A1 & 0.1 & 0.2 & 0.3\\
+%         A2 & ... & ..  & .\\
+%         A3 & ..  & .   & .\\ \hline
+%       \end{tabular}
+% \end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Additional Files              %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \section*{Additional Files}
+%   \subsection*{Additional file 1 --- Sample additional file title}
+%     Additional file descriptions text (including details of how to
+%     view the file, if it is in a non-standard format or the file extension).  This might
+%     refer to a multi-page table or a figure.
+
+%   \subsection*{Additional file 2 --- Sample additional file title}
+%     Additional file descriptions text.
+
+
+\end{backmatter}
+\end{document}
