@@ -18,9 +18,21 @@ logomaker(EBF1_disc1,color_profile = color_profile,frame_width = 1,
           pop_name = 'EBF1_disc1 (Logo)')
 #neg logo plot
 #The log type negative logo plot does not look good
-nlogomaker(EBF1_disc1,logoheight = 'ic-log',color_profile = color_profile,
-           frame_width = 1,pop_name = 'EBF1_disc1 (EDLogo)',
+
+bgmat <- matrix(0.25, dim(EBF1_disc1)[1], dim(EBF1_disc1)[2])
+rownames(bgmat) <- rownames(EBF1_disc1)
+colnames(bgmat) <- colnames(EBF1_disc1)
+
+nlogomaker(EBF1_disc1,logoheight = 'log',color_profile = color_profile,
+           frame_width = 1,pop_name = 'EBF1_disc1 epsilon = 0.01, log',
+           bg = bgmat,
            control = list(gap_ylab=3.5, epsilon = 0.01))
+
+nlogomaker(bgmat,logoheight = 'log',color_profile = color_profile,
+           frame_width = 1,pop_name = 'EBF1_disc1 epsilon = 0.01, log',
+           bg = EBF1_disc1,
+           control = list(gap_ylab=3.5, epsilon = 0.01))
+
 
 
 ###########  Panels (b)  - left and right   ######################
