@@ -1,5 +1,5 @@
 ---
-title: "Symbol calling and Consensus sequence"
+title: "Generating Consensus sequence from EDLogo"
 ---
 
 <!-- The file analysis/chunks.R contains chunks that define default settings
@@ -21,15 +21,10 @@ knitr::read_chunk("chunks.R")
 ```{r code-version, echo=FALSE, results='asis'}
 ```
 
-<!-- Add your analysis here -->
 
-Using the negative Logolas plot repreentation, the user can get a consensus sequence of the logos along the positions. For the DNA sequence data, the consensus sequence is usually coded by the IUPAC code, in which the bases are represented by the first letters of their names: [G]uanine, [C]ytosine, [A]denine, and [T]hymine (check the `getIUPAC` in the [atSNP](https://github.com/chandlerzuo/atSNP) package). For the amino acid sequence, the Prosite syntax is commonly used. 
+IUPAC has a specific nomenclature to call bases at each position of the sequence based on their relative probabilities of occurrence. See the nomenclature [here](https://www.bioinformatics.org/sms/iupac.html). 
 
-Based on the logo heights from the Negative Logolas plot, we develop an algorithm to generate a consensus sequence, which can be used for prediction purposes to check if a given sequence matches with the underlying PWM matrix. Unlike the IUPAC and the Prosite nomenclatures that only decide on the consensus sequence using logo enrichment, the Logolas nomenclature uses both enrichment and depletion of the symbols.
-
-In the Logolas nomenclature, we use uppercase of the symbol to depict enrichment and lowercase of a symbol to depict depletion of that symbol. We present an example below to demonstrate how Logolas nomenclature can be used. 
-
-Compared with traditional way to get the consensus sequence for nucleotide sequence, for example the `GetIUPACSequence` function from the `atSNP` package, our new method gives a better representation of the sequence. 
+In the package `atSNP` by Sunduz Keles' lab, a  `GetIUPACSequence` function has been proposed to generate a consensus sequence based on IUPAC nomenclature from the position weight matrix. 
 
 ```{r,message=FALSE,warning=FALSE}
 library(Logolas)
@@ -40,16 +35,25 @@ rownames(pwm)=c('A','C','G','T')
 colnames(pwm)=1:ncol(pwm)
 
 GetIUPACSequence(t(pwm))
-GetConsensusSeq(pwm)
 ```
 
-The way we give the consensus sequence is intuitive if we have a look at the logo plot.
+In `Logolas`, we can use the scoring scheme in an EDLogo plot to call the bases at each position and generate a new consensus sequence based on our own nomenclature that equally highlights enrichment and depletion. 
+
+
 ```{r,message=FALSE,warning=FALSE}
 color_profile=list("type" = "per_row","col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
 logomaker(pwm,color_profile = color_profile,frame_width = 1)
 nlogomaker(pwm,logoheight = 'log',color_profile = color_profile,frame_width = 1)
 ```
 
+In this nomenclature, we use uppercase of the symbol to depict enrichment and lowercase of a symbol to depict depletion of that symbol.
+
+```{r message= FALSE, warning = FALSE}
+GetConsensusSeq(pwm)
+```
+
+As is clear from the EDLogo plot, the consensus sequence using this nomenclature
+is a more informative representation. 
 
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE,include=FALSE}

@@ -12,7 +12,7 @@
 
 
 
-<title>Symbol calling and Consensus sequence</title>
+<title>Generating Consensus sequence from EDLogo</title>
 
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
@@ -77,7 +77,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </html>
 
 
-<h1 class="title toc-ignore">Symbol calling and Consensus sequence</h1>
+<h1 class="title toc-ignore">Generating Consensus sequence from EDLogo</h1>
 
 
 <div id="TOC">
@@ -90,15 +90,12 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-21</p>
+<p><strong>Last updated:</strong> 2017-11-14</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 56a94be</p>
-<!-- Add your analysis here -->
-<p>Using the negative Logolas plot repreentation, the user can get a consensus sequence of the logos along the positions. For the DNA sequence data, the consensus sequence is usually coded by the IUPAC code, in which the bases are represented by the first letters of their names: [G]uanine, [C]ytosine, [A]denine, and [T]hymine (check the <code>getIUPAC</code> in the <a href="https://github.com/chandlerzuo/atSNP">atSNP</a> package). For the amino acid sequence, the Prosite syntax is commonly used.</p>
-<p>Based on the logo heights from the Negative Logolas plot, we develop an algorithm to generate a consensus sequence, which can be used for prediction purposes to check if a given sequence matches with the underlying PWM matrix. Unlike the IUPAC and the Prosite nomenclatures that only decide on the consensus sequence using logo enrichment, the Logolas nomenclature uses both enrichment and depletion of the symbols.</p>
-<p>In the Logolas nomenclature, we use uppercase of the symbol to depict enrichment and lowercase of a symbol to depict depletion of that symbol. We present an example below to demonstrate how Logolas nomenclature can be used.</p>
-<p>Compared with traditional way to get the consensus sequence for nucleotide sequence, for example the <code>GetIUPACSequence</code> function from the <code>atSNP</code> package, our new method gives a better representation of the sequence.</p>
+<p><strong>Code version:</strong> 90f571a</p>
+<p>IUPAC has a specific nomenclature to call bases at each position of the sequence based on their relative probabilities of occurrence. See the nomenclature <a href="https://www.bioinformatics.org/sms/iupac.html">here</a>.</p>
+<p>In the package <code>atSNP</code> by Sunduz Keles’ lab, a <code>GetIUPACSequence</code> function has been proposed to generate a consensus sequence based on IUPAC nomenclature from the position weight matrix.</p>
 <pre class="r"><code>library(Logolas)
 library(atSNP)
 
@@ -108,21 +105,27 @@ colnames(pwm)=1:ncol(pwm)
 
 GetIUPACSequence(t(pwm))</code></pre>
 <pre><code>[1] &quot;AAAMMMWMMAAAAA&quot;</code></pre>
-<pre class="r"><code>GetConsensusSeq(pwm)</code></pre>
-<pre><code>[1] &quot;A A A (AC) (AC) (AC) c g N N N A A (At)&quot;</code></pre>
-<p>The way we give the consensus sequence is intuitive if we have a look at the logo plot.</p>
+<p>In <code>Logolas</code>, we can use the scoring scheme in an EDLogo plot to call the bases at each position and generate a new consensus sequence based on our own nomenclature that equally highlights enrichment and depletion.</p>
 <pre class="r"><code>color_profile=list(&quot;type&quot; = &quot;per_row&quot;,&quot;col&quot; = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;))
 logomaker(pwm,color_profile = color_profile,frame_width = 1)</code></pre>
 <p><img src="figure/nomenclature.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>nlogomaker(pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1)</code></pre>
 <p><img src="figure/nomenclature.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>In this nomenclature, we use uppercase of the symbol to depict enrichment and lowercase of a symbol to depict depletion of that symbol.</p>
+<pre class="r"><code>GetConsensusSeq(pwm)</code></pre>
+<pre><code>[1] &quot;A A A (AC) (AC) (AC) c g N N N A A (At)&quot;</code></pre>
+<p>As is clear from the EDLogo plot, the consensus sequence using this nomenclature is a more informative representation.</p>
 <div id="session-information" class="section level2">
 <h2>Session information</h2>
 <!-- Insert the session information into the document -->
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.3.3 (2017-03-06)
-Platform: x86_64-apple-darwin13.4.0 (64-bit)
+<pre><code>R version 3.4.2 (2017-09-28)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS Sierra 10.12.5
+
+Matrix products: default
+BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -132,33 +135,38 @@ attached base packages:
  [8] datasets  methods   base     
 
 other attached packages:
- [1] atSNP_1.0            motifStack_1.18.0    Biostrings_2.42.1   
- [4] XVector_0.14.1       ade4_1.7-6           MotIV_1.30.0        
- [7] grImport_0.9-0       XML_3.98-1.9         GenomicRanges_1.26.4
-[10] GenomeInfoDb_1.10.3  IRanges_2.8.2        S4Vectors_0.12.2    
-[13] BiocGenerics_0.20.0  doParallel_1.0.10    iterators_1.0.8     
-[16] foreach_1.4.3        data.table_1.10.4    Rcpp_0.12.12        
-[19] Logolas_1.1.2       
+ [1] atSNP_1.0            motifStack_1.22.0    Biostrings_2.45.3   
+ [4] XVector_0.17.0       ade4_1.7-8           MotIV_1.34.0        
+ [7] grImport_0.9-0       XML_3.98-1.9         GenomicRanges_1.30.0
+[10] GenomeInfoDb_1.13.4  IRanges_2.12.0       S4Vectors_0.15.5    
+[13] BiocGenerics_0.24.0  doParallel_1.0.11    iterators_1.0.8     
+[16] foreach_1.4.3        data.table_1.10.4-3  Rcpp_0.12.13        
+[19] Logolas_1.2.1       
 
 loaded via a namespace (and not attached):
- [1] RColorBrewer_1.1-2         plyr_1.8.4                
- [3] git2r_0.18.0               bitops_1.0-6              
- [5] tools_3.3.3                zlibbioc_1.20.0           
- [7] digest_0.6.12              evaluate_0.10             
- [9] lattice_0.20-34            BSgenome_1.42.0           
-[11] Matrix_1.2-10              yaml_2.1.14               
-[13] LaplacesDemon_16.0.1       seqLogo_1.40.0            
-[15] rtracklayer_1.34.2         stringr_1.2.0             
-[17] knitr_1.16                 rprojroot_1.2             
-[19] Biobase_2.34.0             BiocParallel_1.8.2        
-[21] rGADEM_2.22.0              rmarkdown_1.6             
-[23] magrittr_1.5               scales_0.4.1              
-[25] GenomicAlignments_1.10.1   Rsamtools_1.26.2          
-[27] backports_1.0.5            codetools_0.2-15          
-[29] htmltools_0.3.6            SummarizedExperiment_1.4.0
-[31] colorspace_1.3-2           stringi_1.1.5             
-[33] munsell_0.4.3              RCurl_1.95-4.8            
-[35] SQUAREM_2016.8-2          </code></pre>
+ [1] SummarizedExperiment_1.7.5 lattice_0.20-35           
+ [3] colorspace_1.3-2           htmltools_0.3.6           
+ [5] rtracklayer_1.37.3         yaml_2.1.14               
+ [7] rlang_0.1.4                BiocParallel_1.11.4       
+ [9] RColorBrewer_1.1-2         matrixStats_0.52.2        
+[11] GenomeInfoDbData_0.99.1    plyr_1.8.4                
+[13] stringr_1.2.0              zlibbioc_1.23.0           
+[15] munsell_0.4.3              gtable_0.2.0              
+[17] htmlwidgets_0.9            codetools_0.2-15          
+[19] evaluate_0.10.1            Biobase_2.38.0            
+[21] knitr_1.16                 scales_0.4.1              
+[23] backports_1.1.0            rGADEM_2.26.0             
+[25] BSgenome_1.46.0            seqLogo_1.44.0            
+[27] DelayedArray_0.3.18        Rsamtools_1.29.0          
+[29] ggplot2_2.2.1              digest_0.6.12             
+[31] stringi_1.1.5              rprojroot_1.2             
+[33] tools_3.4.2                bitops_1.0-6              
+[35] magrittr_1.5               lazyeval_0.2.0            
+[37] RCurl_1.95-4.8             tibble_1.3.4              
+[39] Matrix_1.2-11              gridBase_0.4-7            
+[41] SQUAREM_2017.10-1          rmarkdown_1.6             
+[43] GenomicAlignments_1.13.4   git2r_0.19.0              
+[45] compiler_3.4.2            </code></pre>
 </div>
 
 <hr>

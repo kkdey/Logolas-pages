@@ -42,19 +42,44 @@ logomaker(m,xlab = 'position',color_profile = color_profile,
 
 ####### enrichment logo building
 
-nlogomaker(m,xlab = 'position',logoheight = "ic",
+nlogomaker(m,xlab = 'position',logoheight = "log",
            color_profile = color_profile,
            bg = c(0.25, 0.25, 0.25, 0.25),
            frame_width = 1,
-           control = list(ic_scale = 1, quant = 0.5,
-           depletion_weight = 0.5))
+           control = list(quant = 0,
+           depletion_weight = 0, epsilon = 0.1))
+
+nlogomaker(m,xlab = 'position',logoheight = "probKL",
+           color_profile = color_profile,
+           bg = c(0.25, 0.25, 0.25, 0.25),
+           frame_width = 1,
+           control = list(ic_scale = 1, quant = 0,
+                          depletion_weight = 0, epsilon = 0.1))
+
+nlogomaker(m,xlab = 'position',logoheight = "wKL",
+           color_profile = color_profile,
+           bg = c(0.25, 0.25, 0.25, 0.25),
+           frame_width = 1,
+           control = list(ic_scale = 1, quant = 0,
+                          depletion_weight = 0, epsilon = 0.1))
+
+
+
+nlogomaker(m,xlab = 'position',logoheight = "log",
+           color_profile = color_profile,
+           bg = c(0.4, 0.1, 0.1, 0.4),
+           frame_width = 1,
+           control = list(logscale = 0.2, quant = 0,
+                          depletion_weight = 0, epsilon = 0.15))
 
 nlogomaker(m,xlab = 'position',logoheight = "log",
            color_profile = color_profile,
            bg = c(0.4, 0.1, 0.1, 0.4),
            frame_width = 1,
            control = list(logscale = 0.2, quant = 0.5,
-                          depletion_weight = 0.5))
+                          depletion_weight = 0))
+
+
 
 nlogomaker(m,xlab = 'position',logoheight = "log",
            color_profile = color_profile,
@@ -112,6 +137,17 @@ quant = 0.5
 depletion_weight = 0.7
 
 ll1a <- get_logo_heights_ic(m, bg = c(0.4, 0.1, 0.1, 0.4))
+
+
+m = matrix(rep(0,48),4,12)
+m[1,] = c(0,0,2.5,7,0,0,0,0,0,0,1,0)
+m[2,] = c(4,6,3,1,0,0,0,0,0,5,0,5)
+m[3,] = c(0,0,0,0,0,1,8,0,0,1,1,2)
+m[4,] = c(4,2,2.5,0,8,7,0,8,8,2,6,1)
+rownames(m) = c("A", "C", "G", "T")
+colnames(m) = 1:12
+m=m/8
+get_logo_heights_probKL(m)
 
 
 # R version 3.3.3 (2017-03-06)

@@ -591,25 +591,27 @@ Package microtype Info: No adjustment of character kerning.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
-) [1
-
-{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<figures_folder/figures16.pdf, id=11, 1027.84pt x 770.88pt>
-File: figures_folder/figures16.pdf Graphic file (type pdf)
-
-<use figures_folder/figures16.pdf>
-Package pdftex.def Info: figures_folder/figures16.pdf used on input line 25.
-(pdftex.def)             Requested size: 505.88876pt x 433.61894pt.
-
-Overfull \hbox (126.47127pt too wide) in paragraph at lines 25--27
- [][] 
- []
-
-LaTeX Font Info:    Try loading font information for U+msa on input line 27.
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-(/usr/local/texlive/2016/texmf-dist/tex/latex/microtype/mt-msa.cfg
+./figs.tex:21: Undefined control sequence.
+l.21 \leftflagging
+                  
+? 
+./figs.tex:21: Emergency stop.
+l.21 \leftflagging
+                  
+End of file on the terminal!
+
+ 
+Here is how much of TeX's memory you used:
+ 10236 strings out of 493014
+ 157444 string characters out of 6133351
+ 285638 words of memory out of 5000000
+ 13658 multiletter control sequences out of 15000+600000
+ 3742 words of font info for 16 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 38i,2n,38p,1300b,150s stack positions out of 5000i,500n,10000p,200000b,80000s
+./figs.tex:21:  ==> Fatal error occurred, no output PDF file produced!
+/local/texlive/2016/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
 LaTeX Font Info:    Try loading font information for U+msb on input line 27.

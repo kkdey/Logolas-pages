@@ -34,7 +34,6 @@ nlogomaker(bgmat,logoheight = 'log',color_profile = color_profile,
            control = list(gap_ylab=3.5, epsilon = 0.01))
 
 
-
 ###########  Panels (b)  - left and right   ######################
 
 
