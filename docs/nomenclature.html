@@ -93,7 +93,7 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-11-14</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 90f571a</p>
+<p><strong>Code version:</strong> 521b5aa</p>
 <p>IUPAC has a specific nomenclature to call bases at each position of the sequence based on their relative probabilities of occurrence. See the nomenclature <a href="https://www.bioinformatics.org/sms/iupac.html">here</a>.</p>
 <p>In the package <code>atSNP</code> by Sunduz Keles’ lab, a <code>GetIUPACSequence</code> function has been proposed to generate a consensus sequence based on IUPAC nomenclature from the position weight matrix.</p>
 <pre class="r"><code>library(Logolas)
@@ -107,10 +107,8 @@ GetIUPACSequence(t(pwm))</code></pre>
 <pre><code>[1] &quot;AAAMMMWMMAAAAA&quot;</code></pre>
 <p>In <code>Logolas</code>, we can use the scoring scheme in an EDLogo plot to call the bases at each position and generate a new consensus sequence based on our own nomenclature that equally highlights enrichment and depletion.</p>
 <pre class="r"><code>color_profile=list(&quot;type&quot; = &quot;per_row&quot;,&quot;col&quot; = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;))
-logomaker(pwm,color_profile = color_profile,frame_width = 1)</code></pre>
+nlogomaker(pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1)</code></pre>
 <p><img src="figure/nomenclature.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>nlogomaker(pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1)</code></pre>
-<p><img src="figure/nomenclature.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>In this nomenclature, we use uppercase of the symbol to depict enrichment and lowercase of a symbol to depict depletion of that symbol.</p>
 <pre class="r"><code>GetConsensusSeq(pwm)</code></pre>
 <pre><code>[1] &quot;A A A (AC) (AC) (AC) c g N N N A A (At)&quot;</code></pre>

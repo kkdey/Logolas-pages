@@ -42,7 +42,6 @@ In `Logolas`, we can use the scoring scheme in an EDLogo plot to call the bases 
 
 ```{r,message=FALSE,warning=FALSE}
 color_profile=list("type" = "per_row","col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
-logomaker(pwm,color_profile = color_profile,frame_width = 1)
 nlogomaker(pwm,logoheight = 'log',color_profile = color_profile,frame_width = 1)
 ```
 
