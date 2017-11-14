@@ -20,7 +20,7 @@ A pdf version of the vignette is available [here]().
 - [Chapter 3:   Extended Features of Logolas](extend.html)
 
 
-- [Chapter 4:   Symbol calling and Nomenclature](nomenclature.html)
+- [Chapter 4:   Generating Consensus sequence from EDLogo](nomenclature.html)
 
 
 - [Chapter 5:   Dirichlet Adaptive Shrinkage (dash)](dashtutor.html)
