@@ -14,10 +14,10 @@ A pdf version of the vignette is available [here]().
 - [Chapter 1:   Why Logolas?](intro.html)
 
 
-- [Chapter 2:   First Look at Logolas](FirstLook.html)
+- [Chapter 2:   Logo and EDLogo](FirstLook.html)
 
 
-- [Chapter 3:   Extended Features of Logolas](extend.html)
+- [Chapter 3:   String Logos](extend.html)
 
 
 - [Chapter 4:   Generating Consensus sequence from EDLogo](nomenclature.html)

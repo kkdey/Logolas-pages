@@ -12,7 +12,7 @@
 
 
 
-<title>First Look at Logolas</title>
+<title>Logo and EDLogo</title>
 
 <link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
@@ -77,19 +77,23 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </html>
 
 
-<h1 class="title toc-ignore">First Look at Logolas</h1>
+<h1 class="title toc-ignore">Logo and EDLogo</h1>
 
 
 <div id="TOC">
 <ul>
-<li><a href="#first-illustration">First Illustration</a></li>
+<li><a href="#standard-logo">Standard Logo</a><ul>
+<li><a href="#simple-illustration">Simple Illustration</a></li>
 <li><a href="#information-criterion-and-background-probabilities">Information Criterion and Background Probabilities</a></li>
-<li><a href="#plotting-options-in-logolas">Plotting Options in Logolas</a></li>
+<li><a href="#color-palettes-in-logolas">Color palettes in Logolas</a></li>
 <li><a href="#other-entropy-measures">Other entropy measures</a></li>
-<li><a href="#negative-logolas-plot">Negative Logolas Plot</a></li>
+</ul></li>
+<li><a href="#edlogo-plot">EDLogo Plot</a><ul>
+<li><a href="#intuition">Intuition</a></li>
 <li><a href="#algorithm-for-nlogomaker-height-detection">Algorithm for nlogomaker height detection</a></li>
-<li><a href="#depletion-weights">Depletion weights</a></li>
+<li><a href="#scaling-and-scoring-schemes">Scaling and Scoring schemes</a></li>
 <li><a href="#border-and-fill">Border and fill</a></li>
+</ul></li>
 <li><a href="#session-information">Session information</a></li>
 </ul>
 </div>
@@ -98,125 +102,67 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-27</p>
+<p><strong>Last updated:</strong> 2017-11-14</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 9febfe5</p>
+<p><strong>Code version:</strong> a9d8ae3</p>
 <!-- Add your analysis here -->
-<div id="first-illustration" class="section level2">
-<h2>First Illustration</h2>
-<p>One of the first applications of logo plots have been in visualization of DNA sequence motifs (e.g.: <a href="http://bioconductor.org/packages/release/bioc/html/seqLogo.html">seqLogo</a>). These logo plots consist of symbol logos for four letters(A,C,G and T) corresponding to the four nucleotides(Adenine, Cytosine, Guanine, Thymine). We start with an example application of seqLogo in representing DNA sequence motifs using A, C, G and T. Then we show, even with this specific set of symbols, <strong>Logolas</strong> offers way more options to the user for building the logo plot representations.</p>
-<p>We use the same example PWM as in <strong>seqLogo</strong>.</p>
-<pre class="r"><code>mFile &lt;- system.file(&quot;Exfiles/pwm1&quot;, package=&quot;seqLogo&quot;)
+<div id="standard-logo" class="section level2">
+<h2>Standard Logo</h2>
+<div id="simple-illustration" class="section level3">
+<h3>Simple Illustration</h3>
+<p>One of the primary applications of logo plots is in visualizing DNA sequence motif (e.g.: <a href="http://bioconductor.org/packages/release/bioc/html/seqLogo.html">seqLogo</a>). These logo plots comorise of 4 characters (A,C,G and T) corresponding to the 4 bases. We start with an example application from <a href="https://bioconductor.org/packages/release/bioc/html/seqLogo.html">seqLogo</a></p>
+<pre class="r"><code>library(grid)
+library(gridBase)
+mFile &lt;- system.file(&quot;Exfiles/pwm1&quot;, package=&quot;seqLogo&quot;)
 m &lt;- read.table(mFile)
 p &lt;- seqLogo::makePWM(m)
 seqLogo::seqLogo(p)</code></pre>
 <p><img src="figure/FirstLook.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>The <code>logomaker()</code> function in Logolas is an improved and more flexible alternative to the <code>seqLogo()</code> function for visual representation of the position weight matrix(PWM).</p>
+<p>We illustrate how a standard logo plot can be created in <strong>Logolas</strong> using the . <code>logomaker()</code> function.</p>
 <pre class="r"><code>library(Logolas)
 color_profile &lt;- list(&quot;type&quot; = &quot;per_row&quot;,
 &quot;col&quot; = RColorBrewer::brewer.pal(dim(p@pwm)[1],name =&quot;Spectral&quot;))
-logomaker(p@pwm,color_profile = color_profile, frame_width = 1,ic.scale = TRUE)</code></pre>
+logomaker(p@pwm,color_profile = color_profile, ic.scale = TRUE)</code></pre>
 <p><img src="figure/FirstLook.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>As evident from the above example, <code>logomaker</code> offers the user several options to stylize the logo plots. Some of them are</p>
+<p>As evident from the above example, <code>logomaker</code> offers the user several options to stylize the plot.</p>
 <ul>
-<li><p><strong>color_profile</strong> : This option allows the user to specify the color patterns for the different symbols. This is a list argument with a <code>type</code> variable and the <code>color</code> variable. The <code>type</code> variable depicts the coloring scheme to be used, and can be one of three choices - <code>per_row</code>, <code>per_symbol</code> and <code>per_column</code> depending on whether the user wants to fix a color for a specific row name of the PWM matrix, or for each column or for a specific alphanumeric symbol. We shall provide example usages of all the options later in other chapters of the vignettes.</p></li>
-<li><p><strong>frame_width</strong> : Determines the width of the position to be used for the logo plot. Default is set to 1 usually.</p></li>
-<li><p><strong>ic.scale</strong> : If TRUE (which is also the default), Information Criterion (I.C) is used to determine the heights of the logo symbols in the logo plot. The most standard entropy measure for determining the IC is the Shannon entropy, which is also the default entropy measure in Logolas.</p></li>
+<li><p><strong>color_profile</strong> : This option allows the user to specify the color palettes for different symbols. This is a list argument with two items - a <code>type</code> variable and a <code>color</code> variable. The <code>type</code> variable represents the coloring scheme and can be either of three choices - <code>per_row</code>, <code>per_symbol</code> and <code>per_column</code> depending on whether the user wants to fix a color for a specific row name of the PWM matrix, or for each column or for a specific character of an alphanumeric string. We shall discuss these different choices in greater detail in the next section.</p></li>
+<li><p><strong>ic.scale</strong> : If TRUE (which is also the default), Information Content (I.C) is used to determine the stack heights in the logo plot. If FALSE, the stack heights are scaled to 1.</p></li>
 </ul>
 </div>
-<div id="information-criterion-and-background-probabilities" class="section level2">
-<h2>Information Criterion and Background Probabilities</h2>
-<p>The information content for position <span class="math inline">\(i\)</span> is <span class="math inline">\(IC_i=-\Sigma_b p_{b, i}\times \log_2p_{b, i}-(-\Sigma_b q_{b,i}\times \log_2q_{b,i})\)</span>, where <span class="math inline">\(q_{b,i}\)</span> is the relative frequency of base <span class="math inline">\(b\)</span> at position <span class="math inline">\(i\)</span> and <span class="math inline">\(p_{b, i}\)</span> is the background probability of base <span class="math inline">\(b\)</span> and position <span class="math inline">\(i\)</span>. For many examples, we usually have <span class="math inline">\(p_{b,i}= p_{b}\)</span> for each position. Logolas allows the user to fix a background probability <code>bg</code> as input. <code>bg</code> can be a matrix, vector or NULL. When <code>bg</code> is a matrix, each position has a specific base probabilities <span class="math inline">\(p_{b,i}\)</span>, if <code>bg</code> is a vector, it is assumed that <span class="math inline">\(p_{b,i} = p_{b}\)</span> for all <span class="math inline">\(i\)</span>, and if NULL, the background probability is assumed to be same for all the bases. For example, for the DNA motif data, it would correspond to <span class="math inline">\(p_{b,i} = 0.25\)</span>.</p>
+<div id="information-criterion-and-background-probabilities" class="section level3">
+<h3>Information Criterion and Background Probabilities</h3>
+<p>As default, <code>logomaker</code> assumes that the background probability of the occurrence of each base at a position is discrete uniform. However, when a background probability is known for a specific position of the sequence, the user may use that information to relatively scale the heights.</p>
+<p>The information content for position <span class="math inline">\(i\)</span> is then calculated as follows</p>
+<p><span class="math display">\[IC_i=\Sigma_b p_{b, i}\times \log_2p_{b, i}-(\Sigma_b p_{b,i}\times \log_2q_{b,i})\]</span></p>
+<p>where <span class="math inline">\(p_{b,i}\)</span> is the relative frequency of base <span class="math inline">\(b\)</span> at position <span class="math inline">\(i\)</span> and <span class="math inline">\(q_{b, i}\)</span> is the background probability of base <span class="math inline">\(b\)</span> and position <span class="math inline">\(i\)</span>.</p>
+<p>The background probability can be fixed through the input <code>bg</code> in <code>logomaker</code>. <code>bg</code> can be a matrix, vector or NULL. When <code>bg</code> is a matrix, each position has a specific base probability <span class="math inline">\(q_{b,i}\)</span>, if <code>bg</code> is a vector, it is assumed that <span class="math inline">\(q_{b,i} = q_{b}\)</span> for all <span class="math inline">\(i\)</span>, and if NULL, the background probability is assumed to be same for all the bases ( for example - <span class="math inline">\(q_{b,i} = 0.25\)</span> for DNA/RNA sequence data with no specified <code>bg</code>).</p>
 <p>We present examples of Logolas with different options for <code>bg</code>. We plot here a multi-panel Logolas plot for different choices of <code>bg</code>.</p>
 <p>[A FIGURE GOES HERE]</p>
-</div>
-<div id="plotting-options-in-logolas" class="section level2">
-<h2>Plotting Options in Logolas</h2>
-<p>Logolas also allows the user to choose different colors, change the scale of the Y axis, normalize the height of the logos and also play around with the margins of the plot in the plotting region. Besides, Logolas also allows the user to choose the labels and the title, along with their font sizes and spacings.</p>
-<pre class="r"><code>library(grid)
-
-grid.newpage()
-layout.rows &lt;- 2
-layout.cols &lt;- 2
-top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
-                                      widths=unit(rep(5,layout.cols), rep(&quot;null&quot;, 2)),
-                                      heights=unit(rep(5,layout.rows), rep(&quot;null&quot;, 1))))
-plot_reg &lt;- vpList()
-l &lt;- 1
-for(i in 1:layout.rows){
-  for(j in 1:layout.cols){
-    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
-    l &lt;- l+1
-  }
-}
-
-
-plot_tree &lt;- vpTree(top.vp, plot_reg)
-
-pushViewport(plot_tree)
-#change the color of letters
-#change the diverging palettes
-color_profile1=list(&quot;type&quot; = &quot;per_row&quot;,
-&quot;col&quot; = RColorBrewer::brewer.pal(dim(p@pwm)[1],name =&quot;PiYG&quot;))
-seekViewport(paste0(&quot;plotlogo&quot;, 1))
-logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile1,
-          frame_width = 1,
-          newpage = FALSE,
-          pop_name = &#39;Change color&#39;,
-          control = list(viewport.margin.left = 5))
-
-#change the y scale:
-#if yscale_change = FALSE, then the height of y axis would be 2. 
-seekViewport(paste0(&quot;plotlogo&quot;, 2))
-logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
-          frame_width = 1,
-          newpage = FALSE,
-          pop_name = &#39;Change y scale&#39;,
-          yscale_change = FALSE,
-          control = list(viewport.margin.left = 5))
-#Normalize the height of bars to 1
-seekViewport(paste0(&quot;plotlogo&quot;, 3))
-logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
-          frame_width = 1,
-          newpage = FALSE,
-          ic.scale = FALSE,
-          pop_name = &#39;Normalize the height&#39;,
-          control = list(viewport.margin.left = 5))
-#change the background probability
-#And modify the title and the axis label 
-seekViewport(paste0(&quot;plotlogo&quot;, 4))
-logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
+<pre class="r"><code>logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
           frame_width = 1,
           bg=c(0.32, 0.18, 0.2, 0.3),
-          newpage = FALSE,
           pop_name = &#39;Change background prob&#39;,
           control = list(viewport.margin.left = 5))</code></pre>
 <p><img src="figure/FirstLook.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="other-entropy-measures" class="section level2">
-<h2>Other entropy measures</h2>
-<p>Besides the default Shannon entropy, <code>logomaker</code> can also determine the Information Criterion using Renyi entropy. For this entropy measure, the Information content at position <span class="math inline">\(i\)</span> is <span class="math inline">\(IC_{i,\alpha}=\frac{1}{1-\alpha}\Sigma_b\log_2(q_{b,i}^\alpha-0.25^{1-\alpha})\)</span>. When <span class="math inline">\(\alpha\rightarrow1\)</span>, the limiting value of Renyi entropy is the Shannon entropy. In <code>logomaker</code>, <code>alpha</code> is a control parameter that can be tuned to get plots for different entropy measures. The figure below shows the logo plots with different values of <span class="math inline">\(\alpha\)</span>.</p>
-<pre class="r"><code>grid.newpage()
-layout.rows &lt;- 1
-layout.cols &lt;- 2
-top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
-                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
-                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
-
-plot_reg &lt;- vpList()
-l &lt;- 1
-for(i in 1:layout.rows){
-  for(j in 1:layout.cols){
-    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
-    l &lt;- l+1
-  }
-}
-
-
-plot_tree &lt;- vpTree(top.vp, plot_reg)
-
-pushViewport(plot_tree)
+<div id="color-palettes-in-logolas" class="section level3">
+<h3>Color palettes in Logolas</h3>
+<p>Logolas also allows the user to choose different color palettes</p>
+<pre class="r"><code>color_profile1=list(&quot;type&quot; = &quot;per_row&quot;,
+&quot;col&quot; = RColorBrewer::brewer.pal(dim(p@pwm)[1],name =&quot;PiYG&quot;))
+logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile1,
+          frame_width = 1,
+          pop_name = &#39;Change color&#39;,
+          control = list(viewport.margin.left = 5))</code></pre>
+<pre><code>using a background with equal probability for all symbols</code></pre>
+<p><img src="figure/FirstLook.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="other-entropy-measures" class="section level3">
+<h3>Other entropy measures</h3>
+<p>Besides the default Shannon entropy, <code>logomaker</code> can also determine the Information content using Renyi entropy. For this entropy measure, the Information content at position <span class="math inline">\(i\)</span> is <span class="math inline">\(IC_{i,\alpha}=\frac{1}{1-\alpha}\Sigma_b\log_2(q_{b,i}^\alpha-0.25^{1-\alpha})\)</span>. When <span class="math inline">\(\alpha\rightarrow1\)</span>, the limiting value of Renyi entropy is the Shannon entropy. In <code>logomaker</code>, <code>alpha</code> is a control parameter that can be tuned to get plots for different entropy measures. The figure below shows the logo plots with different values of <span class="math inline">\(\alpha\)</span>.</p>
+<pre class="r"><code>get_viewport_logo(1, 2)
 seekViewport(paste0(&quot;plotlogo&quot;, 1))
 logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
           frame_width = 1,
@@ -231,201 +177,88 @@ logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
           newpage = FALSE,
           pop_name = &#39;Logo plot, Alpha=0.2&#39;,
           control = list(viewport.margin.left = 5,alpha=0.2))</code></pre>
-<p><img src="figure/FirstLook.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/FirstLook.Rmd/unnamed-chunk-5-1.png" width="864" style="display: block; margin: auto;" /></p>
 </div>
-<div id="negative-logolas-plot" class="section level2">
-<h2>Negative Logolas Plot</h2>
-<p>In the above logo plot representation, we highlight the enrichment of symbols. But sometimes, highlighting enrichment along with depletion leads to a more parsimonious logo plot representation. For examples, suppose for a particular position <span class="math inline">\(i\)</span>, the base composition of $ (A, C, G, T )$ is as follows</p>
+</div>
+<div id="edlogo-plot" class="section level2">
+<h2>EDLogo Plot</h2>
+<div id="intuition" class="section level3">
+<h3>Intuition</h3>
+<p>Standard logo plots primarily highlight enrichment of characters at a position. We introduce an alternative logo plot called  that highlights both enrichment and depletion, thereby leading to a more visually parsimonious representation. For examples, suppose for a particular position <span class="math inline">\(i\)</span>, the base composition of $ (A, C, G, T )$ is as follows</p>
 <p><span class="math display">\[ \left (A, C, G, T \right ) : = \left ( 0.33, 0.33, 0.01, 0.33 \right )  \]</span></p>
-<p>Then the logo plot above would highlight <span class="math inline">\(A, C, T\)</span> for that position. Also, the information content would be lower compared to an enrichment of a single symbol. But, a more ideal representation would be to show the depletion of <span class="math inline">\(G\)</span> instead. We propose a negative logo plot representation to demonstrate this.</p>
-<p>In these plots, we show enrichment above the zero on the Y-axis and depletion is shown below the zero on the Y-axis. The size of the logo on the positive or negative scale is proportional to how strong the enrichment or depletion is.</p>
-<p>We use <code>nlogomaker</code> function in Logolas to perform these negative Logolas plots. There are three different options for determining the logo heights: information content, log probability and log-odds.</p>
-<p>The negative Logolas plot shows the relative change of base frequencies at a each position. To achieve this, the median of base frequencies is subtracted at a position. For example, assume that the relative frequencies at a position is <span class="math inline">\(P=(0.7,0.15,0.15,0)\)</span>. We obtain median adjusted values to be used for determining the heights of the logos in the logo using the following algorithms for each option.</p>
+<p>Then the logo plot above would highlight <span class="math inline">\(A, C, T\)</span> for that position. Also, the information content would be lower compared to an enrichment of a single symbol. But, a more ideal representation would be to show the depletion of <span class="math inline">\(G\)</span> instead since that is the base that has changed the most from normal.</p>
+<p>We use <code>nlogomaker</code> function in Logolas to plot the <em>EDLogo</em>. Various scoring schemes and scaling options are available for the <em>EDLogo</em>, which we demonstrate in our algorithm below.</p>
 </div>
-<div id="algorithm-for-nlogomaker-height-detection" class="section level2">
-<h2>Algorithm for nlogomaker height detection</h2>
+<div id="algorithm-for-nlogomaker-height-detection" class="section level3">
+<h3>Algorithm for nlogomaker height detection</h3>
 <p>Following are the steps to determine the heights of the logos for <code>log</code> based approach.</p>
-<p>Let $ q_{*,i} = ((q_{b, i} )) $ be the relative frequency vector of bases at position <span class="math inline">\(i\)</span> and <span class="math inline">\(p\)</span> be the background probabiltiy vector.</p>
+<p>For each position of the sequence, $ p = ((p_{b}))$ be the vector of relative frequencies of the bases at that position and <span class="math inline">\(q = ((q_{b}))\)</span> be the corresponding background.</p>
 <ol style="list-style-type: decimal">
-<li>Take $ log_2 $ of $ (q_i + )/(p+) $ where $ $ is a small number (default 0.01) meant to prevent log (0) type errors.</li>
-<li>Subtract the median to get relative PWM scores :</li>
+<li>For the default option (<code>log</code> approach), compute a score <span class="math inline">\(r_{b}\)</span></li>
 </ol>
-<p>For the <code>log</code> approach</p>
-<p><span class="math display">\[ f_i=\log_2\frac{q_i+\epsilon}{p+\epsilon}-median \left (\log_2\frac{q_i + \epsilon}{p + \epsilon} \right) \]</span></p>
-<p>For the <code>log_odds</code> approach,</p>
-<p><span class="math display">\[ f_i=\log_2\frac{q_i (1-p) + \epsilon}{p (1-q_i) + \epsilon}-median \left (\log_2\frac{q_i (1-p) + \epsilon}{p (1-q_i) + \epsilon} \right ) \]</span></p>
+<p><span class="math display">\[ r_b=\log_2\frac{p_b+\epsilon}{q_b+\epsilon}-median \left (\log_2\frac{p_b + \epsilon}{q_b + \epsilon} : b = 1(|) B \right) \]</span></p>
 <ol start="3" style="list-style-type: decimal">
-<li><p>Determine $ f^{+}<em>{i} = max (f_i, 0) $ and $ f^{-}</em>{i} = max(-f_i, 0) $.</p></li>
-<li><p>For the <code>log</code> or the <code>log_odds</code> approaches, $ f^{+}<em>{i} $ scores are plotted on the positive Y axis for the <span class="math inline">\(i\)</span> th position, whereas $ f^{-}</em>{i} $ scores are plotted along the negative Y axis for the same position.</p></li>
-<li><p>For the <code>ic</code> approach, we also calculate the IC measure for the <span class="math inline">\(i\)</span>th measure as in the positive Logolas plot using Shannon entropy or some Renyi entropy measure.</p></li>
-<li><p>Normalize both $ f^{+}<em>{i} $ and $ f^{-}</em>{i} $ so that each sums up to 1.</p></li>
+<li><p>Determine $ r^{+}<em>{b} = max (r_b, 0) $ and $ r^{-}</em>{b} = max(-r_b, 0) $.</p></li>
+<li><p>For the <code>ic</code> scaling approach, we also calculate the IC measure for that position (based on Shannon entropy or Renyi entropy)</p></li>
 </ol>
-<p>7.Caluclate $ IC^{+}<em>{i} = IC</em>{i} * f^{+}<em>{i} $ and $ IC^{-}</em>{i} = IC_{i} * f^{-}_{i} $.</p>
-<ol start="8" style="list-style-type: decimal">
-<li>The $ IC^{+}<em>{i} $ scores are plotted on the positive Y axis for the <span class="math inline">\(i\)</span> th position, whereas the $ IC^{-}</em>{i} $ scores are plotted along the negative Y axis for the same position.</li>
+<p>6.Caluclate $ r^{+}<em>{b} IC *  $ and $ r^{-}</em>{b} IC *  $.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>$ r^{+}<em>{b} $ scores are plotted along the positive Y axis and $ r^{-}</em>{b} $ scores are plotted along the negative Y axis.</li>
 </ol>
-<p>Below we show the negative Logolas plot using <code>ic</code>, <code>log</code> and <code>log-odds</code> heights for the same example as above, along with the positive Logolas plot.</p>
-<pre class="r"><code>grid.newpage()
-layout.rows &lt;- 1
-layout.cols &lt;- 2
-top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
-                                      widths=unit(rep(6,layout.cols), rep(&quot;null&quot;, 2)),
-                                      heights=unit(c(20,50), rep(&quot;lines&quot;, 2))))
-
-plot_reg &lt;- vpList()
-l &lt;- 1
-for(i in 1:layout.rows){
-  for(j in 1:layout.cols){
-    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
-    l &lt;- l+1
-  }
-}
-
-
-plot_tree &lt;- vpTree(top.vp, plot_reg)
-
-pushViewport(plot_tree)
+</div>
+<div id="scaling-and-scoring-schemes" class="section level3">
+<h3>Scaling and Scoring schemes</h3>
+<p>Besides the <code>log</code> (unscaled) and <code>ic-log</code> (scaled) versions discussed here, <strong>Logolas</strong> offers other measures that replace the log ratio in Step 2 by ratio, or log-odds ratio or by probability weighted KL ratio. See the options for <code>logoheight</code> in <code>nlogomaker</code>.</p>
+<pre class="r"><code>get_viewport_logo(2, 2, heights_1 = 20)
 seekViewport(paste0(&quot;plotlogo&quot;, 1))
 nlogomaker(p@pwm,logoheight = &#39;log&#39;,color_profile = color_profile,frame_width = 1,newpage = FALSE)
 
 
 seekViewport(paste0(&quot;plotlogo&quot;, 2))
-nlogomaker(p@pwm,logoheight = &#39;log_odds&#39;,color_profile = color_profile,frame_width = 1,newpage = FALSE)</code></pre>
-<p><img src="figure/FirstLook.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>As seen from the above figures, the negative Logolas plot presents both the enrichment and depletion while the positive Logolas highlights only enrichment. For example, there is an obvious depletion of T at the position 4. When one looks at the positive Logolas plot, that position does not seem interesting. But the negative Logolas plot clearly highlights the T depletion and hence proves its worth.</p>
-</div>
-<div id="depletion-weights" class="section level2">
-<h2>Depletion weights</h2>
-<p>Logolas further allow users to customize the weight of depletion. The option <code>depletion_weight</code> is the weighting attached on top of the <code>nlogomaker</code> scaling rules for logo height detection (see the 3 algorithms above), that highlights the depletion more clearly. The default choice of <code>depletion_weight</code> is <span class="math inline">\(0\)</span>, which means the depletion is solely determined by the above rules. However with the depletion weight increasing, the depletion (as well as the enrichment) would look more prominent. Here we show <code>nlogomaker</code> plots for the same PWM with the <code>depletion_weights</code> chosen to be 0 (default), 0.3, 0.5, 1.</p>
-<pre class="r"><code>grid.newpage()
-layout.rows &lt;- 2
-layout.cols &lt;- 2
-top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
-                                      widths=unit(rep(5,layout.cols), rep(&quot;null&quot;, 2)),
-                                      heights=unit(rep(5,layout.rows), rep(&quot;null&quot;, 1))))
-plot_reg &lt;- vpList()
-l &lt;- 1
-for(i in 1:layout.rows){
-  for(j in 1:layout.cols){
-    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
-    l &lt;- l+1
-  }
-}
-
-
-plot_tree &lt;- vpTree(top.vp, plot_reg)
-
-pushViewport(plot_tree)
-seekViewport(paste0(&quot;plotlogo&quot;, 1))
-nlogomaker(p@pwm,
-           logoheight = &#39;log_odds&#39;,
-           color_profile = color_profile,
-           frame_width = 1,
-           newpage = FALSE,
-           pop_name = &#39;Weight=0.1&#39;,
-           control = list(depletion_weight=0.1))
-
-
-seekViewport(paste0(&quot;plotlogo&quot;, 2))
-nlogomaker(p@pwm,
-           logoheight = &#39;log_odds&#39;,
-           color_profile = color_profile,
-           frame_width = 1,
-           newpage = FALSE,
-            pop_name = &#39;Weight=0.3&#39;,
-           control = list(depletion_weight=0.3))
+nlogomaker(p@pwm,logoheight = &#39;ic_log&#39;,color_profile = color_profile,frame_width = 1,newpage = FALSE)
 
 seekViewport(paste0(&quot;plotlogo&quot;, 3))
-nlogomaker(p@pwm,
-           logoheight = &#39;log_odds&#39;,
-           color_profile = color_profile,
-           frame_width = 1,
-           newpage = FALSE,
-            pop_name = &#39;Weight=0.5&#39;,
-           control = list(depletion_weight=0.5))
+nlogomaker(p@pwm,logoheight = &#39;ratio&#39;,color_profile = color_profile,frame_width = 1,newpage = FALSE)
 
 seekViewport(paste0(&quot;plotlogo&quot;, 4))
-nlogomaker(p@pwm,
-           logoheight = &#39;log_odds&#39;,
-           color_profile = color_profile,
-           frame_width = 1,
-           newpage = FALSE,
-            pop_name = &#39;Weight=1&#39;,
-           control = list(depletion_weight=1))</code></pre>
-<p><img src="figure/FirstLook.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+nlogomaker(p@pwm,logoheight = &#39;ic_ratio&#39;,color_profile = color_profile,frame_width = 1,newpage = FALSE)</code></pre>
+<p><img src="figure/FirstLook.Rmd/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>All the versions of the  capture the strong depletion of T at the position 4, which is downplayed by the standard logo. At the same time, like the standrad logo, the enrichments are also clearly highlighted by the  plot. The depletion signal is clearer in the unscaled versions and the scaled versions still seem slightly biased towards enrichments</p>
 </div>
-<div id="border-and-fill" class="section level2">
-<h2>Border and fill</h2>
+<div id="border-and-fill" class="section level3">
+<h3>Border and fill</h3>
 <p>Logolas allows the user to customize the border and fill of the logos and also have separate border and fill rules for the enrichment and depletion of logos. The figure below shows the various options of choosing border and fill for making the logos.</p>
-<pre class="r"><code>grid.newpage()
-layout.rows &lt;- 2
-layout.cols &lt;- 2
-top.vp &lt;- viewport(layout=grid.layout(layout.rows, layout.cols,
-                                      widths=unit(rep(5,layout.cols), rep(&quot;null&quot;, 2)),
-                                      heights=unit(rep(5,layout.rows), rep(&quot;null&quot;, 1))))
-
-plot_reg &lt;- vpList()
-l &lt;- 1
-for(i in 1:layout.rows){
-  for(j in 1:layout.cols){
-    plot_reg[[l]] &lt;- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0(&quot;plotlogo&quot;, l))
-    l &lt;- l+1
-  }
-}
-
-
-plot_tree &lt;- vpTree(top.vp, plot_reg)
-
-pushViewport(plot_tree)
+<pre class="r"><code>get_viewport_logo(2, 2, heights_1 = 20)
 
 seekViewport(paste0(&quot;plotlogo&quot;, 1))
 nlogomaker(p@pwm,xlab = &#39;position&#39;,logoheight = &quot;log&quot;,
-           color_profile = color_profile,
-           bg = c(0.25, 0.25, 0.25, 0.25),
-           frame_width = 1,
-           control = list(tofill_pos = TRUE, tofill_neg=FALSE,
-                          logscale = 0.2, quant = 0.5,
-                          depletion_weight = 0.5),
-           newpage = FALSE)
+color_profile = color_profile,control = list(tofill_pos = TRUE, tofill_neg=FALSE), newpage = FALSE)
 
 seekViewport(paste0(&quot;plotlogo&quot;, 2))
 nlogomaker(p@pwm,xlab = &#39;position&#39;,logoheight = &quot;log&quot;,
-           color_profile = color_profile,
-           bg = c(0.25, 0.25, 0.25, 0.25),
-           frame_width = 1,
-           control = list(tofill_pos = FALSE, tofill_neg=TRUE,
-                          logscale = 0.2, quant = 0.5,
-                          depletion_weight = 0.5),
-           newpage = FALSE)
+color_profile = color_profile, control = list(tofill_pos = FALSE, tofill_neg=TRUE), newpage = FALSE)
 
 seekViewport(paste0(&quot;plotlogo&quot;, 3))
-nlogomaker(p@pwm,xlab = &#39;position&#39;,logoheight = &quot;log&quot;,
-           color_profile = color_profile,
-           bg = c(0.25, 0.25, 0.25, 0.25),
-           frame_width = 1,
-           control = list(tofill_pos = TRUE, tofill_neg=TRUE,
-                          logscale = 0.2, quant = 0.5,
-                          depletion_weight = 0.5),
-           newpage = FALSE)
+nlogomaker(p@pwm,xlab = &#39;position&#39;,logoheight = &quot;log&quot;, color_profile = color_profile,control = list(tofill_pos = TRUE, tofill_neg=TRUE),
+newpage = FALSE)
 
 seekViewport(paste0(&quot;plotlogo&quot;, 4))
-nlogomaker(p@pwm,xlab = &#39;position&#39;,logoheight = &quot;log&quot;,
-           color_profile = color_profile,
-           bg = c(0.25, 0.25, 0.25, 0.25),
-           frame_width = 1,
-           control = list(tofill_pos = FALSE, tofill_neg=FALSE,
-                          logscale = 0.2, quant = 0.5,
-                          depletion_weight = 0.5),
-           newpage = FALSE)</code></pre>
-<p><img src="figure/FirstLook.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+nlogomaker(p@pwm,xlab = &#39;position&#39;,logoheight = &quot;log&quot;, color_profile = color_profile, control = list(tofill_pos = FALSE, tofill_neg=FALSE),
+newpage = FALSE)</code></pre>
+<p><img src="figure/FirstLook.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
 </div>
 <div id="session-information" class="section level2">
 <h2>Session information</h2>
 <!-- Insert the session information into the document -->
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.3.3 (2017-03-06)
-Platform: x86_64-apple-darwin13.4.0 (64-bit)
+<pre><code>R version 3.4.2 (2017-09-28)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS Sierra 10.12.5
+
+Matrix products: default
+BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -435,15 +268,19 @@ attached base packages:
 [8] base     
 
 other attached packages:
-[1] Logolas_1.1.2
+[1] Logolas_1.2.1  gridBase_0.4-7
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.12       digest_0.6.12      rprojroot_1.2     
- [4] backports_1.0.5    stats4_3.3.3       git2r_0.18.0      
- [7] magrittr_1.5       evaluate_0.10      stringi_1.1.5     
-[10] rmarkdown_1.6      RColorBrewer_1.1-2 tools_3.3.3       
-[13] stringr_1.2.0      yaml_2.1.14        seqLogo_1.40.0    
-[16] SQUAREM_2016.8-2   htmltools_0.3.6    knitr_1.16        </code></pre>
+ [1] Rcpp_0.12.13       knitr_1.16         magrittr_1.5      
+ [4] munsell_0.4.3      SQUAREM_2017.10-1  colorspace_1.3-2  
+ [7] rlang_0.1.4        stringr_1.2.0      plyr_1.8.4        
+[10] tools_3.4.2        gtable_0.2.0       seqLogo_1.44.0    
+[13] git2r_0.19.0       htmltools_0.3.6    yaml_2.1.14       
+[16] lazyeval_0.2.0     rprojroot_1.2      digest_0.6.12     
+[19] tibble_1.3.4       RColorBrewer_1.1-2 ggplot2_2.2.1     
+[22] evaluate_0.10.1    rmarkdown_1.6      stringi_1.1.5     
+[25] compiler_3.4.2     scales_0.4.1       backports_1.1.0   
+[28] stats4_3.4.2      </code></pre>
 </div>
 
 <hr>
