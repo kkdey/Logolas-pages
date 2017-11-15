@@ -29,14 +29,11 @@ We introduce a  Logo visualization package called [Logolas](https://bioconductor
 - **Standard Plots** : Logolas offers functions for plotting the standard 
 logo plots for DNA/RNA and protein sequences,  like in [seqLogo](https://bioconductor.org/packages/release/bioc/html/seqLogo.html), [seq2Logo](http://www.cbs.dtu.dk/biotools/Seq2Logo/), [webLogo](http://weblogo.berkeley.edu/logo.cgi) etc, but with increased flexibility for the user. 
 
-
-- **String symbols** :  Logolas allows the user to plot elements that are alphanumeric strings and not just characters. This extends the scope of logo plot beyond the usual DNA, RNA and protein sequence visualization to more generic example - species distribution, histone marks composition, mutation signature patterns etc (see Applications). 
-
-
 - **More Parsimonious Representation** : Logolas introduces a new logo plot called
-*EDLogo* that highlights both enrichment and depletion of elements at each position of the sequence. This is in contrast to tthe standard logo which is
+**EDLogo** that highlights both enrichment and depletion of elements at each position of the sequence. This is in contrast to tthe standard logo which is
 primarily driven by enrichments. 
 
+- **String symbols** :  Logolas allows the user to plot elements that are alphanumeric strings and not just characters. This extends the scope of logo plot beyond the usual DNA, RNA and protein sequence visualization to more generic example - species distribution, histone marks composition, mutation signature patterns etc (see Applications). 
 
 
 - **Dirichlet Adaptive Shrinkage** : Most existing logo plotting tools take position weight matrix (PWM) as input for the logo plot but fail to effectively adapt to the scale of the underlying positional frequencies. Logolas provides a Dirichlet Adaptive Shrinkage method (dash) approach for adaptively scaling the heights of the logos based on the frequency scale [M. Stephens (2016)]. 

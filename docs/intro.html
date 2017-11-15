@@ -95,13 +95,13 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-11-14</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> eb1d0b5</p>
+<p><strong>Code version:</strong> 73d79fc</p>
 <!-- Add your analysis here -->
 <p>We introduce a Logo visualization package called <a href="https://bioconductor.org/packages/release/bioc/html/Logolas.html">Logolas</a> that offers several nice features.</p>
 <ul>
 <li><p><strong>Standard Plots</strong> : Logolas offers functions for plotting the standard logo plots for DNA/RNA and protein sequences, like in <a href="https://bioconductor.org/packages/release/bioc/html/seqLogo.html">seqLogo</a>, <a href="http://www.cbs.dtu.dk/biotools/Seq2Logo/">seq2Logo</a>, <a href="http://weblogo.berkeley.edu/logo.cgi">webLogo</a> etc, but with increased flexibility for the user.</p></li>
+<li><p><strong>More Parsimonious Representation</strong> : Logolas introduces a new logo plot called <strong>EDLogo</strong> that highlights both enrichment and depletion of elements at each position of the sequence. This is in contrast to tthe standard logo which is primarily driven by enrichments.</p></li>
 <li><p><strong>String symbols</strong> : Logolas allows the user to plot elements that are alphanumeric strings and not just characters. This extends the scope of logo plot beyond the usual DNA, RNA and protein sequence visualization to more generic example - species distribution, histone marks composition, mutation signature patterns etc (see Applications).</p></li>
-<li><p><strong>More Parsimonious Representation</strong> : Logolas introduces a new logo plot called <em>EDLogo</em> that highlights both enrichment and depletion of elements at each position of the sequence. This is in contrast to tthe standard logo which is primarily driven by enrichments.</p></li>
 <li><p><strong>Dirichlet Adaptive Shrinkage</strong> : Most existing logo plotting tools take position weight matrix (PWM) as input for the logo plot but fail to effectively adapt to the scale of the underlying positional frequencies. Logolas provides a Dirichlet Adaptive Shrinkage method (dash) approach for adaptively scaling the heights of the logos based on the frequency scale [M. Stephens (2016)].</p></li>
 <li><p><strong>Generating Consensus Sequence</strong> : Based on enrichment and depletion of symbols, Logolas introduces a new nomenclature based on enrichment and depletion of elements at each position to generate a consensus sequence, which is an alternative to the IUPAC nomenclature.</p></li>
 <li><p><strong>Better Stylizations</strong> : Logolas also allows for new and flexible stylizations of the logos, involving color palettes, fill and border styles, choice of measures for calculating stack heights (based on Renyi entropy, Shannon entropy or relative frequnency) etc. In our vignettes, we also show how to plot multi-panel Logolas plots and combine Logolas plots with ggplot2 and base R graphics.</p></li>
