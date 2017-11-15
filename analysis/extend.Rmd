@@ -1,5 +1,5 @@
 ---
-title: "Extended features of Logolas"
+title: "String Logos"
 ---
 
 <!-- The file analysis/chunks.R contains chunks that define default settings
@@ -23,16 +23,17 @@ knitr::read_chunk("chunks.R")
 
 <!-- Add your analysis here -->
 
+In this chapter, we highlight another key feature of **Logolas** - the ability to plot symbols not just for A, C, G and T, or  English alphabets, but for any alphanumeric string. 
 
-In this chapter, we discuss how Logolas can be used to plot symbols beyond A, C, G, T which formed the library of symbols for all the examples in the first chapter. Here we show examples where Logolas has been used for plotting symbols that are English alphabets beyond the A, C, G and T, as well as strings comprising of alphabets and numbers and also arrows. This really increases the scope of applications of the Logolas package.  
 
-## Protein logo plot
+## Character Symbol Logos
 
-In the first chapter, we primarily discussed how Logolas can be used in various ways to plot the PWM matrix for DNA sequence motifs. However Logolas can be used to visualize protein sequence motifs as its logo library includes all the English alphabets and the 20 amino acids, which are the building blocks for the proteins, have a 1-letter representation using English alphabets.
+### Protein Example 
 
-The default background probability is uniform in Logolas but for the protein data exampl here, we use a background `bg` set from BLOSUM62.
+We first present an example of visualizing protein binding sites using **Logolas** where each character is represented by an English alphabet. 
+Keeping with the flexibility to use any background, for the protein data example here, the background `bg` is set to uniform in panel (a) and to the amino acid composition from BLOSUM62 in panel (b).
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE, fig.height=5,fig.width=9}
 library(Logolas)
 library(grid)
 counts_mat <- rbind(c(0, 0, 100, 1, 2), c(4, 3, 30, 35, 2),
@@ -57,29 +58,15 @@ RColorBrewer::brewer.pal(8, "Dark2")[c(3,4,8)])
 color_profile <- list("type" = "per_row",
 "col" = cols1)
 
-grid.newpage()
-layout.rows <- 1
-layout.cols <- 2
-top.vp <- viewport(layout=grid.layout(layout.rows,layout.cols, widths=unit(rep(2,layout.cols), rep("null",layout.cols)),heights=unit(rep(2,1), rep("null",1))))
 
-plot_reg <- vpList()
-l <- 1
-for(i in 1:layout.rows){
-  for(j in 1:layout.cols){
-    plot_reg[[l]] <- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0("plotlogo", l))
-    l <- l+1
-  }
-}
+get_viewport_logo(1, 2)
 
-
-plot_tree <- vpTree(top.vp, plot_reg)
-
-pushViewport(plot_tree)
 seekViewport(paste0("plotlogo", 1))
 
 logomaker(counts_mat,
 color_profile = color_profile,
 newpage = FALSE,
+pop_name = "Uniform Background",
 frame_width = 1)
 
 seekViewport(paste0("plotlogo", 2))
@@ -88,65 +75,65 @@ logomaker(counts_mat,
 color_profile = color_profile,
 bg=c(0.074,0.052,0.045,0.054,0.025,0.034,0.054,0.074,0.026,0.068,0.099,0.058,0.025,0.047,0.039,0.057,0.051,0.013,0.034,0.073),
 newpage = FALSE,
-pop_name = 'Logo plot with Varying background prob',
+pop_name = 'BLOSUM background',
 frame_width = 1)
 ```
 
-## PSSM plot
+### PSSM plot
 
-However for protein motif data, PWM is not always reported. Instead a more popular position scoring candidate for the amino acids data is called PSSM (Position specific scoring matrix).
+However for protein motif data, PWM is not always reported. Instead a derived score matrix called PSSM (Position specific scoring matrix) is often reported.
 
-PSSM is constructed from a multiple alignment of a set of sequences. If a residue at a particular position is highly conserved(high relative frequency), it is given a high positive socre and the other residues are given high negative score. All residues are given scores near zero if the residues are all weakly conserved at that position.
-
-A guide to how to construct the PSSM matrix from the PWM matrix is given here [LINK - Dongyue]
-
-Logolas provides a function `logo_pssm` to plot the sequence logo based on the PSSM data.
+Logolas provides a function `logo_pssm` to plot the sequence logo based on the PSSM data. One can also apply median adjustment to the PSSM matrix like in \textit{EDLogo} plot.  
 
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 bg=c(0.074,0.052,0.045,0.054,0.025,0.034,0.054,0.074,0.026,0.068,0.099,0.058,0.025,0.047,0.039,0.057,0.051,0.013,0.034,0.073)
 readprotein=function(file,skip=3,nrows,nsites,bg=bg,adash,mat){
-  library(dash)
   rawdata=read.table(file = file,skip = skip,nrows = nrows)
-  if(mat=='pwm'){
-    pwm=as.matrix(rawdata[,23:42]/100)
-  pfm=round(pwm*nsites)
-  if(adash==T){
-    pwm=dash(as.matrix(pfm),mode = bg,optmethod = 'mixEM')$posmean
-  }
-  colnames(pwm)=c('A' ,'R','N','D',   'C' ,  'Q',   'E' ,  'G',   'H' ,  'I',   'L' , 'K'  , 'M' ,  'F',   'P' ,  'S'  , 'T' ,  'W',   'Y',   'V')
-  rownames(pwm)=1:nrow(pwm)
-  return(t(pwm))
-  }
-  if(mat=='pssm'){
-    pssm=as.matrix(rawdata[,3:22])
-    colnames(pssm)=c('A' ,'R','N','D',   'C' ,  'Q',   'E' ,  'G',   'H' ,  'I',   'L' , 'K'  , 'M' ,  'F',   'P' ,  'S'  , 'T' ,  'W',   'Y',   'V')
+  pssm=as.matrix(rawdata[,3:22])
+  colnames(pssm)=c('A' ,'R','N','D',   'C' ,  'Q',   'E' ,  'G',   'H' ,  'I',   'L' , 'K'  , 'M' ,  'F',   'P' ,  'S'  , 'T' ,  'W',   'Y',   'V')
   rownames(pssm)=1:nrow(pssm)
   return(t(pssm))
-  }
 }
 pssm= readprotein('http://caps.ncbs.res.in/cgi-bin/mini/databases/3pfdb/3pfdb_pssm_download.cgi?id=PF07966&data_dir=SDB_folder',nrows = 29,nsites = 85,adash = FALSE,mat='pssm')
 pssm=pssm[,19:27]
 colnames(pssm)=1:9
 ```
 
-```{r,message=FALSE,warning=FALSE}
-pssm
-logo_pssm(pssm,
-          color_profile = color_profile,
-          frame_width = 1
-          )
+```{r message = FALSE, warning = FALSE}
+
 ```
 
-## Mutation signature plot
+```{r,message=FALSE,warning=FALSE, fig.height=5,fig.width=9}
+get_viewport_logo(1, 2)
+seekViewport(paste0("plotlogo", 1))
+logo_pssm(pssm,
+          color_profile = color_profile,
+          control = list(quant = 0, gap_ylab = 3.5, round_off = 0),
+          newpage = FALSE,
+          pop_name = "PSSM : no adj.")
 
-Mutation signatures have been shown to play a major role in causing cancer and driving cancer progression (Alexandrov et al, Shiraichi et al). In a cancer mutation signature, we usually record the type of mutation (C->T, C->A, C->G, T->A, T->C.T->G) along with the immediately surrounding left and right flanking bases, each of which can take the symbols A, C, G and T. 
+seekViewport(paste0("plotlogo", 2))
+logo_pssm(pssm,
+          color_profile = color_profile,
+          control = list(quant = 0.5, gap_ylab = 3.5, round_off = 0),
+          newpage = FALSE,
+          pop_name = "PSSM: median adj.")
 
-Using Logolas, one can plot mutation logos like $X>Y$, which denotes $X\rightarrow Y$ substitutions. Using this, therefore, the user can present the logo plot for the whole mutational signature. 
 
-User may want to have the C in $C>T$ to be of the same color as the C at the flanking bases and Logolas coloring profile provides the user the flexibility to color each symbol instead of a string. We use the color type `per_symbol` instead of the `per_row` profile used before. We consider a list of all symbols `total_chars` which is set as default to the list chosen above (so you can skip the `total_chars` argument below). However, if the user adds a symbol to the library (the process of doing that we show in the end), then the library is expected to grow and the user then might want to update the total_chars list by adding new symbols.
+```
+
+## Strings +  Character Symbols Logos
+
+### Mutation Signatures plot
+
+Next we present an example of cancer mutation signature profiles where string symbols are mixed with character symbols. 
+
+A cancer mutation signature is usually represented by the type of mutation (C->T, C->A, C->G, T->A, T->C.T->G) along with the immediately surrounding left and right flanking bases, each of which can take the symbols A, C, G and T. We use the string symbol feature of **Logolas** to represent the substitutions $X\rightarrow Y$ and the character symbols for the flanking bases.
+
+User may want to have the C in $C>T$ to be of the same color as the C at the flanking bases and Logolas coloring profile provides the user the flexibility to color each symbol instead of a string. While `per_row` profile would assign a separate color to $C->T$ and the standalone base $C$ at the flanking bases, the `per_symbol` option can actually recognise each character in the string and assign a color to it. We see the difference through the example below. 
 
 
-```{r,message=FALSE}
+```{r,message=FALSE, fig.height=7,fig.width=9}
 mFile <- system.file("Exfiles/pwm1", package="seqLogo")
 m <- read.table(mFile)
 p <- seqLogo::makePWM(m)
@@ -160,36 +147,16 @@ rownames(mat2) <- c("C>T", "C>A", "C>G",
 "T>A", "T>C", "T>G")
 table <- rbind(mat1, mat2)
 
-library(grid)
-grid.newpage()
-layout.rows <- 1
-layout.cols <- 2
-top.vp <- viewport(layout=grid.layout(layout.rows, layout.cols,
-                                      widths=unit(rep(6,layout.cols), rep("null", 2)),
-                                      heights=unit(c(20,50), rep("lines", 2))))
+get_viewport_logo(1, 2)
 
-plot_reg <- vpList()
-l <- 1
-for(i in 1:layout.rows){
-  for(j in 1:layout.cols){
-    plot_reg[[l]] <- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0("plotlogo", l))
-    l <- l+1
-  }
-}
-
-
-plot_tree <- vpTree(top.vp, plot_reg)
-
-pushViewport(plot_tree)
 seekViewport(paste0("plotlogo", 1))
 color_profile <- list("type" = "per_row",
 "col" = RColorBrewer::brewer.pal(dim(table)[1],name ="Spectral"))
-logomaker(table,
+nlogomaker(table,
           color_profile = color_profile,
-          frame_width = 1,
-          newpage = FALSE,
-          xlab = "Position",
-          ylab = "Information content")
+          logoheight = "log",
+          pop_name = "color per element",
+          newpage = FALSE)
 
 
 seekViewport(paste0("plotlogo", 2))
@@ -205,167 +172,73 @@ set.seed(20)
 color_profile <- list("type" = "per_symbol",
 "col" = sample(col_vector, length(total_chars), replace=FALSE))
 
-logomaker(table,
+nlogomaker(table,
           color_profile = color_profile,
+          logoheight = "log",
           total_chars = total_chars,
-          frame_width = 1,
-          newpage = FALSE,
-          xlab = "Position",
-          ylab = "Information content")
+          pop_name = "color per character",
+          newpage = FALSE)
 ```
 
-Another coloring option is `per_column`, in which we have a specific color for a specific column. This sort of coloring might be useful when the user wants to highlight the difference between columns. We provide an example of this next.
+Another coloring option available in **Logolas** is `per_column`, in which we assign a specific color for a specific column. This sort of coloring might be useful when the user wants to highlight the difference between columns [Check Gallery example of Birds data]
 
 
 ## Full string plots
 
-The mutational signature Logo plot was the first example of the use of strings as logos in Logolas. Now we look at a few more examples, where the logos are alphanumeric strings.
+Next we consider an example where all the symbols are alphanumeric strings. 
 
-### Histone marks
+### Histone mark composition
 
-In studies related to histone marks, one might be interested to see if certain histone marks are prominent than others in some cell lines or tissues or in some genomic regions. In this case, we apply Logolas on an example data from Koch *et al* (2007).  The authors recorded number of histone modification sites identified by their algorithm which overlap with an intergenic sequence, intron, exon, gene start and gene end for the lymphoblastoid cell line, GM06990, in the ChIP-CHIP data. Note here that the histone mark symbols are alphanumeric, for example, H3K4ME1.
+We apply Logolas on an example data from [Koch et al (2007)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1891331/) that summarizes the relative abundance patterns 5 different histone marks in different genomic contexts - intergenic sequence, intron, exon, gene start and gene end for the lymphoblastoid cell line, GM06990, in the ChIP-CHIP data. Note here that the histone marks are alphanumeric symbols, for example, H3K4ME1. we use as background a table of relative abundances generated from randomly simulated data in Koch *et al* (2007).
 
-```{r,message=FALSE}
+```{r,message=FALSE, fig.height=5,fig.width=9}
 mat <- rbind(c(326, 296, 81, 245, 71),
-c(258, 228, 55, 273, 90),
-c(145, 121, 29, 253, 85),
-c(60, 52, 23, 180, 53),
-c(150, 191, 63, 178, 63))
+             c(258, 228, 55, 273, 90),
+             c(145, 121, 29, 253, 85),
+             c(60, 52, 23, 180, 53),
+             c(150, 191, 63, 178, 63))
+
+bgmat <- rbind(c(542, 218, 118, 108, 33),
+               c(480, 204, 107, 87, 26),
+               c(346, 131, 71, 66, 20),
+               c(199, 72, 41, 43, 13),
+               c(368, 101, 67, 80, 30))
+
 rownames(mat) <- c("H3K4ME1", "H3K4ME2", "H3K4ME3", "H3AC", "H4AC")
-colnames(mat) <- c("Intergenic","Intron","Exon \n 1000 KB window",
-"Gene start \n 1000 KB window","Gene end \n 1000 KB window")
+colnames(mat) <- c("Intergenic","Intron","Exon",
+                   "Gene start ","Gene end")
 
+set.seed(201)
 color_profile <- list("type" = "per_row",
-"col" = RColorBrewer::brewer.pal(dim(mat)[1],name ="Spectral"))
+                      "col" = sample(RColorBrewer::brewer.pal(10,name = "Spectral"), dim(mat)[1]))
 
-logomaker(mat,color_profile = color_profile,frame_width = 1, ic.scale = TRUE, yscale_change = TRUE)
-```
+get_viewport_logo(1, 2)
 
-From the plot, we see how the patterns of histone modification sites change across genomic region types for that cell line.
-
-### Document mining
-
-Further, besides alphanumerics, the logos in Logolas may include punctuation marks - dot, colon, semicolon, along with dashes etc. 
-
-We present such an example using the data on the field categories of manuscipts submitted on aRxiv by 4 professors from Department of Statistics, University of Chicago. Note that the field categories here are a combination of numbers, alphabets, dots and dashes.
-
-```{r,message=FALSE,warning=FALSE}
-library(aRxiv)
-rec1 <- aRxiv::arxiv_search('au:"Matthew Stephens"', limit=50)
-rec2 <- aRxiv::arxiv_search('au:"John Lafferty"', limit=50)
-rec3 <- aRxiv::arxiv_search('au:"Wei Biao Wu"', limit=50)
-rec4 <- aRxiv::arxiv_search('au:"Peter Mccullagh"', limit=50)
-
-primary_categories_1 <- toupper(rec1$primary_category)
-primary_categories_2 <- toupper(rec2$primary_category)
-primary_categories_3 <- toupper(rec3$primary_category)
-primary_categories_4 <- toupper(rec4$primary_category)
-
-factor_levels <- unique(c(unique(primary_categories_1),
-unique(primary_categories_2),
-unique(primary_categories_3),
-unique(primary_categories_4)))
-
-primary_categories_1 <- factor(primary_categories_1, levels=factor_levels)
-primary_categories_2 <- factor(primary_categories_2, levels=factor_levels)
-primary_categories_3 <- factor(primary_categories_3, levels=factor_levels)
-primary_categories_4 <- factor(primary_categories_4, levels=factor_levels)
-
-tab_data <- cbind(table(primary_categories_1),
-table(primary_categories_2),
-table(primary_categories_3),
-table(primary_categories_4))
-
-colnames(tab_data) <- c("Matthew Stephens",
-"John Lafferty",
-"Wei Biao Wu",
-"Peter McCullagh")
-tab_data <- as.matrix(tab_data)
-
-color_profile <- list("type" = "per_row",
-"col" = RColorBrewer::brewer.pal(dim(tab_data)[1],
-name = "Spectral"))
-
-logomaker(tab_data,
-        color_profile = color_profile,
-        frame_width = 1,
-        pop_name = "arXiv field categories of UChicago STAT professors",
-        xlab = "Professors",
-        ylab = "Information content")
-
-```
-
-## Combine Logolas with ggplot2 graphics
-
-We saw in the previous chapter that the user can build multi-panel Logolas plots. However, once can also have multi-panel plots pooling Logolas plots with ggplot2 graphics. We show such an example below.
-
-```{r,warning=FALSE,message=FALSE,fig.height=4,fig.width=8}
-library(ggplot2)
-library(grid)
-library(gridBase)
-
-m = matrix(rep(0,48),4,12)
-m[1,] = c(0,0,2.5,7,0,0,0,0,0,0,1,2)
-m[2,] = c(4,6,3,1,0,0,0,0,0,5,0,2)
-m[3,] = c(0,0,0,0,0,1,8,0,0,1,1,2)
-m[4,] = c(4,2,2.5,0,8,7,0,8,8,2,6,2)
-rownames(m) = c("A", "C", "G", "T")
-colnames(m) = 1:12
-m=m/8
-
-color_profile = list("type" = "per_row",
-                     "col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
-
-mtcars$gear <- factor(mtcars$gear,levels=c(3,4,5),
-                      labels=c("3gears","4gears","5gears"))
-mtcars$am <- factor(mtcars$am,levels=c(0,1),
-                    labels=c("Automatic","Manual"))
-mtcars$cyl <- factor(mtcars$cyl,levels=c(4,6,8),
-                     labels=c("4cyl","6cyl","8cyl"))
-
-
-grid.newpage()
-layout.rows <- 1
-layout.cols <- 2
-top.vp <- viewport(layout=grid.layout(layout.rows, layout.cols,
-                                      widths=unit(rep(2,layout.cols), rep("null", layout.cols)),
-                                      heights=unit(rep(2,1), rep("null",1))))
-
-plot_reg <- vpList()
-l <- 1
-for(i in 1:layout.rows){
-  for(j in 1:layout.cols){
-    plot_reg[[l]] <- viewport(layout.pos.col = j, layout.pos.row = i, name = paste0("plotlogo", l))
-    l <- l+1
-  }
-}
-
-
-plot_tree <- vpTree(top.vp, plot_reg)
-
-pushViewport(plot_tree)
 seekViewport(paste0("plotlogo", 1))
-logomaker(m,xlab = 'position',color_profile = color_profile,
-          bg = c(0.28, 0.22, 0.24, 0.26),
-          frame_width = 1,
+Logolas::logomaker(mat,
+          color_profile = color_profile,
+          pop_name = "",
           newpage = FALSE,
-          control = list(viewport.margin.left = 5))
-
+          col_line_split = "black",
+          control = list(gap_ylab = 3.5,
+                         totbins = 3))
 
 seekViewport(paste0("plotlogo", 2))
-vp3 = viewport(width=0.8, height=0.8, x = 0.5, y = 0.5)
-p <- qplot(mpg, data=mtcars, geom="density")
-print(p, vp = vp3)
+Logolas::nlogomaker(mat,
+                    logoheight = 'log',
+                    bg = bgmat,
+                    pop_name = "",
+                    color_profile = color_profile,
+                    newpage = FALSE,
+                    control = list(gap_ylab=3.5,
+                                   round_off = 1,
+                                   posbins = 3, negbins = 3))
 
-# seekViewport(paste0("plotlogo", 3))
-# vp3 = viewport(height = 1, width = 1)
-# pushViewport(vp3)
-# par(fig=gridFIG())
-# par(gridPAR())
-# #par(new=TRUE)
-# #par(mar = c(3, 3, 1, 1))
-# plot(1:10, type="b")
 ```
+
+The control options `posbins`,  `negbins` and `totbins` determine the number of ticks in the positive and negative parts of the Y axis in the logo plot, whereas `gap_ylab` denotes the spacing between the Y axis label and the y axis ticks. 
+
+
 
 ## Session information
 

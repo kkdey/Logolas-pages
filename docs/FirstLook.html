@@ -87,6 +87,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <li><a href="#information-criterion-and-background-probabilities">Information Criterion and Background Probabilities</a></li>
 <li><a href="#color-palettes-in-logolas">Color palettes in Logolas</a></li>
 <li><a href="#other-entropy-measures">Other entropy measures</a></li>
+<li><a href="#combine-logolas-with-ggplot2-graphics">Combine Logolas with ggplot2 graphics</a></li>
 </ul></li>
 <li><a href="#edlogo-plot">EDLogo Plot</a><ul>
 <li><a href="#intuition">Intuition</a></li>
@@ -105,7 +106,7 @@ shared across the workflowr files. -->
 <p><strong>Last updated:</strong> 2017-11-14</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> a9d8ae3</p>
+<p><strong>Code version:</strong> 35656d9</p>
 <!-- Add your analysis here -->
 <div id="standard-logo" class="section level2">
 <h2>Standard Logo</h2>
@@ -179,6 +180,37 @@ logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
           control = list(viewport.margin.left = 5,alpha=0.2))</code></pre>
 <p><img src="figure/FirstLook.Rmd/unnamed-chunk-5-1.png" width="864" style="display: block; margin: auto;" /></p>
 </div>
+<div id="combine-logolas-with-ggplot2-graphics" class="section level3">
+<h3>Combine Logolas with ggplot2 graphics</h3>
+<p>We have shown an example of multipanel Logolas plots above. Logolas plots can be combined with ggplot2 graphics in a very similar fashion. We show such an example below.</p>
+<pre class="r"><code>library(ggplot2)
+library(grid)
+library(gridBase)
+
+
+mtcars$gear &lt;- factor(mtcars$gear,levels=c(3,4,5),
+                      labels=c(&quot;3gears&quot;,&quot;4gears&quot;,&quot;5gears&quot;))
+mtcars$am &lt;- factor(mtcars$am,levels=c(0,1),
+                    labels=c(&quot;Automatic&quot;,&quot;Manual&quot;))
+mtcars$cyl &lt;- factor(mtcars$cyl,levels=c(4,6,8),
+                     labels=c(&quot;4cyl&quot;,&quot;6cyl&quot;,&quot;8cyl&quot;))
+
+
+get_viewport_logo(1, 2)
+seekViewport(paste0(&quot;plotlogo&quot;, 1))
+logomaker(p@pwm,xlab = &#39;position&#39;,color_profile = color_profile,
+          bg = c(0.28, 0.22, 0.24, 0.26),
+          frame_width = 1,
+          newpage = FALSE,
+          control = list(viewport.margin.left = 5))
+
+
+seekViewport(paste0(&quot;plotlogo&quot;, 2))
+vp3 = viewport(width=0.8, height=0.8, x = 0.5, y = 0.5)
+p1 &lt;- qplot(mpg, data=mtcars, geom=&quot;density&quot;)
+print(p1, vp = vp3)</code></pre>
+<p><img src="figure/FirstLook.Rmd/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
 </div>
 <div id="edlogo-plot" class="section level2">
 <h2>EDLogo Plot</h2>
@@ -222,7 +254,7 @@ nlogomaker(p@pwm,logoheight = &#39;ratio&#39;,color_profile = color_profile,fram
 
 seekViewport(paste0(&quot;plotlogo&quot;, 4))
 nlogomaker(p@pwm,logoheight = &#39;ic_ratio&#39;,color_profile = color_profile,frame_width = 1,newpage = FALSE)</code></pre>
-<p><img src="figure/FirstLook.Rmd/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/FirstLook.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>All the versions of the  capture the strong depletion of T at the position 4, which is downplayed by the standard logo. At the same time, like the standrad logo, the enrichments are also clearly highlighted by the  plot. The depletion signal is clearer in the unscaled versions and the scaled versions still seem slightly biased towards enrichments</p>
 </div>
 <div id="border-and-fill" class="section level3">
@@ -245,7 +277,7 @@ newpage = FALSE)
 seekViewport(paste0(&quot;plotlogo&quot;, 4))
 nlogomaker(p@pwm,xlab = &#39;position&#39;,logoheight = &quot;log&quot;, color_profile = color_profile, control = list(tofill_pos = FALSE, tofill_neg=FALSE),
 newpage = FALSE)</code></pre>
-<p><img src="figure/FirstLook.Rmd/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/FirstLook.Rmd/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="session-information" class="section level2">
@@ -268,7 +300,7 @@ attached base packages:
 [8] base     
 
 other attached packages:
-[1] Logolas_1.2.1  gridBase_0.4-7
+[1] ggplot2_2.2.1  Logolas_1.2.1  gridBase_0.4-7
 
 loaded via a namespace (and not attached):
  [1] Rcpp_0.12.13       knitr_1.16         magrittr_1.5      
@@ -277,8 +309,8 @@ loaded via a namespace (and not attached):
 [10] tools_3.4.2        gtable_0.2.0       seqLogo_1.44.0    
 [13] git2r_0.19.0       htmltools_0.3.6    yaml_2.1.14       
 [16] lazyeval_0.2.0     rprojroot_1.2      digest_0.6.12     
-[19] tibble_1.3.4       RColorBrewer_1.1-2 ggplot2_2.2.1     
-[22] evaluate_0.10.1    rmarkdown_1.6      stringi_1.1.5     
+[19] tibble_1.3.4       RColorBrewer_1.1-2 evaluate_0.10.1   
+[22] rmarkdown_1.6      labeling_0.3       stringi_1.1.5     
 [25] compiler_3.4.2     scales_0.4.1       backports_1.1.0   
 [28] stats4_3.4.2      </code></pre>
 </div>

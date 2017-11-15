@@ -119,6 +119,40 @@ logomaker(p@pwm,xlab = 'position',color_profile = color_profile,
           control = list(viewport.margin.left = 5,alpha=0.2))
 ```
 
+### Combine Logolas with ggplot2 graphics
+
+We have shown an example of multipanel Logolas plots above. Logolas plots can be combined with ggplot2 graphics in a very similar fashion.  We show such an example below.
+
+```{r,warning=FALSE,message=FALSE,fig.height=4,fig.width=8}
+library(ggplot2)
+library(grid)
+library(gridBase)
+
+
+mtcars$gear <- factor(mtcars$gear,levels=c(3,4,5),
+                      labels=c("3gears","4gears","5gears"))
+mtcars$am <- factor(mtcars$am,levels=c(0,1),
+                    labels=c("Automatic","Manual"))
+mtcars$cyl <- factor(mtcars$cyl,levels=c(4,6,8),
+                     labels=c("4cyl","6cyl","8cyl"))
+
+
+get_viewport_logo(1, 2)
+seekViewport(paste0("plotlogo", 1))
+logomaker(p@pwm,xlab = 'position',color_profile = color_profile,
+          bg = c(0.28, 0.22, 0.24, 0.26),
+          frame_width = 1,
+          newpage = FALSE,
+          control = list(viewport.margin.left = 5))
+
+
+seekViewport(paste0("plotlogo", 2))
+vp3 = viewport(width=0.8, height=0.8, x = 0.5, y = 0.5)
+p1 <- qplot(mpg, data=mtcars, geom="density")
+print(p1, vp = vp3)
+
+```
+
 
 
 
