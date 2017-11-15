@@ -92,25 +92,19 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 shared across the workflowr files. -->
 <!-- Update knitr chunk options -->
 <!-- Insert the date the file was last updated -->
-<p><strong>Last updated:</strong> 2017-09-21</p>
+<p><strong>Last updated:</strong> 2017-11-14</p>
 <!-- Insert the code version (Git commit SHA1) if Git repository exists and R
  package git2r is installed -->
-<p><strong>Code version:</strong> 56a94be</p>
+<p><strong>Code version:</strong> eb1d0b5</p>
 <!-- Add your analysis here -->
-<p>Ever since its introduction due to Schneider &amp; Stephens (1990), sequence logos have proved to be an effective tool in informative visualization of patterns in aligned sets of sequences. There are several existing packages for plotting sequence logos, like</p>
+<p>We introduce a Logo visualization package called <a href="https://bioconductor.org/packages/release/bioc/html/Logolas.html">Logolas</a> that offers several nice features.</p>
 <ul>
-<li><a href="http://bioconductor.org/packages/release/bioc/html/seqLogo.html">seqLogo</a> (exclusively for DNA sequence motif visualization)</li>
-<li><a href="http://www.cbs.dtu.dk/biotools/Seq2Logo/">seq2Logo</a> (amino acid binding motifs visualization)</li>
-<li><a href="http://weblogo.berkeley.edu/logo.cgi">WebLogo</a> (web based tool for logo plotting)</li>
-<li><a href="http://bioconductor.org/packages/release/bioc/html/motifStack.html">motifStack</a></li>
-</ul>
-<p>We introduce another Logo visualization package called <a href="https://bioconductor.org/packages/release/bioc/html/Logolas.html">Logolas</a> which addresses some limitations of the above packages and makes logo visualization a more generic tool with potential applications in a much wider scope of problems, in comparison to the existing softwares. We highlight some of these advantages below.</p>
-<ul>
-<li><p><strong>Strings as symbols</strong> : General logo building softwares have limited library of symbols (A, C, G and T for seqLogo, alphabets for WebLogo and seq2Logo). However Logolas lets the user plot, besides the usual alphabetic symbols, any alphanumeric string, comprising of English alphabets, numbers, punctuation marks, arrows etc. It also provides an easy interface for the user to create her own logo and add to the library of symbols that can be plotted (check the Vignette).</p></li>
-<li><p><strong>More parsimonious Representation</strong> : General logo plotting softwares highlight only enrichment of certain symbols, but Logolas allows the user to highlight both enrichment and depletion of symbols at any position, leading to more parsimonious and visually appealing representation.</p></li>
-<li><p><strong>Symbol calling Nomenclature</strong> : Based on enrichment and depletion of symbols, Logolas introduces a new nomenclature to call symbols at each position. The Logolas nomenclature is more informative and generic compared to the IUPAC nomenclature for DNA sequence binding motifs and Prosite nomenclature for protein binding motifs.</p></li>
-<li><p><strong>Dirichlet Adaptive Shrinkage</strong> : Most existing logo plotting tools take position weight matrix (PWM) as input for the logo plot. But they tend to effectively adapt to the scale of the underlying positional frequencies from which the PWM is created. In Logolas, we provide a Dirichlet Adaptive Shrinkage method (dash) approach for adaptively scaling the heights of the logos based on the frequency scale. This approach is similar in lines to the <strong>ashr</strong> software due to M. Stephens (2016).</p></li>
-<li><p><strong>Better stylizations</strong> : Logolas also allows for new and flexible stylizations of the logos, involving color palettes, fill and border styles, in the choice of entropy for determining heights of the logos etc. In our vignettes, we also show how to plot multi-panel Logolas plots and combine Logolas plots with ggplot2 and base R graphics.</p></li>
+<li><p><strong>Standard Plots</strong> : Logolas offers functions for plotting the standard logo plots for DNA/RNA and protein sequences, like in <a href="https://bioconductor.org/packages/release/bioc/html/seqLogo.html">seqLogo</a>, <a href="http://www.cbs.dtu.dk/biotools/Seq2Logo/">seq2Logo</a>, <a href="http://weblogo.berkeley.edu/logo.cgi">webLogo</a> etc, but with increased flexibility for the user.</p></li>
+<li><p><strong>String symbols</strong> : Logolas allows the user to plot elements that are alphanumeric strings and not just characters. This extends the scope of logo plot beyond the usual DNA, RNA and protein sequence visualization to more generic example - species distribution, histone marks composition, mutation signature patterns etc (see Applications).</p></li>
+<li><p><strong>More Parsimonious Representation</strong> : Logolas introduces a new logo plot called <em>EDLogo</em> that highlights both enrichment and depletion of elements at each position of the sequence. This is in contrast to tthe standard logo which is primarily driven by enrichments.</p></li>
+<li><p><strong>Dirichlet Adaptive Shrinkage</strong> : Most existing logo plotting tools take position weight matrix (PWM) as input for the logo plot but fail to effectively adapt to the scale of the underlying positional frequencies. Logolas provides a Dirichlet Adaptive Shrinkage method (dash) approach for adaptively scaling the heights of the logos based on the frequency scale [M. Stephens (2016)].</p></li>
+<li><p><strong>Generating Consensus Sequence</strong> : Based on enrichment and depletion of symbols, Logolas introduces a new nomenclature based on enrichment and depletion of elements at each position to generate a consensus sequence, which is an alternative to the IUPAC nomenclature.</p></li>
+<li><p><strong>Better Stylizations</strong> : Logolas also allows for new and flexible stylizations of the logos, involving color palettes, fill and border styles, choice of measures for calculating stack heights (based on Renyi entropy, Shannon entropy or relative frequnency) etc. In our vignettes, we also show how to plot multi-panel Logolas plots and combine Logolas plots with ggplot2 and base R graphics.</p></li>
 </ul>
 <div id="reference" class="section level1">
 <h1>Reference</h1>
@@ -120,9 +114,13 @@ shared across the workflowr files. -->
 <h2>Session information</h2>
 <!-- Insert the session information into the document -->
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.3.3 (2017-03-06)
-Platform: x86_64-apple-darwin13.4.0 (64-bit)
+<pre><code>R version 3.4.2 (2017-09-28)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS Sierra 10.12.5
+
+Matrix products: default
+BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -131,10 +129,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] backports_1.0.5 magrittr_1.5    rprojroot_1.2   tools_3.3.3    
- [5] htmltools_0.3.6 yaml_2.1.14     Rcpp_0.12.12    stringi_1.1.5  
- [9] rmarkdown_1.6   knitr_1.16      git2r_0.18.0    stringr_1.2.0  
-[13] digest_0.6.12   evaluate_0.10  </code></pre>
+ [1] compiler_3.4.2  backports_1.1.0 magrittr_1.5    rprojroot_1.2  
+ [5] tools_3.4.2     htmltools_0.3.6 yaml_2.1.14     Rcpp_0.12.13   
+ [9] stringi_1.1.5   rmarkdown_1.6   knitr_1.16      git2r_0.19.0   
+[13] stringr_1.2.0   digest_0.6.12   evaluate_0.10.1</code></pre>
 </div>
 </div>
 

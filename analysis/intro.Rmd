@@ -23,30 +23,29 @@ knitr::read_chunk("chunks.R")
 
 <!-- Add your analysis here -->
 
-Ever since its introduction due to Schneider & Stephens (1990), sequence logos have proved to be an effective tool in informative visualization of patterns in aligned sets of sequences. There are several existing packages for plotting sequence logos, like 
 
-- [seqLogo](http://bioconductor.org/packages/release/bioc/html/seqLogo.html) (exclusively for DNA sequence motif visualization)
-- [seq2Logo](http://www.cbs.dtu.dk/biotools/Seq2Logo/) (amino acid binding motifs visualization)
-- [WebLogo](http://weblogo.berkeley.edu/logo.cgi) (web based tool for logo plotting)
-- [motifStack](http://bioconductor.org/packages/release/bioc/html/motifStack.html)
+We introduce a  Logo visualization package called [Logolas](https://bioconductor.org/packages/release/bioc/html/Logolas.html) that offers several nice features. 
 
-
-We introduce another Logo visualization package called [Logolas](https://bioconductor.org/packages/release/bioc/html/Logolas.html) which addresses some limitations of the above packages and makes logo visualization a more generic tool with potential applications in a much wider scope of problems, in comparison to the existing softwares. We highlight some of these advantages below.
+- **Standard Plots** : Logolas offers functions for plotting the standard 
+logo plots for DNA/RNA and protein sequences,  like in [seqLogo](https://bioconductor.org/packages/release/bioc/html/seqLogo.html), [seq2Logo](http://www.cbs.dtu.dk/biotools/Seq2Logo/), [webLogo](http://weblogo.berkeley.edu/logo.cgi) etc, but with increased flexibility for the user. 
 
 
-- **Strings as symbols** : General logo building softwares have limited library of symbols (A, C, G and T for seqLogo, alphabets for WebLogo and seq2Logo). However Logolas lets the user plot, besides the usual alphabetic symbols, any alphanumeric string, comprising of English alphabets, numbers, punctuation marks, arrows etc. It also provides an easy interface for the user to create her own logo and add to the library of symbols that can be plotted (check the Vignette).
+- **String symbols** :  Logolas allows the user to plot elements that are alphanumeric strings and not just characters. This extends the scope of logo plot beyond the usual DNA, RNA and protein sequence visualization to more generic example - species distribution, histone marks composition, mutation signature patterns etc (see Applications). 
 
 
-- **More parsimonious Representation** : General logo plotting softwares highlight only enrichment of certain symbols, but Logolas allows the user to highlight both enrichment and depletion of symbols at any position, leading to more parsimonious and visually appealing representation. 
+- **More Parsimonious Representation** : Logolas introduces a new logo plot called
+*EDLogo* that highlights both enrichment and depletion of elements at each position of the sequence. This is in contrast to tthe standard logo which is
+primarily driven by enrichments. 
 
 
-- **Symbol calling Nomenclature** : Based on enrichment and depletion of symbols, Logolas introduces a new nomenclature to call symbols at each position. The Logolas nomenclature is more informative and generic compared to the IUPAC nomenclature for DNA sequence binding motifs and Prosite nomenclature for protein binding motifs.
+
+- **Dirichlet Adaptive Shrinkage** : Most existing logo plotting tools take position weight matrix (PWM) as input for the logo plot but fail to effectively adapt to the scale of the underlying positional frequencies. Logolas provides a Dirichlet Adaptive Shrinkage method (dash) approach for adaptively scaling the heights of the logos based on the frequency scale [M. Stephens (2016)]. 
 
 
-- **Dirichlet Adaptive Shrinkage** : Most existing logo plotting tools take position weight matrix (PWM) as input for the logo plot. But they tend to effectively adapt to the scale of the underlying positional frequencies from which the PWM is created. In Logolas, we provide a Dirichlet Adaptive Shrinkage method (dash) approach for adaptively scaling the heights of the logos based on the frequency scale. This approach is similar in lines to the **ashr** software due to M. Stephens (2016).
+- **Generating Consensus Sequence** : Based on enrichment and depletion of symbols, Logolas introduces a new nomenclature based on enrichment and depletion of elements at each position to generate a consensus sequence, which is an alternative to the IUPAC nomenclature. 
 
 
-- **Better stylizations** : Logolas also allows for new and flexible stylizations of the logos, involving color palettes, fill and border styles, in the choice of entropy for determining heights of the logos etc. In our vignettes, we also show how to plot multi-panel Logolas plots and combine Logolas plots with ggplot2 and base R graphics.
+- **Better Stylizations** : Logolas also allows for new and flexible stylizations of the logos, involving color palettes, fill and border styles, choice of measures for calculating stack heights (based on Renyi entropy, Shannon entropy or relative frequnency) etc. In our vignettes, we also show how to plot multi-panel Logolas plots and combine Logolas plots with ggplot2 and base R graphics.
 
 
 
