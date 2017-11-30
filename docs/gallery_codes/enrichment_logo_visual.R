@@ -1,18 +1,13 @@
 library(Logolas)
-library(TFBSTools)
-library(JASPAR2014)
+#read all the motif data from http://compbio.mit.edu/encode-motifs/motifs.txt
+library(atSNP)
+pfm=LoadMotifLibrary('http://compbio.mit.edu/encode-motifs/motifs.txt',tag = ">",
+                     transpose = F, field = 1, sep = c("\t", " ", ">"), skipcols = 1, skiprows = 1,
+                     pseudocount = 0)
+color_profile = list("type" = "per_row",
+                     "col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
+EBF1_disc1=t(pfm[[52]]);rownames(EBF1_disc1)=c('A','C','G','T');colnames(EBF1_disc1)=1:ncol(EBF1_disc1)
 
-opts3 = list()
-opts3[['type']] = 'ChIP-seq'
-PFMchip = getMatrixSet(JASPAR2014,opts3)
 
-pfm=as.matrix(PFMchip[[121]])
-rownames(pfm)=c('A','C','G','T')
-colnames(pfm)=1:ncol(pfm)
-
-color_profile <- list("type" = "per_row",
-                      "col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
-
-nlogomaker(pfm,logoheight = 'log',xlab = 'position',
-           color_profile = color_profile,frame_width = 1,
-           control = list( log_epsilon =1, gap_ylab = 3.5))
+Logolas::nlogomaker(EBF1_disc1, logoheight = 'log',
+                    color_profile = color_profile)

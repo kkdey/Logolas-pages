@@ -12,7 +12,7 @@ colnames(mat2) = c("-2", "-1", "0", "1", "2")
 rownames(mat2) = c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G")
 table = rbind(mat1, mat2)
 
-cols = RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category == 
+cols = RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category ==
                                        'qual',]
 col_vector = unlist(mapply(RColorBrewer::brewer.pal, cols$maxcolors, rownames(cols)))
 total_chars = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
@@ -24,20 +24,12 @@ set.seed(20)
 color_profile <- list("type" = "per_symbol",
                       "col" = sample(col_vector, length(total_chars), replace=FALSE))
 
-logomaker(table,
-           color_profile = color_profile,
-           frame_width = 1,
-           xlab = "Position",
-           ylab = "Information content",
-           pop_name = 'ALL'
-)
 
 
 nlogomaker(table,
            logoheight = 'log',
            color_profile = color_profile,
-           frame_width = 1,
            xlab = "Position",
-           ylab = "Information content",
-           pop_name = 'ALL'
+           ylab = "Enrichment Score",
+           pop_name = 'EDLogo : Mutation Signatures'
 )

@@ -3,14 +3,10 @@ library(Logolas)
 bg=c(0.074,0.052,0.045,0.054,0.025,0.034,0.054,0.074,0.026,0.068,0.099,0.058,0.025,0.047,0.039,0.057,0.051,0.013,0.034,0.073)
 #A function to read the data
 readprotein=function(file,skip=3,nrows,nsites,bg=bg,adash,mat){
-  library(dash)
   rawdata=read.table(file = file,skip = skip,nrows = nrows)
   if(mat=='pwm'){
     pwm=as.matrix(rawdata[,23:42]/100)
     pfm=round(pwm*nsites)
-    if(adash==T){
-      pwm=dash(as.matrix(pfm),mode = bg,optmethod = 'mixEM')$posmean
-    }
     colnames(pwm)=c('A' ,'R','N','D',   'C' ,  'Q',   'E' ,  'G',   'H' ,  'I',   'L' , 'K'  , 'M' ,  'F',   'P' ,  'S'  , 'T' ,  'W',   'Y',   'V')
     rownames(pwm)=1:nrow(pwm)
     return(t(pwm))
@@ -37,6 +33,7 @@ color_profile <- list("type" = "per_row",
 logo_pssm(pssm,
           color_profile = color_profile,
           frame_width = 1,
-          pop_name = "PSSM Logo plot: amino acids",
-          control = list(viewport.margin.left = 6, gap_ylab = 4)
+          pop_name = "PSSM Logo",
+          control = list(viewport.margin.left = 6, gap_ylab = 4,
+                         round_off = 0, quant = 0.5)
 )

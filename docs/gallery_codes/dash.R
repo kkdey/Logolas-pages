@@ -15,8 +15,8 @@ color_profile = list("type" = "per_row",
                      "col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
 
 grid.newpage()
-layout.rows <- 2
-layout.cols <- 3
+layout.rows <- 3
+layout.cols <- 2
 top.vp <- viewport(layout=grid.layout(layout.rows,layout.cols, widths=unit(rep(2,layout.cols), rep("null",layout.cols)),heights=unit(rep(2,1), rep("null",1))))
 
 plot_reg <- vpList()
