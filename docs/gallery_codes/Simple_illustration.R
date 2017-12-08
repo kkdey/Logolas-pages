@@ -1,5 +1,4 @@
 library(Logolas)
-set.seed(20)
 out <- suppressWarnings(suppressMessages(get(load(system.file("extdata", "EBF1.RData",
                                                           package = "Logolas")))))
 
