@@ -1,12 +1,4 @@
 library(Logolas)
-#read all the motif data from http://compbio.mit.edu/encode-motifs/motifs.txt
-out <- suppressWarnings(suppressMessages(get(load(system.file("extdata", "EBF1.RData",
-                                                              package = "Logolas")))))
-
-color_profile = list("type" = "per_row",
-                     "col" = RColorBrewer::brewer.pal(4,name ="Spectral"))
-EBF1_disc1=t(out);rownames(EBF1_disc1)=c('A','C','G','T');colnames(EBF1_disc1)=1:ncol(EBF1_disc1)
-
-
-Logolas::nlogomaker(EBF1_disc1, logoheight = 'log',
-                    color_profile = color_profile)
+out <- get(load(system.file("extdata", "EBF1_disc1.RData",package = "Logolas")))
+logomaker(EBF1_disc1, type = "EDLogo",
+          color_type = "per_row", colors = c("#ABDDA4","#FDAE61", "#2B83BA", "#D7191C"))
