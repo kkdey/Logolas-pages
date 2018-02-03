@@ -251,6 +251,15 @@ logo_pssm(pssm, control = list(round_off = 0))
 
 The `round_off` comtrol argument specifies the number of points after decimal allowed in the axes of the plot.
 
+## Acknowledgements
+
+The authors would like to acknowledge Oliver Bembom, the author of `seqLogo` for acting as an inspiration and providing the foundation on which this package is created. We also thank Peter Carbonetto, Edward Wallace and John Blischak for helpful feedback and discussions.
+
+\section{Session Info}
+
+```{r}
+sessionInfo()
+```
 
 ----------------------------------------------------------------------------
 

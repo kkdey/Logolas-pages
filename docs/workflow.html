@@ -100,6 +100,7 @@ if (window.hljs) {
 <li><a href="#multiple-panels-plots">Multiple panels plots}</a></li>
 <li><a href="#pssm-logos">PSSM logos</a></li>
 </ul></li>
+<li><a href="#acknowledgements">Acknowledgements</a></li>
 </ul>
 </div>
 
@@ -297,10 +298,47 @@ logomaker(sequence, type = &quot;EDLogo&quot;, logo_control = list(newpage = FAL
 logo_pssm(pssm, control = list(round_off = 0))</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>round_off</code> comtrol argument specifies the number of points after decimal allowed in the axes of the plot.</p>
+</div>
+</div>
+<div id="acknowledgements" class="section level2">
+<h2>Acknowledgements</h2>
+<p>The authors would like to acknowledge Oliver Bembom, the author of <code>seqLogo</code> for acting as an inspiration and providing the foundation on which this package is created. We also thank Peter Carbonetto, Edward Wallace and John Blischak for helpful feedback and discussions.</p>
+
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.4.2 (2017-09-28)
+## Platform: x86_64-apple-darwin15.6.0 (64-bit)
+## Running under: macOS Sierra 10.12.6
+## 
+## Matrix products: default
+## BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] grid      stats     graphics  grDevices utils     datasets  methods  
+## [8] base     
+## 
+## other attached packages:
+## [1] ggseqlogo_0.1 Logolas_2.0.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.15         XVector_0.18.0       knitr_1.17          
+##  [4] magrittr_1.5         zlibbioc_1.24.0      IRanges_2.12.0      
+##  [7] BiocGenerics_0.24.0  munsell_0.4.3        gridBase_0.4-7      
+## [10] SQUAREM_2017.10-1    colorspace_1.3-2     rlang_0.1.6         
+## [13] stringr_1.2.0        plyr_1.8.4           tools_3.4.2         
+## [16] parallel_3.4.2       gtable_0.2.0         htmltools_0.3.6     
+## [19] yaml_2.1.14          lazyeval_0.2.1       rprojroot_1.2       
+## [22] digest_0.6.12        tibble_1.3.4         RColorBrewer_1.1-2  
+## [25] ggplot2_2.2.1        S4Vectors_0.16.0     evaluate_0.10.1     
+## [28] LaplacesDemon_16.1.0 rmarkdown_1.8        stringi_1.1.6       
+## [31] compiler_3.4.2       Biostrings_2.46.0    scales_0.5.0        
+## [34] backports_1.1.0      stats4_3.4.2</code></pre>
 <hr />
 <p><strong>Thank you for using Logolas !</strong></p>
 <p>If you have any questions, you can either open an issue in our <a href="https://github.com/kkdey/Logolas">Github page</a> or write to Kushal K Dey (<a href="mailto:kkdey@uchicago.edu">kkdey@uchicago.edu</a>). Also please feel free to contribute to the package. You can contribute by submitting a pull request or by communicating with the said person.</p>
-</div>
 </div>
 
 <hr>
