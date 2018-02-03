@@ -2,7 +2,7 @@
 title: "Guided Tutorial"
 output:
   html_document:
-    toc: false
+    toc: true
 ---
 
 We present an elaborate guided tutorial of how to use the **Logolas** R package. A pdf version of this vignette can be found [here](https://github.com/kkdey/Logolas/blob/master/vignettes/logolas.pdf).
