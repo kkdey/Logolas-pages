@@ -1,7 +1,7 @@
 library(Logolas)
 library(grid)
 
-p <- get(load(system.file("extdata", "seqlogo_example.rda", package = "Logolas")))
+p <- get(load(system.file("extdata", "seqlogo_example.Rdata", package = "Logolas")))
 get_viewport_logo(2, 2, heights_1 = 16)
 
 seekViewport(paste0("plotlogo", 1))
