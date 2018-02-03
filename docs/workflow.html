@@ -125,15 +125,15 @@ biocLite(&quot;Logolas&quot;)</code></pre>
               &quot;CTATTGT&quot;, &quot;CTCATGT&quot;, &quot;CTATAGT&quot;, &quot;CTCGTTA&quot;, &quot;CTAGAAT&quot;, &quot;CAATGGT&quot;)</code></pre>
 <p>The logo plots (both standard and Enrichment Depletion Logo) can be plotted using the  function.</p>
 <pre class="r"><code>logomaker(sequence, type = &quot;Logo&quot;)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-1-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-1-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>logomaker(sequence, type = &quot;EDLogo&quot;)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-1-2.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-1-2.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Instead of DNA.RNA sequqnce as above, one can also use amino acid character sequences.</p>
 <pre class="r"><code>library(ggseqlogo)
 data(ggseqlogo_sample)
 sequence &lt;- seqs_aa$AKT1
 logomaker(sequence, type = &quot;EDLogo&quot;)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="positional-frequency-weight-matrix" class="section level3">
 <h3>Positional Frequency (Weight) Matrix</h3>
@@ -147,11 +147,11 @@ p</code></pre>
 ## T 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0</code></pre>
 <p>We plot the logo plots for this PWM matrix.</p>
 <pre class="r"><code>logomaker(p, type = &quot;Logo&quot;, return_heights = TRUE)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-4-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>## [1] 1.2751513 1.2751513 1.2751513 0.4277256 0.1534290 1.2751513 1.2751513
 ## [8] 1.2751513</code></pre>
 <pre class="r"><code>logomaker(p, type = &quot;EDLogo&quot;, return_heights = TRUE)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-4-2.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-4-2.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>## $pos_ic
 ##         1         2         3         4         5         6         7 
 ## 6.3105144 6.3105144 6.3105144 0.4031197 0.9645379 6.3105144 6.3105144 
@@ -187,21 +187,21 @@ p</code></pre>
 <pre class="r"><code>logomaker(p, color_type = &quot;per_row&quot;,
           colors = c(&quot;#7FC97F&quot;, &quot;#BEAED4&quot;, &quot;#FDC086&quot;, &quot;#386CB0&quot;),
           type = &quot;EDLogo&quot;)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>logomaker(p, type = &quot;EDLogo&quot;, color_seed = 1500)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-5-2.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-5-2.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="styles-of-symbols" class="section level3">
 <h3>Styles of symbols</h3>
 <p>Besides the default style with filled symbols for each character, one can also use characters with border styles. For the standard logo plot, this is accomplished by the <code>tofill</code> control argument.</p>
 <pre class="r"><code>logomaker(p, type = &quot;Logo&quot;,
           logo_control = list(control = list(tofill= FALSE)), color_seed = 4000)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-6-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>For an EDLogo plot, the arguments <code>tofill_pos</code> and <code>tofill_neg</code> represent the coloring scheme for the positive and the negative axes in an EDLogo plot.</p>
 <pre class="r"><code>logomaker(p, type = &quot;EDLogo&quot;,
           logo_control = list(control = list(tofill_pos = TRUE,
                                              tofill_neg = FALSE)))</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-7-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="background-info" class="section level3">
 <h3>Background Info</h3>
@@ -210,10 +210,10 @@ p</code></pre>
 <pre class="r"><code>bg &lt;- c(0.05, 0.90, 0.03, 0.05)
 names(bg) &lt;- c(&quot;A&quot;, &quot;C&quot;, &quot;G&quot;, &quot;T&quot;)
 logomaker(p, bg=bg, type = &quot;EDLogo&quot;)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Second example with <code>bg</code> as a matrix.</p>
 <pre class="r"><code>logomaker(p, bg=(p+1e-02), type = &quot;EDLogo&quot;)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-9-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-9-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="adaptive-scaling-of-logos-dash" class="section level3">
 <h3>Adaptive scaling of logos (dash)</h3>
@@ -222,26 +222,26 @@ logomaker(p, bg=bg, type = &quot;EDLogo&quot;)</code></pre>
               &quot;CTTAGAT&quot;, &quot;CTATTAA&quot;, &quot;CTATTTA&quot;, &quot;CTATTAT&quot;)
 logomaker(sequence, use_dash = FALSE, type = &quot;Logo&quot;,
           logo_control = list(pop_name = &quot;use_dash = FALSE&quot;))</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-10-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-10-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>logomaker(sequence, type = &quot;Logo&quot;, logo_control = list(pop_name = &quot;use_dash = TRUE&quot;))</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-10-2.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-10-2.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The adaptive scaling is performed by the Dirichlet Adaptive Shrinkage method, the details of which can be viewed at our <a href="https://github.com/kkdey/dashr">dashr</a> package.</p>
 
 <p><strong>Logolas</strong> allows the user to plot symbols not just for characters as we saw in previous examples, but for any alphanumeric string. We present two examples - one for representing mutation signature and another for representing histone marks composition.</p>
 <p>Histone marks string symbols example</p>
 <pre class="r"><code>histones &lt;- get(load(system.file(&quot;extdata&quot;, &quot;histone_marks.Rdata&quot;, package = &quot;Logolas&quot;)))
 logomaker(histones$mat, bg=histones$bgmat, type = &quot;EDLogo&quot;)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Mutation signature string and character mix example.</p>
 <pre class="r"><code>mut &lt;- get(load(system.file(&quot;extdata&quot;, &quot;mutation_sig.Rdata&quot;, package = &quot;Logolas&quot;)))
 logomaker(mut, type = &quot;Logo&quot;, color_seed = 3000)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The user may want to have distinct colors for distinct symbols. This is where we use the <code>per_symbol</code> option for <strong>color_type</strong>.</p>
 <pre class="r"><code>logomaker(mut, type = &quot;Logo&quot;, color_type = &quot;per_symbol&quot;,  color_seed = 2300)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The corresponding EDLogo</p>
 <pre class="r"><code>logomaker(mut, type = &quot;EDLogo&quot;, color_type = &quot;per_symbol&quot;,  color_seed = 2300)</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-14-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="extras" class="section level2">
@@ -267,7 +267,7 @@ logomaker(sequence, type = &quot;Logo&quot;, logo_control = list(newpage = FALSE
 
 seekViewport(paste0(&quot;plotlogo&quot;, 2))
 logomaker(sequence, type = &quot;EDLogo&quot;, logo_control = list(newpage = FALSE))</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-16-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>In the same way, ggplot2 graphics can also be combined with <strong>Logolas</strong> plots.</p>
 </div>
 <div id="pssm-logos" class="section level3">
@@ -275,7 +275,7 @@ logomaker(sequence, type = &quot;EDLogo&quot;, logo_control = list(newpage = FAL
 <p>While <strong>logomaker()</strong> takes a PFM, PWM or a set of aligned sequences as input, sometimes, some position specific scores are only available to the user. In this case, one can use the <strong>logo_pssm()</strong> in <strong>Logolas</strong> to plot the scoring matrix.</p>
 <pre class="r"><code>pssm &lt;- get(load(system.file(&quot;extdata&quot;, &quot;pssm.Rdata&quot;, package = &quot;Logolas&quot;)))
 logo_pssm(pssm, control = list(round_off = 0))</code></pre>
-<p><img src="workflow_files/figure-html/unnamed-chunk-17-1.png" width="576" /></p>
+<p><img src="workflow_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>round_off</code> comtrol argument specifies the number of points after decimal allowed in the axes of the plot.</p>
 <hr />
 <p><strong>Thank you for using Logolas !</strong></p>
