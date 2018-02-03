@@ -9,7 +9,7 @@ We present an elaborate guided tutorial of how to use the **Logolas** R package.
 
 ## Features of Logolas 
 
-Compared to the existing packages for plotting sequence logos (\textit{seqLogo}, \textit{seq2Logo}, \textit{motifStack} etc), \textit{Logolas} offers several new features that makes  logo visualization a more generic tool with potential applications in a much wider scope of problems.
+Compared to the existing packages for plotting sequence logos (*seqLogo*, *seq2Logo*, *motifStack* etc), **Logolas** offers several new features that makes  logo visualization a more generic tool with potential applications in a much wider scope of problems.
 
 - **Enrichment Depletion Logo (EDLogo)** : General logo plotting softwares highlight only enrichment of certain symbols, but Logolas allows the user to highlight both enrichment and depletion of symbols at any position, leading to more parsimonious and visually appealing representation.
 
@@ -21,8 +21,8 @@ Compared to the existing packages for plotting sequence logos (\textit{seqLogo},
 
 ## Installation
 
-**Logolas** loads as dependencies the following CRAN-R package : *grid*, *gridExtra*, *SQUAREM*,  *LaplacesDemon*, *Matrix*, *RColorBrewer*. To run this vignette, the user also would be required to install the 
-*ggseqlogo* package. 
+**Logolas** loads as dependencies the following CRAN-R package : `grid`, `gridExtra`, `SQUAREM`,  `LaplacesDemon`, `Matrix`, `RColorBrewer`. To run this vignette, the user also would be required to install the 
+`ggseqlogo` package. 
 
 The Bioc version of **Logolas** can be installed as follows
 
@@ -31,7 +31,7 @@ source("http://bioconductor.org/biocLite.R")
 biocLite("Logolas")
 ```
 
-For installing the developmental version of **Logolas** from Github, the user is required to have the *devtools* package and then run the following command.
+For installing the developmental version of **Logolas** from Github, the user is required to have the `devtools` package and then run the following command.
 
 ```{r install_logolas_git, eval=FALSE}
 devtools::install_github('kkdey/Logolas')

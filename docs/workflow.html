@@ -106,7 +106,7 @@ if (window.hljs) {
 <p>We present an elaborate guided tutorial of how to use the <strong>Logolas</strong> R package. A pdf version of this vignette can be found <a href="https://github.com/kkdey/Logolas/blob/master/vignettes/logolas.pdf">here</a>.</p>
 <div id="features-of-logolas" class="section level2">
 <h2>Features of Logolas</h2>
-<p>Compared to the existing packages for plotting sequence logos (, ,  etc),  offers several new features that makes logo visualization a more generic tool with potential applications in a much wider scope of problems.</p>
+<p>Compared to the existing packages for plotting sequence logos (<em>seqLogo</em>, <em>seq2Logo</em>, <em>motifStack</em> etc), <strong>Logolas</strong> offers several new features that makes logo visualization a more generic tool with potential applications in a much wider scope of problems.</p>
 <ul>
 <li><p><strong>Enrichment Depletion Logo (EDLogo)</strong> : General logo plotting softwares highlight only enrichment of certain symbols, but Logolas allows the user to highlight both enrichment and depletion of symbols at any position, leading to more parsimonious and visually appealing representation.</p></li>
 <li><p><strong>String symbols</strong> : General logo building softwares have limited library of symbols usually restricted to English alphabets. Logolas allows the user to plot symbols for any alphanumeric string, comprising of English alphabets, numbers, punctuation marks, arrows etc. It also provides an easy interface for the user to create her own logo and add to the library of symbols that can be plotted.</p></li>
@@ -116,11 +116,11 @@ if (window.hljs) {
 </div>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<p><strong>Logolas</strong> loads as dependencies the following CRAN-R package : <em>grid</em>, <em>gridExtra</em>, <em>SQUAREM</em>, <em>LaplacesDemon</em>, <em>Matrix</em>, <em>RColorBrewer</em>. To run this vignette, the user also would be required to install the <em>ggseqlogo</em> package.</p>
+<p><strong>Logolas</strong> loads as dependencies the following CRAN-R package : <code>grid</code>, <code>gridExtra</code>, <code>SQUAREM</code>, <code>LaplacesDemon</code>, <code>Matrix</code>, <code>RColorBrewer</code>. To run this vignette, the user also would be required to install the <code>ggseqlogo</code> package.</p>
 <p>The Bioc version of <strong>Logolas</strong> can be installed as follows</p>
 <pre class="r"><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
 biocLite(&quot;Logolas&quot;)</code></pre>
-<p>For installing the developmental version of <strong>Logolas</strong> from Github, the user is required to have the <em>devtools</em> package and then run the following command.</p>
+<p>For installing the developmental version of <strong>Logolas</strong> from Github, the user is required to have the <code>devtools</code> package and then run the following command.</p>
 <pre class="r"><code>devtools::install_github(&#39;kkdey/Logolas&#39;)</code></pre>
 <p>Load  into R</p>
 <pre class="r"><code>library(Logolas)</code></pre>
