@@ -1,0 +1,377 @@
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Flexible Logo plots of symbols and alphanumeric strings using Logolas}
+%\VignettePackage{Logolas}
+
+% To compile this document
+% library('knitr'); rm(list=ls()); knit('Logolas/vignettes/logolas.Rnw')
+% library('knitr'); rm(list=ls()); knit2pdf('Logolas/vignettes/logolas.Rnw'); openPDF('logolas.pdf')
+% !Rnw weave = knitr
+
+\documentclass[12pt]{article}
+
+\newcommand{\Logolas}{\textit{Logolas}}
+\usepackage{dsfont}
+\usepackage{cite}
+
+<<knitr, echo=FALSE, results="hide">>=
+library("knitr")
+opts_chunk$set(tidy=FALSE,tidy.opts=list(width.cutoff=30),dev="png",fig.show="hide",
+               fig.width=7,fig.height=7,
+               message=FALSE)
+@
+
+<<style, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@
+
+
+\author{Kushal K Dey, Dongyue Xie, Matthew Stephens  \\[1em]
+\small{Dept. of Statistics, The University of Chicago} \mbox{ }\\
+\small{\texttt{$^*$Correspondending Email: kkdey@uchicago.edu}}}
+
+
+\bioctitle[ Enrichment Depletion Logo plots with String symbols using \Logolas{}]{Enrichment Depletion Logo plots with String symbols using \Logolas{}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\vspace{1em}
+Sequence logo plots have become a standard graphical tool for visualizing sequence motifs in DNA, RNA or protein sequences. However standard logo plots primarily highlight enrichment of symbols, and may fail to highlight interesting depletions. Current alternatives that try to highlight depletion often produce visually cluttered logos. We introduce a new sequence logo plot, the EDLogo plot, that highlights both enrichment and depletion, while minimizing visual clutter. We provide an easy-to-use and highly customizable R package Logolas to produce a range of logo plots, including EDLogo plots. This software also allows elements in the logo plot to be strings of characters, rather than a single character, extending the range of applications beyond the usual DNA, RNA or protein sequences. We illustrate our methods and software on applications to transcription factor binding site motifs, protein sequence alignments and cancer mutation signature profiles. Our new EDLogo plots, and flexible software implementation, can help data analysts visualize both enrichment and depletion of characters (DNA sequence bases, amino acids, etc) across a wide range of applications.
+
+\vspace{1em}
+\textbf{\Logolas{} version:} \Sexpr{packageDescription("Logolas")$Version} \footnote{This document used the vignette from \Bioconductor{} package \Biocpkg{CountClust, DESeq2} as \CRANpkg{knitr} template}
+\end{abstract}
+
+<<options, results="hide", echo=FALSE>>=
+options(digits=3, width=80, prompt=" ", continue=" ")
+@
+
+\newpage
+
+\tableofcontents
+
+\section{Introduction}
+
+
+Compared to the existing packages for plotting sequence logos (\textit{seqLogo}, \textit{seq2Logo}, \textit{motifStack} etc), \Logolas{} offers several new features that makes  logo visualization a more generic tool with potential applications in a much wider scope of problems.
+
+- \textbf{Enrichment Depletion Logo (EDLogo)} : General logo plotting softwares highlight only enrichment of certain symbols, but Logolas allows the user to highlight both enrichment and depletion of symbols at any position, leading to more parsimonious and visually appealing representation.
+
+- \textbf{String symbols} : General logo building softwares have limited library of symbols usually restricted to English alphabets. Logolas allows the user to plot symbols for any alphanumeric string, comprising of English alphabets, numbers, punctuation marks, arrows etc. It also provides an easy interface for the user to create her own logo and add to the library of symbols that can be plotted.
+
+- \textbf{Dirichlet Adaptive Shrinkage} : Logolas provides a statistical approach to adaptively scale the heights of the logos based on the number of aligned sequences.
+
+- \textbf{Better customizations} : Logolas offers several new color palettes, fill and border styles, several options for determining heights of the logos etc. Also, they can be plotted in multiple panels and combined with ggplot2 graphics.
+
+
+\newpage
+
+\section{\Logolas{} Installation}
+
+\Logolas{} loads as dependencies the following CRAN-R package : \CRANpkg{grid}, \CRANpkg{gridExtra}, \CRANpkg{SQUAREM},  \CRANpkg{LaplacesDemon}, \CRANpkg{Matrix}, \CRANpkg{RColorBrewer}.
+
+The Bioc version of \Logolas{} can be installed as follows
+
+<<install_logolas_bio, eval=FALSE>>=
+source("http://bioconductor.org/biocLite.R")
+biocLite("Logolas")
+@
+
+For installing the developmental version of \Logolas{} from Github, the user is required to have the \CRANpkg{devtools} package and then run the following command.
+
+<<install_logolas_github, eval=FALSE>>=
+devtools::install_github('kkdey/Logolas')
+@
+
+Load \Logolas{} into R
+
+<<load_logolas, cache=FALSE, eval=TRUE,warning=FALSE>>=
+library(Logolas)
+@
+
+\section{Data Type}
+
+\subsection{Data Format}
+
+\Logolas{} accepts two data formats as input
+
+- a vector of aligned character sequences (may be DNA, RNA or amino acid sequences), each of same length (see Example 1 below)
+
+- a positional frequency (weight) matrix, termed PFM (PWM), with the symbols to be plotted along the rows and the positions of aligned sequences, from which the matrix is generated, along the columns. (see Example 2)
+
+\subsection{String Data example}
+
+Consider aligned strings of characters
+
+<<seq, cache=FALSE, eval=TRUE,warning=FALSE>>=
+sequence <- c("CTATTGT", "CTCTTAT", "CTATTAA", "CTATTTA", "CTATTAT", "CTTGAAT",
+              "CTTAGAT", "CTATTAA", "CTATTTA", "CTATTAT", "CTTTTAT", "CTATAGT",
+              "CTATTTT", "CTTATAT", "CTATATT", "CTCATTT", "CTTATTT", "CAATAGT",
+              "CATTTGA", "CTCTTAT", "CTATTAT", "CTTTTAT", "CTATAAT", "CTTAGGT",
+              "CTATTGT", "CTCATGT", "CTATAGT", "CTCGTTA", "CTAGAAT", "CAATGGT")
+
+@
+
+The logo plots (both standard and Enrichment Depletion Logo) can be plotted using the
+\textbf{logomaker()} function.
+
+\begin{figure}[h]
+\begin{center}
+<<standard_logo, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+logomaker(sequence, type = "Logo")
+@
+\end{center}
+\end{figure}
+
+
+\begin{figure}[h]
+\begin{center}
+<<ED_logo, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+logomaker(sequence, type = "EDLogo")
+@
+\end{center}
+\end{figure}
+
+\newpage
+
+Instead of DNA.RNA sequqnce as above, one can also use amino acid character sequences.
+
+\begin{figure}[h]
+\begin{center}
+<<ED_logo_2, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+library(ggseqlogo)
+data(ggseqlogo_sample)
+sequence <- seqs_aa$AKT1
+logomaker(sequence, type = "EDLogo")
+@
+\end{center}
+\end{figure}
+
+
+\newpage
+\subsection{Positional Frequency (Weight) Matrix}
+
+We now see an example of positional weight matrix (PWM) as input to \textbf{logomaker()}.
+
+<<pfm, cache=FALSE, eval=TRUE,warning=FALSE>>=
+data(seqlogo_example)
+@
+
+We plot the logo plots for this PWM matrix.
+
+
+\begin{figure}[h]
+\begin{center}
+<<logo_3, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+logomaker(seqlogo_example, type = "Logo", return_heights = TRUE)
+@
+\end{center}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+<<edlogo_3, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+logomaker(seqlogo_example, type = "EDLogo", return_heights = TRUE)
+@
+\end{center}
+\end{figure}
+
+The \begin{verb} return_heights = TRUE \end{verb} outputs the information content at each position for the standard logo plot (type = "Logo") and the heights of the stacks along the positive and negative Y axis, along
+with the breakdown of the height due to different characters for the EDLogo plot (type = "EDLogo").
+
+\clearpage
+
+\section{Configuring Logos}
+
+\subsection{Coloring schemes}
+
+The \textbf{logomaker()} function provides three arguments to set the colors for the logos, a \begin{verb} color_type \end{verb} specifying the scheme of coloring used, \begin{verb} colors \end{verb} denoting the cohort of colors used and a \begin{verb} color_seed \end{verb} argument determining how sampling is done from this cohort.
+
+The \begin{verb} color_type \end{verb} argument can be of three types, \begin{verb} per_row \end{verb}, \begin{verb} per_column \end{verb} and \begin{verb} per_symbol \end{verb}. \textbf{colors} element is a cohort of colors (chosen suitably large) from which distinct colors are chosen based on distinct \begin{verb} color_type \end{verb}. The number of colors chosen is of same length as number of rows in table for \begin{verb} per-row \end{verb} (assigning a color to each string), of same length as number of columns in table for \begin{verb} per-column \end{verb} (assuming a color for each column), or a distinct color for a distinct symbol in \begin{verb} per-symbol \end{verb}. The length of \textbf{colors} should be as large as the number of colors to be chosen in each scenario.
+%
+The default \begin{verb} color_type \end{verb} is \begin{verb} per-row \end{verb} and default \textbf{colors} comprises of a large cohort of nearly 70 distinct colors from which colors are sampled using the \begin{verb} color_seed \end{verb} argument.
+
+<<col_prof, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+logomaker(seqlogo_example, color_type = "per_row",
+          colors = c("#7FC97F", "#BEAED4", "#FDC086", "#386CB0"),
+          type = "EDLogo")
+logomaker(seqlogo_example, type = "EDLogo", color_seed = 1500)
+@
+
+\subsection{Styles of symbols}
+
+Besides the default style with filled symbols for each character, one can also use characters with border styles. For the standard logo plot, this is accomplished by the \begin{verb} tofill \end{verb} control argument.
+
+<<fill, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+logomaker(seqlogo_example, type = "Logo",
+          logo_control = list(control = list(tofill= FALSE)))
+@
+
+For an EDLogo plot, the arguments \begin{verb} tofill_pos \end{verb} and \begin{verb} tofill_neg \end{verb} represent the coloring scheme for the positive and the negative axes in an EDLogo plot.
+
+<<fill2, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+logomaker(seqlogo_example, type = "EDLogo",
+          logo_control = list(control = list(tofill_pos = TRUE,
+                                             tofill_neg = FALSE)))
+@
+
+
+\subsection{Background Info}
+
+\Logolas{} allows the user to scale the data based on a specified background information. The background information can be incorporated in the argument \begin{verb} bg \end{verb}. The default value is NULL,
+in which case equal probability is assigned to each symbol. The user can however specify a
+vector (equal to in length to the number of symbols) which specifies the background probability
+for each symbol and assumes this background probability to be the same across the columns (sites),
+or a matrix, whose each cell specifies the background probability of the symbols for each position.
+
+First example with \begin{verb} bg \end{verb} as a vector.
+
+<<bg, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+bg <- c(0.05, 0.90, 0.03, 0.05)
+names(bg) <- c("A", "C", "G", "T")
+logomaker(seqlogo_example, bg=bg, type = "EDLogo")
+@
+
+Second example with \begin{verb} bg \end{verb} as a matrix.
+
+<<bg2, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+logomaker(seqlogo_example, bg=(seqlogo_example+1e-02), type = "EDLogo")
+@
+
+\section{Adaptive scaling of logos}
+
+\Logolas{} allows the user to perform adaptive scaling of the stack heights in a logo plot based on the
+number of aligned sequences, using the \begin{verb} use_dash \end{verb} argument. This scaling is performed
+only when the data input into the \textbf{logomaker()} function is a vector of sequences or a position frequency (PFM) matrix. We show an example with and without the \begin{verb} use_dash \end{verb} argument.
+
+<<dash, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=4, fig.height=4, out.width="4in", out.height="4in">>=
+sequence <- c("CTATTGT", "CTCTTAT", "CTATTAA", "CTATTTA", "CTATTAT", "CTTGAAT",
+              "CTTAGAT", "CTATTAA", "CTATTTA", "CTATTAT")
+logomaker(sequence, use_dash = FALSE, type = "Logo",
+          logo_control = list(pop_name = "use_dash = FALSE"))
+logomaker(sequence, type = "Logo", logo_control = list(pop_name = "use_dash = TRUE"))
+@
+
+The adaptive scaling is performed by the Dirichlet Adaptive Shrinkage method, the details of which can be viewed at our \textbf{dashr} package repository \url{https://github.com/kkdey/dashr}.
+
+\section{String symbols}
+
+\Logolas{} allows the user to plot symbols not just for characters as we saw in previous examples, but for any alphanumeric string. We present two examples - one for representing mutation signature and another for representing histone marks composition.
+
+Histone marks string symbols example
+
+<<histones, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=5, fig.height=4, out.width="5in", out.height="4in">>=
+data("histone_marks")
+logomaker(histone_marks$mat, bg=histone_marks$bgmat, type = "EDLogo")
+@
+
+Mutation signature string and character mix example.
+
+<<mutsig2, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=5, fig.height=4, out.width="5in", out.height="4in">>=
+data("mutation_sig")
+logomaker(mutation_sig, type = "Logo", color_seed = 3000)
+@
+
+The user may want to have distinct colors for distinct symbols. This is where we use the \textit{persymbol}
+option for  \begin{verb} color_type \end{verb}.
+
+<<mutsig3, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=5, fig.height=4, out.width="5in", out.height="4in">>=
+logomaker(mutation_sig, type = "Logo", color_type = "per_symbol",  color_seed = 2300)
+@
+
+The corresponding EDLogo
+
+<<mutsig4, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=5, fig.height=4, out.width="5in", out.height="4in">>=
+logomaker(mutation_sig, type = "EDLogo", color_type = "per_symbol",  color_seed = 2300)
+@
+
+
+\section{Extras}
+
+\subsection{Consensus Sequence}
+
+\Logolas{} provides a new nomenclature to geneerate consensus sequence from a positional frequency (weight) matrix or from a vector of aligned sequences. This is performed by the \begin{verb} GetConsensusSeq() \end{verb} function.
+
+<<consensus_seq, cache=FALSE, eval=TRUE,warning=FALSE>>=
+sequence <- c("CTATTGT", "CTCTTAT", "CTATTAA", "CTATTTA", "CTATTAT", "CTTGAAT",
+              "CTTAGAT", "CTATTAA", "CTATTTA", "CTATTAT")
+GetConsensusSeq(sequence)
+@
+
+In the sequence, a position represented by (Ag) would mean enrichment in A and depletion in G at that position.
+One can input a PWM or PFM matrix with A, C, G and T as row names in the \begin{verb} GetConsensusSeq() \end{verb} function as well.
+
+\subsection{Multiple panels plots}
+
+\Logolas{} plots can be plotted in multiple panels, as depicted below.
+
+<<mult_panels, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=6, fig.height=4, out.width="6in", out.height="4in">>=
+sequence <- c("CTATTGT", "CTCTTAT", "CTATTAA", "CTATTTA", "CTATTAT", "CTTGAAT",
+              "CTTAGAT", "CTATTAA", "CTATTTA", "CTATTAT")
+Logolas::get_viewport_logo(1, 2, heights_1 = 20) ## first arg: num of rows in panel, second arg: num of columns
+library(grid)
+seekViewport(paste0("plotlogo", 1))
+logomaker(sequence, type = "Logo", logo_control = list(newpage = FALSE))
+
+seekViewport(paste0("plotlogo", 2))
+logomaker(sequence, type = "EDLogo", logo_control = list(newpage = FALSE))
+
+@
+
+In the same way, ggplot2 graphics can also be combined with \Logolas{} plots.
+
+\subsection {PSSM logos}
+
+While \textbf{logomaker} takes a PFM, PWM or a set of aligned sequences as input, sometimes, some position specific scores are only available to the user. In this case, one can use the \begin{verb} logo_pssm() \end{verb}
+in \Logolas{} to plot the scoring matrix.
+
+<<pssm, cache=FALSE, eval=TRUE, warning=FALSE, fig.show="asis", fig.align = "left",dpi=144, fig.width=5, fig.height=4, out.width="5in", out.height="4in">>=
+data("pssm")
+logo_pssm(pssm, control = list(round_off = 0))
+@
+
+The \begin{verb} round_off \end{verb} comtrol argument specifies the number of points after decimal allowed in the axes of the plot.
+
+
+\section{Acknowledgements}
+
+The authors would like to acknowledge Oliver Bembom, the author of `seqLogo` for acting as an inspiration and providing the foundation on which this package is created. We also thank Peter Carbonetto, Edward Wallace and John Blischak for helpful feedback and discussions.
+
+\section{Session Info}
+
+<<session_info, eval=TRUE>>=
+sessionInfo()
+@ %def
+
+\begin{thebibliography}{1}
+
+\bibitem{Bembom2016}
+Bembom O (2016).
+\newblock seqLogo: Sequence logos for DNA sequence alignments.
+\newblock R package version 1.40.0.
+
+\bibitem{Wagih2014}
+Omar Wagih (2014).
+\newblock RWebLogo: plotting custom sequence logos.
+\newblock R package version 1.0.3. https://CRAN.R-project.org/package=RWebLogo
+
+\bibitem{Ou2015}
+Jianhong Ou and Lihua Julie Zhu  (2015).
+\newblock  motifStack: Plot stacked logos for single or multiple DNA, RNA and amino acid sequence.
+\newblock  R package version 1.14.0.
+
+\bibitem{Shiraishi2015}
+Shiraishi Y, Tremmel G, Miyano S, Stephens M (2015)
+\newblock A Simple Model-Based Approach to Inferring and Visualizing Cancer Mutation Signatures.
+\newblock PLoS Genet 11(12): e1005657. doi: 10.1371/journal.pgen.1005657
+
+\bibitem{Koch2007}
+Koch CM, Andrews RM, Flicek P, et al (2007).
+\newblock The landscape of histone modifications across $1 \%$ of the human genome in five human cell lines.
+\newblock Genome Research. 2007;17(6):691-707. doi:10.1101/gr.5704207.
+
+\end{thebibliography}
+
+\end{document}

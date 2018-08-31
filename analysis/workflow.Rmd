@@ -88,15 +88,15 @@ logomaker(sequence, type = "EDLogo")
 We now see an example of positional weight matrix (PWM) as input to **logomaker()**.
 
 ```{r}
-p <- get(load(system.file("extdata", "seqlogo_example.Rdata", package = "Logolas")))
-p
+data("seqlogo_example")
+seqlogo_example
 ```
 
 We plot the logo plots for this PWM matrix.
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-logomaker(p, type = "Logo", return_heights = TRUE)
-logomaker(p, type = "EDLogo", return_heights = TRUE)
+logomaker(seqlogo_example, type = "Logo", return_heights = TRUE)
+logomaker(seqlogo_example, type = "EDLogo", return_heights = TRUE)
 ```
 
 The `r return_heights = TRUE ` outputs the information content at each position for the standard logo plot (type = "Logo") and the heights of the stacks along the positive and negative Y axis, along
@@ -114,10 +114,10 @@ The default **color_type** is `per-row` and default **colors** comprises of a la
 
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-logomaker(p, color_type = "per_row",
+logomaker(seqlogo_example, color_type = "per_row",
           colors = c("#7FC97F", "#BEAED4", "#FDC086", "#386CB0"),
           type = "EDLogo")
-logomaker(p, type = "EDLogo", color_seed = 1500)
+logomaker(seqlogo_example, type = "EDLogo", color_seed = 1500)
 ```
 
 ### Styles of symbols
@@ -125,14 +125,14 @@ logomaker(p, type = "EDLogo", color_seed = 1500)
 Besides the default style with filled symbols for each character, one can also use characters with border styles. For the standard logo plot, this is accomplished by the `tofill` control argument.
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-logomaker(p, type = "Logo",
+logomaker(seqlogo_example, type = "Logo",
           logo_control = list(control = list(tofill= FALSE)), color_seed = 4000)
 ```
 
 For an EDLogo plot, the arguments `tofill_pos` and `tofill_neg` represent the coloring scheme for the positive and the negative axes in an EDLogo plot.
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-logomaker(p, type = "EDLogo",
+logomaker(seqlogo_example, type = "EDLogo",
           logo_control = list(control = list(tofill_pos = TRUE,
                                              tofill_neg = FALSE)))
 ```
@@ -150,13 +150,13 @@ First example with `bg` as a vector.
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
 bg <- c(0.05, 0.90, 0.03, 0.05)
 names(bg) <- c("A", "C", "G", "T")
-logomaker(p, bg=bg, type = "EDLogo")
+logomaker(seqlogo_example, bg=bg, type = "EDLogo")
 ```
 
 Second example with `bg` as a matrix.
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-logomaker(p, bg=(p+1e-02), type = "EDLogo")
+logomaker(seqlogo_example, bg=(seqlogo_example+1e-02), type = "EDLogo")
 ```
 
 ### Adaptive scaling of logos (dash)
@@ -182,28 +182,28 @@ The adaptive scaling is performed by the Dirichlet Adaptive Shrinkage method, th
 Histone marks string symbols example
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-histones <- get(load(system.file("extdata", "histone_marks.Rdata", package = "Logolas")))
-logomaker(histones$mat, bg=histones$bgmat, type = "EDLogo")
+data("histone_marks")
+logomaker(histone_marks$mat, bg=histone_marks$bgmat, type = "EDLogo")
 ```
 
 Mutation signature string and character mix example.
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-mut <- get(load(system.file("extdata", "mutation_sig.Rdata", package = "Logolas")))
-logomaker(mut, type = "Logo", color_seed = 3000)
+data("mutation_sig")
+logomaker(mutation_sig, type = "Logo", color_seed = 3000)
 ```
 
 The user may want to have distinct colors for distinct symbols. This is where we use the `per_symbol`
 option for  **color_type**.
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-logomaker(mut, type = "Logo", color_type = "per_symbol",  color_seed = 2300)
+logomaker(mutation_sig, type = "Logo", color_type = "per_symbol",  color_seed = 2300)
 ```
 
 The corresponding EDLogo
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-logomaker(mut, type = "EDLogo", color_type = "per_symbol",  color_seed = 2300)
+logomaker(mutation_sig, type = "EDLogo", color_type = "per_symbol",  color_seed = 2300)
 ```
 
 
@@ -229,7 +229,7 @@ One can input a PWM or PFM matrix with A, C, G and T as row names in the **GetCo
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
 sequence <- c("CTATTGT", "CTCTTAT", "CTATTAA", "CTATTTA", "CTATTAT", "CTTGAAT",
               "CTTAGAT", "CTATTAA", "CTATTTA", "CTATTAT")
-Logolas::get_viewport_logo(1, 2, heights_1 = 20)
+Logolas::get_viewport_logo(1, 2, heights.val = 20)
 library(grid)
 seekViewport(paste0("plotlogo", 1))
 logomaker(sequence, type = "Logo", logo_control = list(newpage = FALSE))
@@ -245,7 +245,7 @@ In the same way, ggplot2 graphics can also be combined with **Logolas** plots.
 While **logomaker()** takes a PFM, PWM or a set of aligned sequences as input, sometimes, some position specific scores are only available to the user. In this case, one can use the **logo_pssm()** in **Logolas** to plot the scoring matrix.
 
 ```{r message = FALSE, warning=FALSE, fig.height=5, fig.width= 6, fig.align='center'}
-pssm <- get(load(system.file("extdata", "pssm.Rdata", package = "Logolas")))
+data(pssm)
 logo_pssm(pssm, control = list(round_off = 0))
 ```
 
@@ -266,6 +266,8 @@ sessionInfo()
 **Thank you for using Logolas !**  
 
 If you have any questions, you can either open an issue in our [Github page](https://github.com/kkdey/Logolas) or write to Kushal K Dey (kkdey@uchicago.edu). Also please feel free to contribute to the package. You can contribute by submitting a pull request or by communicating with the said person.
+
+- [Precision log scoring function](preclog_check.html)
 
 
 

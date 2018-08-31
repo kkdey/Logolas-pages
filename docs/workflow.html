@@ -159,43 +159,43 @@ logomaker(sequence, type = &quot;EDLogo&quot;)</code></pre>
 <div id="positional-frequency-weight-matrix" class="section level3">
 <h3>Positional Frequency (Weight) Matrix</h3>
 <p>We now see an example of positional weight matrix (PWM) as input to <strong>logomaker()</strong>.</p>
-<pre class="r"><code>p &lt;- get(load(system.file(&quot;extdata&quot;, &quot;seqlogo_example.Rdata&quot;, package = &quot;Logolas&quot;)))
-p</code></pre>
+<pre class="r"><code>data(&quot;seqlogo_example&quot;)
+seqlogo_example</code></pre>
 <pre><code>##     1   2   3   4   5   6   7   8
 ## A 0.0 0.0 0.0 0.3 0.2 0.0 0.0 0.0
 ## C 0.8 0.2 0.8 0.3 0.4 0.2 0.8 0.2
 ## G 0.2 0.8 0.2 0.4 0.3 0.8 0.2 0.8
 ## T 0.0 0.0 0.0 0.0 0.1 0.0 0.0 0.0</code></pre>
 <p>We plot the logo plots for this PWM matrix.</p>
-<pre class="r"><code>logomaker(p, type = &quot;Logo&quot;, return_heights = TRUE)</code></pre>
+<pre class="r"><code>logomaker(seqlogo_example, type = &quot;Logo&quot;, return_heights = TRUE)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-4-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>## [1] 1.2751513 1.2751513 1.2751513 0.4277256 0.1534290 1.2751513 1.2751513
-## [8] 1.2751513</code></pre>
-<pre class="r"><code>logomaker(p, type = &quot;EDLogo&quot;, return_heights = TRUE)</code></pre>
+<pre><code>## [1] 0.64527194 0.64527194 0.64527194 0.18985354 0.08563644 0.64527194
+## [7] 0.64527194 0.64527194</code></pre>
+<pre class="r"><code>logomaker(seqlogo_example, type = &quot;EDLogo&quot;, return_heights = TRUE)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-4-2.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>## $pos_ic
 ##         1         2         3         4         5         6         7 
-## 6.3105144 6.3105144 6.3105144 0.4031197 0.9645379 6.3105144 6.3105144 
+## 6.3398500 6.3398500 6.3398500 0.4033557 0.9652346 6.3398500 6.3398500 
 ##         8 
-## 6.3105144 
+## 6.3398500 
 ## 
 ## $neg_ic
 ##        1        2        3        4        5        6        7        8 
-## 4.364040 4.364040 4.364040 4.925458 1.493007 4.364040 4.364040 4.364040 
+## 4.392317 4.392317 4.392317 4.954196 1.494765 4.392317 4.392317 4.392317 
 ## 
 ## $table_mat_pos_norm
 ##           1         2         3 4         5         6         7         8
 ## A 0.0000000 0.0000000 0.0000000 0 0.0000000 0.0000000 0.0000000 0.0000000
-## C 0.6542247 0.3457753 0.6542247 0 0.7089704 0.3457753 0.6542247 0.3457753
-## G 0.3457753 0.6542247 0.3457753 1 0.2910296 0.6542247 0.3457753 0.6542247
+## C 0.6535945 0.3464055 0.6535945 0 0.7089418 0.3464055 0.6535945 0.3464055
+## G 0.3464055 0.6535945 0.3464055 1 0.2910582 0.6535945 0.3464055 0.6535945
 ## T 0.0000000 0.0000000 0.0000000 0 0.0000000 0.0000000 0.0000000 0.0000000
 ## 
 ## $table_mat_neg_norm
-##     1   2   3 4        5   6   7   8
-## A 0.5 0.5 0.5 0 0.188016 0.5 0.5 0.5
-## C 0.0 0.0 0.0 0 0.000000 0.0 0.0 0.0
-## G 0.0 0.0 0.0 0 0.000000 0.0 0.0 0.0
-## T 0.5 0.5 0.5 1 0.811984 0.5 0.5 0.5</code></pre>
+##     1   2   3 4         5   6   7   8
+## A 0.5 0.5 0.5 0 0.1879489 0.5 0.5 0.5
+## C 0.0 0.0 0.0 0 0.0000000 0.0 0.0 0.0
+## G 0.0 0.0 0.0 0 0.0000000 0.0 0.0 0.0
+## T 0.5 0.5 0.5 1 0.8120511 0.5 0.5 0.5</code></pre>
 <p>The outputs the information content at each position for the standard logo plot (type = “Logo”) and the heights of the stacks along the positive and negative Y axis, along with the breakdown of the height due to different characters for the EDLogo plot (type = “EDLogo”).</p>
 </div>
 </div>
@@ -205,21 +205,21 @@ p</code></pre>
 <h3>Coloring schemes</h3>
 <p>The <strong>logomaker()</strong> function provides three arguments to set the colors for the logos, a <strong>color_type</strong> specifying the scheme of coloring used, <strong>colors</strong> denoting the cohort of colors used and a <strong>color_seed</strong> argument determining how sampling is done from this cohort.</p>
 <p>The <strong>color_type</strong> argument can be of three types, <code>per_row</code>, <code>per_column</code> and <code>per_symbol</code>. <code>colors</code> element is a cohort of colors (chosen suitably large) from which distinct colors are chosen based on distinct <code>color_type</code>. The number of colors chosen is of same length as number of rows in table for <code>per_row</code> (assigning a color to each string), of same length as number of columns in table for <code>per_column</code> (assuming a color for each column), or a distinct color for a distinct symbol in <code>per_symbol</code>. The length of <strong>colors</strong> should be as large as the number of colors to be chosen in each scenario. % The default <strong>color_type</strong> is <code>per-row</code> and default <strong>colors</strong> comprises of a large cohort of nearly 70 distinct colors from which colors are sampled using the <strong>color_seed</strong> argument.</p>
-<pre class="r"><code>logomaker(p, color_type = &quot;per_row&quot;,
+<pre class="r"><code>logomaker(seqlogo_example, color_type = &quot;per_row&quot;,
           colors = c(&quot;#7FC97F&quot;, &quot;#BEAED4&quot;, &quot;#FDC086&quot;, &quot;#386CB0&quot;),
           type = &quot;EDLogo&quot;)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>logomaker(p, type = &quot;EDLogo&quot;, color_seed = 1500)</code></pre>
+<pre class="r"><code>logomaker(seqlogo_example, type = &quot;EDLogo&quot;, color_seed = 1500)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-5-2.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="styles-of-symbols" class="section level3">
 <h3>Styles of symbols</h3>
 <p>Besides the default style with filled symbols for each character, one can also use characters with border styles. For the standard logo plot, this is accomplished by the <code>tofill</code> control argument.</p>
-<pre class="r"><code>logomaker(p, type = &quot;Logo&quot;,
+<pre class="r"><code>logomaker(seqlogo_example, type = &quot;Logo&quot;,
           logo_control = list(control = list(tofill= FALSE)), color_seed = 4000)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-6-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>For an EDLogo plot, the arguments <code>tofill_pos</code> and <code>tofill_neg</code> represent the coloring scheme for the positive and the negative axes in an EDLogo plot.</p>
-<pre class="r"><code>logomaker(p, type = &quot;EDLogo&quot;,
+<pre class="r"><code>logomaker(seqlogo_example, type = &quot;EDLogo&quot;,
           logo_control = list(control = list(tofill_pos = TRUE,
                                              tofill_neg = FALSE)))</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-7-1.png" width="576" style="display: block; margin: auto;" /></p>
@@ -230,10 +230,10 @@ p</code></pre>
 <p>First example with <code>bg</code> as a vector.</p>
 <pre class="r"><code>bg &lt;- c(0.05, 0.90, 0.03, 0.05)
 names(bg) &lt;- c(&quot;A&quot;, &quot;C&quot;, &quot;G&quot;, &quot;T&quot;)
-logomaker(p, bg=bg, type = &quot;EDLogo&quot;)</code></pre>
+logomaker(seqlogo_example, bg=bg, type = &quot;EDLogo&quot;)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Second example with <code>bg</code> as a matrix.</p>
-<pre class="r"><code>logomaker(p, bg=(p+1e-02), type = &quot;EDLogo&quot;)</code></pre>
+<pre class="r"><code>logomaker(seqlogo_example, bg=(seqlogo_example+1e-02), type = &quot;EDLogo&quot;)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-9-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="adaptive-scaling-of-logos-dash" class="section level3">
@@ -250,18 +250,18 @@ logomaker(sequence, use_dash = FALSE, type = &quot;Logo&quot;,
 
 <p><strong>Logolas</strong> allows the user to plot symbols not just for characters as we saw in previous examples, but for any alphanumeric string. We present two examples - one for representing mutation signature and another for representing histone marks composition.</p>
 <p>Histone marks string symbols example</p>
-<pre class="r"><code>histones &lt;- get(load(system.file(&quot;extdata&quot;, &quot;histone_marks.Rdata&quot;, package = &quot;Logolas&quot;)))
-logomaker(histones$mat, bg=histones$bgmat, type = &quot;EDLogo&quot;)</code></pre>
+<pre class="r"><code>data(&quot;histone_marks&quot;)
+logomaker(histone_marks$mat, bg=histone_marks$bgmat, type = &quot;EDLogo&quot;)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Mutation signature string and character mix example.</p>
-<pre class="r"><code>mut &lt;- get(load(system.file(&quot;extdata&quot;, &quot;mutation_sig.Rdata&quot;, package = &quot;Logolas&quot;)))
-logomaker(mut, type = &quot;Logo&quot;, color_seed = 3000)</code></pre>
+<pre class="r"><code>data(&quot;mutation_sig&quot;)
+logomaker(mutation_sig, type = &quot;Logo&quot;, color_seed = 3000)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The user may want to have distinct colors for distinct symbols. This is where we use the <code>per_symbol</code> option for <strong>color_type</strong>.</p>
-<pre class="r"><code>logomaker(mut, type = &quot;Logo&quot;, color_type = &quot;per_symbol&quot;,  color_seed = 2300)</code></pre>
+<pre class="r"><code>logomaker(mutation_sig, type = &quot;Logo&quot;, color_type = &quot;per_symbol&quot;,  color_seed = 2300)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The corresponding EDLogo</p>
-<pre class="r"><code>logomaker(mut, type = &quot;EDLogo&quot;, color_type = &quot;per_symbol&quot;,  color_seed = 2300)</code></pre>
+<pre class="r"><code>logomaker(mutation_sig, type = &quot;EDLogo&quot;, color_type = &quot;per_symbol&quot;,  color_seed = 2300)</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
@@ -281,7 +281,7 @@ GetConsensusSeq(sequence)</code></pre>
 <p><strong>Logolas</strong> plots can be plotted in multiple panels, as depicted below.</p>
 <pre class="r"><code>sequence &lt;- c(&quot;CTATTGT&quot;, &quot;CTCTTAT&quot;, &quot;CTATTAA&quot;, &quot;CTATTTA&quot;, &quot;CTATTAT&quot;, &quot;CTTGAAT&quot;,
               &quot;CTTAGAT&quot;, &quot;CTATTAA&quot;, &quot;CTATTTA&quot;, &quot;CTATTAT&quot;)
-Logolas::get_viewport_logo(1, 2, heights_1 = 20)
+Logolas::get_viewport_logo(1, 2, heights.val = 20)
 library(grid)
 seekViewport(paste0(&quot;plotlogo&quot;, 1))
 logomaker(sequence, type = &quot;Logo&quot;, logo_control = list(newpage = FALSE))
@@ -294,7 +294,7 @@ logomaker(sequence, type = &quot;EDLogo&quot;, logo_control = list(newpage = FAL
 <div id="pssm-logos" class="section level3">
 <h3>PSSM logos</h3>
 <p>While <strong>logomaker()</strong> takes a PFM, PWM or a set of aligned sequences as input, sometimes, some position specific scores are only available to the user. In this case, one can use the <strong>logo_pssm()</strong> in <strong>Logolas</strong> to plot the scoring matrix.</p>
-<pre class="r"><code>pssm &lt;- get(load(system.file(&quot;extdata&quot;, &quot;pssm.Rdata&quot;, package = &quot;Logolas&quot;)))
+<pre class="r"><code>data(pssm)
 logo_pssm(pssm, control = list(round_off = 0))</code></pre>
 <p><img src="workflow_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>round_off</code> comtrol argument specifies the number of points after decimal allowed in the axes of the plot.</p>
@@ -305,13 +305,13 @@ logo_pssm(pssm, control = list(round_off = 0))</code></pre>
 <p>The authors would like to acknowledge Oliver Bembom, the author of <code>seqLogo</code> for acting as an inspiration and providing the foundation on which this package is created. We also thank Peter Carbonetto, Edward Wallace and John Blischak for helpful feedback and discussions.</p>
 
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>## R version 3.4.2 (2017-09-28)
+<pre><code>## R version 3.5.0 (2018-04-23)
 ## Platform: x86_64-apple-darwin15.6.0 (64-bit)
 ## Running under: macOS Sierra 10.12.6
 ## 
 ## Matrix products: default
-## BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib
+## BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -321,24 +321,36 @@ logo_pssm(pssm, control = list(round_off = 0))</code></pre>
 ## [8] base     
 ## 
 ## other attached packages:
-## [1] ggseqlogo_0.1 Logolas_2.0.0
+## [1] ggseqlogo_0.1 Logolas_1.3.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.15         XVector_0.18.0       knitr_1.17          
-##  [4] magrittr_1.5         zlibbioc_1.24.0      IRanges_2.12.0      
-##  [7] BiocGenerics_0.24.0  munsell_0.4.3        gridBase_0.4-7      
-## [10] SQUAREM_2017.10-1    colorspace_1.3-2     rlang_0.1.6         
-## [13] stringr_1.2.0        plyr_1.8.4           tools_3.4.2         
-## [16] parallel_3.4.2       gtable_0.2.0         htmltools_0.3.6     
-## [19] yaml_2.1.14          lazyeval_0.2.1       rprojroot_1.2       
-## [22] digest_0.6.12        tibble_1.3.4         RColorBrewer_1.1-2  
-## [25] ggplot2_2.2.1        S4Vectors_0.16.0     evaluate_0.10.1     
-## [28] LaplacesDemon_16.1.0 rmarkdown_1.8        stringi_1.1.6       
-## [31] compiler_3.4.2       Biostrings_2.46.0    scales_0.5.0        
-## [34] backports_1.1.0      stats4_3.4.2</code></pre>
+##  [1] tidyselect_0.2.4     purrr_0.2.5          lattice_0.20-35     
+##  [4] colorspace_1.3-2     htmltools_0.3.6      stats4_3.5.0        
+##  [7] yaml_2.2.0           gmp_0.5-13.1         rlang_0.2.2         
+## [10] R.oo_1.22.0          pillar_1.2.2         glue_1.3.0          
+## [13] Rmpfr_0.7-0          R.utils_2.6.0        RColorBrewer_1.1-2  
+## [16] BiocGenerics_0.26.0  bit64_0.9-7          bindrcpp_0.2.2      
+## [19] scs_1.1-1            plyr_1.8.4           bindr_0.1.1         
+## [22] zlibbioc_1.26.0      stringr_1.3.1        Biostrings_2.48.0   
+## [25] munsell_0.5.0        gtable_0.2.0         R.methodsS3_1.7.1   
+## [28] LaplacesDemon_16.1.1 evaluate_0.10.1      knitr_1.20          
+## [31] IRanges_2.14.8       parallel_3.5.0       Rcpp_0.12.18        
+## [34] scales_1.0.0         backports_1.1.2      S4Vectors_0.18.1    
+## [37] XVector_0.20.0       bit_1.1-14           ggplot2_3.0.0       
+## [40] digest_0.6.15        stringi_1.2.4        dplyr_0.7.6         
+## [43] rprojroot_1.3-2      ade4_1.7-11          ECOSolveR_0.4       
+## [46] tools_3.5.0          magrittr_1.5         lazyeval_0.2.1      
+## [49] tibble_1.4.2         ape_5.1              seqinr_3.4-5        
+## [52] pkgconfig_2.0.2      MASS_7.3-49          Matrix_1.2-14       
+## [55] gridBase_0.4-7       SQUAREM_2017.10-1    assertthat_0.2.0    
+## [58] rmarkdown_1.9        R6_2.2.2             nlme_3.1-137        
+## [61] CVXR_0.99            compiler_3.5.0</code></pre>
 <hr />
 <p><strong>Thank you for using Logolas !</strong></p>
 <p>If you have any questions, you can either open an issue in our <a href="https://github.com/kkdey/Logolas">Github page</a> or write to Kushal K Dey (<a href="mailto:kkdey@uchicago.edu">kkdey@uchicago.edu</a>). Also please feel free to contribute to the package. You can contribute by submitting a pull request or by communicating with the said person.</p>
+<ul>
+<li><a href="preclog_check.html">Precision log scoring function</a></li>
+</ul>
 </div>
 
 <hr>

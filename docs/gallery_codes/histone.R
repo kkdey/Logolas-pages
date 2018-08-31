@@ -1,2 +1,2 @@
-histones <- get(load(system.file("extdata", "histone_marks.Rdata", package = "Logolas")))
-logomaker(histones$mat, bg=histones$bgmat, type = "EDLogo")
+data(histone_marks)
+logomaker(histone_marks$mat, bg=histone_marks$bgmat, type = "EDLogo")

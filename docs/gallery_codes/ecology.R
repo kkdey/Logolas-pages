@@ -1,5 +1,5 @@
 library(Logolas)
-mat <- get((load(system.file("extdata", "himalayan_fauna_3_clusters.Rdata", package = "Logolas"))))
-logomaker(himalayan_fauna_3_clusters, type = "Logo", color_type = "per_column",
+data(himalayan_fauna)
+logomaker(himalayan_fauna, type = "Logo", color_type = "per_column",
           colors = sample(RColorBrewer::brewer.pal(10,name = "Spectral"),
-                          dim(himalayan_fauna_3_clusters)[2], replace=TRUE))
+                          dim(himalayan_fauna)[2], replace=TRUE))

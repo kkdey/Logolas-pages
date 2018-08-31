@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Kushal K Dey" />
+
+
+<title>Preclog check!</title>
+
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<link rel="stylesheet" href="cosmo.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
+    <link href="../docs/cosmo.css" rel="stylesheet">
+    <link href="../docs/cosmo.min.css" rel="stylesheet">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../docs/bootstrap/js/bootstrap.min.js"></script>
+
+<body>
+
+<div class = "nav" align = "middle">
+<div class= "p1"></div>
+<p>
+  <a class="btn btn-large btn btn-primary" type="button" href = "Logolas_home.html">HOME</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "Gallery.html">GALLERY</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "workflow.html">VIGNETTES</a>
+   &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas">SOFTWARE</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "license.html">LICENSE</a>
+ </p>
+</div>
+<!-- <div class="nav">
+  <a href="index.html">Home page</a> &nbsp &nbsp
+  <a href="musings.html">Musings</a> &nbsp &nbsp
+  <a href="town.html">My town</a> &nbsp &nbsp
+  <a href="links.html">Links</a>
+</div> -->
+
+<!-- Main content -->
+</body>
+</html>
+
+
+<h1 class="title toc-ignore">Preclog check!</h1>
+<h4 class="author"><em>Kushal K Dey</em></h4>
+<h4 class="date"><em>8/31/2018</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#tfbs-example">TFBS example</a><ul>
+<li><a href="#edlogo--log">EDlogo -log</a></li>
+<li><a href="#edlogo--preclog">EDlogo -preclog</a></li>
+</ul></li>
+<li><a href="#mutation-signature---sig-12-yuichi">Mutation Signature - Sig 12 Yuichi</a><ul>
+<li><a href="#color-scheme">Color Scheme</a></li>
+<li><a href="#edlogo---log">EDLogo - log</a></li>
+<li><a href="#edlogo---preclog">EDLogo - preclog</a></li>
+</ul></li>
+<li><a href="#n-glycosylation-sites-example">N-Glycosylation sites example</a><ul>
+<li><a href="#edlogo--log-1">EDlogo -log</a></li>
+<li><a href="#edlogo--log-2">EDlogo -log</a></li>
+</ul></li>
+</ul>
+</div>
+
+<pre class="r"><code>library(Logolas)
+library(CVXR)</code></pre>
+<div id="tfbs-example" class="section level2">
+<h2>TFBS example</h2>
+<pre class="r"><code>data(&quot;EBF1_disc1&quot;)</code></pre>
+<div id="edlogo--log" class="section level3">
+<h3>EDlogo -log</h3>
+<pre class="r"><code>Logolas::logomaker(EBF1_disc1,
+                   type = &quot;EDLogo&quot;,
+                   color_type = &quot;per_row&quot;,
+                   colors = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;),
+                   logo_control = list(score = &quot;wKL&quot;,
+                                       y_fontsize=20,
+                                       control = list(quant = 0.5, gap_ylab=2.5,
+                                        epsilon = 0.01, round_off = 0,
+                                        posbins = 2, negbins = 3)))</code></pre>
+<p><img src="preclog_check_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="edlogo--preclog" class="section level3">
+<h3>EDlogo -preclog</h3>
+<pre class="r"><code>Logolas::logomaker(EBF1_disc1,
+                   type = &quot;EDLogo&quot;,
+                   color_type = &quot;per_row&quot;,
+                   colors = RColorBrewer::brewer.pal(4,name =&quot;Spectral&quot;),
+                   logo_control = list(score = &quot;preclog&quot;,
+                                       y_fontsize=20,
+                                       control = list(quant = 0.5, gap_ylab=2.5,
+                                        epsilon = 0.01, round_off = 0,
+                                        posbins = 2, negbins = 3)))</code></pre>
+<p><img src="preclog_check_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+</div>
+<div id="mutation-signature---sig-12-yuichi" class="section level2">
+<h2>Mutation Signature - Sig 12 Yuichi</h2>
+<pre class="r"><code>mat=read.table(paste(&#39;../data/Fig4_rawdata/sig_&#39;,12,&#39;.txt&#39;,sep = &#39;&#39;))
+mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
+rownames(mat1)=c(&#39;A&#39;,&#39;C&#39;,&#39;G&#39;,&#39;T&#39;)
+colnames(mat1) = c(&quot;-2&quot;, &quot;-1&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;)
+mat2=cbind(rep(NA,6),rep(NA,6),t(mat[1,]),rep(NA,6),rep(NA,6))
+colnames(mat2) = c(&quot;-2&quot;, &quot;-1&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;)
+rownames(mat2) = c(&quot;C&gt;A&quot;, &quot;C&gt;G&quot;, &quot;C&gt;T&quot;, &quot;T&gt;A&quot;, &quot;T&gt;C&quot;, &quot;T&gt;G&quot;)
+table = rbind(mat1, mat2)</code></pre>
+<div id="color-scheme" class="section level3">
+<h3>Color Scheme</h3>
+<pre class="r"><code>cols = RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category ==
+                                       &#39;qual&#39;,]
+col_vector = unlist(mapply(RColorBrewer::brewer.pal, cols$maxcolors, rownames(cols)))
+col_vector = col_vector[-c(4,5)]
+total_chars = c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;I&quot;, &quot;J&quot;, &quot;K&quot;, &quot;L&quot;, &quot;M&quot;, &quot;N&quot;, &quot;O&quot;,
+                &quot;P&quot;, &quot;Q&quot;, &quot;R&quot;, &quot;S&quot;, &quot;T&quot;, &quot;U&quot;, &quot;V&quot;, &quot;W&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;zero&quot;, &quot;one&quot;, &quot;two&quot;,
+                &quot;three&quot;, &quot;four&quot;, &quot;five&quot;, &quot;six&quot;, &quot;seven&quot;, &quot;eight&quot;, &quot;nine&quot;, &quot;dot&quot;, &quot;comma&quot;,
+                &quot;dash&quot;, &quot;colon&quot;, &quot;semicolon&quot;, &quot;leftarrow&quot;, &quot;rightarrow&quot;)
+
+set.seed(20)</code></pre>
+</div>
+<div id="edlogo---log" class="section level3">
+<h3>EDLogo - log</h3>
+<pre class="r"><code>Logolas::logomaker(table,
+                   type = &quot;EDLogo&quot;,
+                   color_type = &quot;per_symbol&quot;,
+                   color_seed = 2000,
+                   logo_control = list(score = &quot;log&quot;,
+                                       y_fontsize=10,
+                                       control= list(quant=0.5,
+                                                     gap_ylab = 2.5,
+                                                     round_off=0,
+                                                     posbins = 2,
+                                                     negbins = 3)))</code></pre>
+<p><img src="preclog_check_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="edlogo---preclog" class="section level3">
+<h3>EDLogo - preclog</h3>
+<pre class="r"><code>Logolas::logomaker(table,
+                   type = &quot;EDLogo&quot;,
+                   color_type = &quot;per_symbol&quot;,
+                   color_seed = 2000,
+                   logo_control = list(score = &quot;preclog&quot;,
+                                       y_fontsize=10,
+                                       control= list(quant=0.5,
+                                                     gap_ylab = 2.5,
+                                                     round_off=0,
+                                                     posbins = 2,
+                                                     negbins = 3)))</code></pre>
+<p><img src="preclog_check_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+</div>
+<div id="n-glycosylation-sites-example" class="section level2">
+<h2>N-Glycosylation sites example</h2>
+<pre class="r"><code>data(&quot;N_Glycosyl_sequences&quot;)
+sequences &lt;- N_Glycosyl_sequences
+bg &lt;- apply(sequences, 1, function(x) return(median(x)))
+bg &lt;- bg/sum(bg)</code></pre>
+<div id="edlogo--log-1" class="section level3">
+<h3>EDlogo -log</h3>
+<pre class="r"><code>out &lt;- Logolas::logomaker(sequences,
+                          type = &quot;EDLogo&quot;,
+                          color_type = &quot;per_row&quot;,
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = &quot;log&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                            gap_ylab = 2.5,
+                                                            round_off=0,
+                                                            posbins = 3,
+                                                            negbins = 3)))</code></pre>
+<pre><code>## frame width not provided, taken to be 1
+## frame width not provided, taken to be 1</code></pre>
+<p><img src="preclog_check_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="edlogo--log-2" class="section level3">
+<h3>EDlogo -log</h3>
+<pre class="r"><code>out &lt;- Logolas::logomaker(sequences,
+                          type = &quot;EDLogo&quot;,
+                          color_type = &quot;per_row&quot;,
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = &quot;preclog&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                    quant_strategy = &quot;center&quot;,
+                                                    gap_ylab = 2.5,
+                                                    round_off=0,
+                                                    posbins = 3,
+                                                    negbins = 3)))</code></pre>
+<pre><code>## frame width not provided, taken to be 1
+## frame width not provided, taken to be 1</code></pre>
+<p><img src="preclog_check_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+</div>
+
+<hr>
+<p>
+    This webpage has been developed using RStudio's <a href="http://rmarkdown.rstudio.com">R Markdown</a> and John D Blischak's <a href="https://github.com/jdblischak/workflowr">workflowr</a> package. 
+</p>
+<hr>
+
+<!-- To enable disqus, uncomment the section below and provide your disqus_shortname -->
+
+<!-- disqus
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rmarkdown'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+-->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

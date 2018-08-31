@@ -1,0 +1,160 @@
+---
+title: "Preclog check!"
+author: "Kushal K Dey"
+date: "8/31/2018"
+output: html_document
+---
+
+```{r warning=FALSE, message=FALSE}
+library(Logolas)
+library(CVXR)
+```
+
+## TFBS example 
+
+```{r}
+data("EBF1_disc1")
+```
+
+### EDlogo -log
+
+```{r warning=FALSE, message = FALSE}
+Logolas::logomaker(EBF1_disc1,
+                   type = "EDLogo",
+                   color_type = "per_row",
+                   colors = RColorBrewer::brewer.pal(4,name ="Spectral"),
+                   logo_control = list(score = "wKL",
+                                       y_fontsize=20,
+                                       control = list(quant = 0.5, gap_ylab=2.5,
+                                        epsilon = 0.01, round_off = 0,
+                                        posbins = 2, negbins = 3)))
+
+```
+
+### EDlogo -preclog
+
+```{r warning=FALSE, message=FALSE}
+Logolas::logomaker(EBF1_disc1,
+                   type = "EDLogo",
+                   color_type = "per_row",
+                   colors = RColorBrewer::brewer.pal(4,name ="Spectral"),
+                   logo_control = list(score = "preclog",
+                                       y_fontsize=20,
+                                       control = list(quant = 0.5, gap_ylab=2.5,
+                                        epsilon = 0.01, round_off = 0,
+                                        posbins = 2, negbins = 3)))
+
+```
+
+## Mutation Signature - Sig 12 Yuichi
+
+```{r}
+mat=read.table(paste('../data/Fig4_rawdata/sig_',12,'.txt',sep = ''))
+mat1=cbind(t(mat[2:3,1:4]),rep(NA,4),t(mat[4:5,1:4]))
+rownames(mat1)=c('A','C','G','T')
+colnames(mat1) = c("-2", "-1", "0", "1", "2")
+mat2=cbind(rep(NA,6),rep(NA,6),t(mat[1,]),rep(NA,6),rep(NA,6))
+colnames(mat2) = c("-2", "-1", "0", "1", "2")
+rownames(mat2) = c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G")
+table = rbind(mat1, mat2)
+
+```
+
+### Color Scheme
+
+```{r}
+cols = RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category ==
+                                       'qual',]
+col_vector = unlist(mapply(RColorBrewer::brewer.pal, cols$maxcolors, rownames(cols)))
+col_vector = col_vector[-c(4,5)]
+total_chars = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+                "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "zero", "one", "two",
+                "three", "four", "five", "six", "seven", "eight", "nine", "dot", "comma",
+                "dash", "colon", "semicolon", "leftarrow", "rightarrow")
+
+set.seed(20)
+
+```
+
+### EDLogo - log
+
+```{r warning=FALSE, message = FALSE}
+Logolas::logomaker(table,
+                   type = "EDLogo",
+                   color_type = "per_symbol",
+                   color_seed = 2000,
+                   logo_control = list(score = "log",
+                                       y_fontsize=10,
+                                       control= list(quant=0.5,
+                                                     gap_ylab = 2.5,
+                                                     round_off=0,
+                                                     posbins = 2,
+                                                     negbins = 3)))
+
+```
+
+
+### EDLogo - preclog
+
+```{r warning=FALSE, message = FALSE}
+Logolas::logomaker(table,
+                   type = "EDLogo",
+                   color_type = "per_symbol",
+                   color_seed = 2000,
+                   logo_control = list(score = "preclog",
+                                       y_fontsize=10,
+                                       control= list(quant=0.5,
+                                                     gap_ylab = 2.5,
+                                                     round_off=0,
+                                                     posbins = 2,
+                                                     negbins = 3)))
+
+```
+
+## N-Glycosylation sites example 
+
+```{r}
+data("N_Glycosyl_sequences")
+sequences <- N_Glycosyl_sequences
+bg <- apply(sequences, 1, function(x) return(median(x)))
+bg <- bg/sum(bg)
+```
+
+### EDlogo -log
+
+```{r}
+out <- Logolas::logomaker(sequences,
+                          type = "EDLogo",
+                          color_type = "per_row",
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = "log",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                            gap_ylab = 2.5,
+                                                            round_off=0,
+                                                            posbins = 3,
+                                                            negbins = 3)))
+
+```
+
+### EDlogo -log
+
+```{r}
+out <- Logolas::logomaker(sequences,
+                          type = "EDLogo",
+                          color_type = "per_row",
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = "preclog",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                    quant_strategy = "center",
+                                                    gap_ylab = 2.5,
+                                                    round_off=0,
+                                                    posbins = 3,
+                                                    negbins = 3)))
+
+```
