@@ -14,6 +14,7 @@ library(CVXR)
 
 ```{r}
 data("EBF1_disc1")
+EBF1_disc1
 ```
 
 ### EDlogo -log
@@ -57,7 +58,7 @@ mat2=cbind(rep(NA,6),rep(NA,6),t(mat[1,]),rep(NA,6),rep(NA,6))
 colnames(mat2) = c("-2", "-1", "0", "1", "2")
 rownames(mat2) = c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G")
 table = rbind(mat1, mat2)
-
+table
 ```
 
 ### Color Scheme
@@ -118,6 +119,7 @@ data("N_Glycosyl_sequences")
 sequences <- N_Glycosyl_sequences
 bg <- apply(sequences, 1, function(x) return(median(x)))
 bg <- bg/sum(bg)
+sequences
 ```
 
 ### EDlogo -log
