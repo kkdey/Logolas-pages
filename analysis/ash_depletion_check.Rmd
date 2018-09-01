@@ -1,0 +1,170 @@
+---
+title: "ash depletions check - N glycosylation protein example"
+author: "Kushal K Dey"
+date: "9/1/2018"
+output: html_document
+---
+
+We test the `ash-depletion` model in Logolas. 
+
+```{r warning=FALSE, message=FALSE}
+library(Logolas)
+```
+
+## N-Glycosylation sites example 
+
+```{r warning=FALSE, message=FALSE}
+data("N_Glycosyl_sequences")
+sequences <- N_Glycosyl_sequences
+bg <- apply(sequences, 1, function(x) return(median(x)))
+bg <- bg/sum(bg)
+sequences
+```
+
+## EDlogo - log
+
+```{r warning=FALSE, message=FALSE}
+out <- Logolas::logomaker(sequences,
+                          type = "EDLogo",
+                          color_type = "per_row",
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = "log",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                            gap_ylab = 2.5,
+                                                            round_off=0,
+                                                            posbins = 3,
+                                                            negbins = 3)))
+
+```
+
+## EDlogo - ash depletion
+
+```{r warning=FALSE, message=FALSE}
+out <- Logolas::logomaker(sequences,
+                          type = "EDLogo",
+                          color_type = "per_row",
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = "ash",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                            gap_ylab = 2.5,
+                                                            round_off=0,
+                                                            posbins = 3,
+                                                            negbins = 3)))
+
+```
+
+## EDLogo - ash depletion on normalized PWM
+
+```{r}
+table <- apply(sequences, 2, function(x) return((x+1e-10)/sum((x+1e-10))))
+```
+
+### nP = 10, nQ = 10^5
+
+```{r warning=FALSE, message=FALSE}
+out <- Logolas::logomaker(table,
+                     type = "EDLogo",
+                     color_type = "per_row",
+                     return_heights = TRUE,
+                     bg = bg,
+                     logo_control = list(score = "ash",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10, nQ=10^5),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))
+
+```
+
+### nP = 10^4, nQ = 10
+
+```{r warning=FALSE, message=FALSE}
+out <- Logolas::logomaker(table,
+                     type = "EDLogo",
+                     color_type = "per_row",
+                     return_heights = TRUE,
+                     bg = bg,
+                     logo_control = list(score = "ash",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10^4, nQ=10),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))
+
+```
+
+### nP = 10^4, nQ = 100
+
+```{r warning=FALSE, message=FALSE}
+out <- Logolas::logomaker(table,
+                     type = "EDLogo",
+                     color_type = "per_row",
+                     return_heights = TRUE,
+                     bg = bg,
+                     logo_control = list(score = "ash",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10^4, nQ=100),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))
+
+```
+
+### nP = 10^4, nQ = 10^4
+
+```{r warning=FALSE, message=FALSE}
+out <- Logolas::logomaker(table,
+                     type = "EDLogo",
+                     color_type = "per_row",
+                     return_heights = TRUE,
+                     bg = bg,
+                     pseudocount = 0,
+                     logo_control = list(score = "ash",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10^4, nQ=10^4),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))
+
+```
+
+
+
+### nP = 10^10, nQ = 10^4
+
+```{r warning=FALSE, message=FALSE}
+out <- Logolas::logomaker(table,
+                     type = "EDLogo",
+                     color_type = "per_row",
+                     return_heights = TRUE,
+                     bg = bg,
+                     pseudocount = 0.01,
+                     logo_control = list(score = "ash",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10^10, nQ=10^4),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))
+
+```

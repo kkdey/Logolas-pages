@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Kushal K Dey" />
+
+
+<title>ash depletions check - N glycosylation protein example</title>
+
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+<link rel="stylesheet" href="cosmo.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
+    <link href="../docs/cosmo.css" rel="stylesheet">
+    <link href="../docs/cosmo.min.css" rel="stylesheet">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="../docs/bootstrap/js/bootstrap.min.js"></script>
+
+<body>
+
+<div class = "nav" align = "middle">
+<div class= "p1"></div>
+<p>
+  <a class="btn btn-large btn btn-primary" type="button" href = "Logolas_home.html">HOME</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "Gallery.html">GALLERY</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "workflow.html">VIGNETTES</a>
+   &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "https://github.com/kkdey/Logolas">SOFTWARE</a>
+  &nbsp &nbsp
+  <a class="btn btn-large btn btn-primary" type="button" href = "license.html">LICENSE</a>
+ </p>
+</div>
+<!-- <div class="nav">
+  <a href="index.html">Home page</a> &nbsp &nbsp
+  <a href="musings.html">Musings</a> &nbsp &nbsp
+  <a href="town.html">My town</a> &nbsp &nbsp
+  <a href="links.html">Links</a>
+</div> -->
+
+<!-- Main content -->
+</body>
+</html>
+
+
+<h1 class="title toc-ignore">ash depletions check - N glycosylation protein example</h1>
+<h4 class="author"><em>Kushal K Dey</em></h4>
+<h4 class="date"><em>9/1/2018</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#n-glycosylation-sites-example">N-Glycosylation sites example</a></li>
+<li><a href="#edlogo---log">EDlogo - log</a></li>
+<li><a href="#edlogo---ash-depletion">EDlogo - ash depletion</a></li>
+<li><a href="#edlogo---ash-depletion-on-normalized-pwm">EDLogo - ash depletion on normalized PWM</a><ul>
+<li><a href="#np-10-nq-105">nP = 10, nQ = 10^5</a></li>
+<li><a href="#np-104-nq-10">nP = 10^4, nQ = 10</a></li>
+<li><a href="#np-104-nq-100">nP = 10^4, nQ = 100</a></li>
+<li><a href="#np-104-nq-104">nP = 10^4, nQ = 10^4</a></li>
+<li><a href="#np-1010-nq-104">nP = 10^10, nQ = 10^4</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p>We test the <code>ash-depletion</code> model in Logolas.</p>
+<pre class="r"><code>library(Logolas)</code></pre>
+<div id="n-glycosylation-sites-example" class="section level2">
+<h2>N-Glycosylation sites example</h2>
+<pre class="r"><code>data(&quot;N_Glycosyl_sequences&quot;)
+sequences &lt;- N_Glycosyl_sequences
+bg &lt;- apply(sequences, 1, function(x) return(median(x)))
+bg &lt;- bg/sum(bg)
+sequences</code></pre>
+<pre><code>##    -5  -4  -3  -2  -1    0   1    2   3   4   5
+## A 312 311 348 365 385    0 402    2 366 348 355
+## C 142 147 148 125 145    0 225   14 244 149 212
+## D 266 272 225 177 196    0 201    1 268 234 320
+## E 320 393 323 249 280    0 252    3 335 336 376
+## F 266 226 231 330 267    0 268    2 260 203 229
+## G 341 325 358 389 450    0 508    1 337 305 310
+## H 119 137 156 188 136    0 133    0 147 149 130
+## I 283 242 279 277 272    0 440    1 293 310 311
+## K 237 228 283 243 257    0 179    0 206 205 204
+## L 533 594 537 544 566    0 581    4 643 524 484
+## M  93  94  92 105 100    0 109    2  87  97  73
+## N 216 257 209 230 181 5422 187    3 181 225 225
+## P 325 325 312 322 256    0  10    1  28 344 317
+## Q 231 226 260 228 242    0 180    3 241 265 210
+## R 260 234 267 224 274    0 206    4 242 260 229
+## S 443 424 414 427 395    0 448 2365 432 434 388
+## T 349 356 301 317 284    0 318 3012 277 369 287
+## V 390 348 379 370 385    0 494    4 493 401 439
+## W  91 101  96  82  97    0  62    0 135  75 110
+## Y 205 182 204 230 254    0 219    0 207 189 213</code></pre>
+</div>
+<div id="edlogo---log" class="section level2">
+<h2>EDlogo - log</h2>
+<pre class="r"><code>out &lt;- Logolas::logomaker(sequences,
+                          type = &quot;EDLogo&quot;,
+                          color_type = &quot;per_row&quot;,
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = &quot;log&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                            gap_ylab = 2.5,
+                                                            round_off=0,
+                                                            posbins = 3,
+                                                            negbins = 3)))</code></pre>
+<p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="edlogo---ash-depletion" class="section level2">
+<h2>EDlogo - ash depletion</h2>
+<pre class="r"><code>out &lt;- Logolas::logomaker(sequences,
+                          type = &quot;EDLogo&quot;,
+                          color_type = &quot;per_row&quot;,
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = &quot;ash&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                            gap_ylab = 2.5,
+                                                            round_off=0,
+                                                            posbins = 3,
+                                                            negbins = 3)))</code></pre>
+<p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="edlogo---ash-depletion-on-normalized-pwm" class="section level2">
+<h2>EDLogo - ash depletion on normalized PWM</h2>
+<pre class="r"><code>table &lt;- apply(sequences, 2, function(x) return((x+1e-10)/sum((x+1e-10))))</code></pre>
+<div id="np-10-nq-105" class="section level3">
+<h3>nP = 10, nQ = 10^5</h3>
+<pre class="r"><code>out &lt;- Logolas::logomaker(table,
+                     type = &quot;EDLogo&quot;,
+                     color_type = &quot;per_row&quot;,
+                     return_heights = TRUE,
+                     bg = bg,
+                     logo_control = list(score = &quot;ash&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10, nQ=10^5),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))</code></pre>
+<p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="np-104-nq-10" class="section level3">
+<h3>nP = 10^4, nQ = 10</h3>
+<pre class="r"><code>out &lt;- Logolas::logomaker(table,
+                     type = &quot;EDLogo&quot;,
+                     color_type = &quot;per_row&quot;,
+                     return_heights = TRUE,
+                     bg = bg,
+                     logo_control = list(score = &quot;ash&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10^4, nQ=10),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))</code></pre>
+<p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="np-104-nq-100" class="section level3">
+<h3>nP = 10^4, nQ = 100</h3>
+<pre class="r"><code>out &lt;- Logolas::logomaker(table,
+                     type = &quot;EDLogo&quot;,
+                     color_type = &quot;per_row&quot;,
+                     return_heights = TRUE,
+                     bg = bg,
+                     logo_control = list(score = &quot;ash&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10^4, nQ=100),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))</code></pre>
+<p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="np-104-nq-104" class="section level3">
+<h3>nP = 10^4, nQ = 10^4</h3>
+<pre class="r"><code>out &lt;- Logolas::logomaker(table,
+                     type = &quot;EDLogo&quot;,
+                     color_type = &quot;per_row&quot;,
+                     return_heights = TRUE,
+                     bg = bg,
+                     pseudocount = 0,
+                     logo_control = list(score = &quot;ash&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10^4, nQ=10^4),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))</code></pre>
+<p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="np-1010-nq-104" class="section level3">
+<h3>nP = 10^10, nQ = 10^4</h3>
+<pre class="r"><code>out &lt;- Logolas::logomaker(table,
+                     type = &quot;EDLogo&quot;,
+                     color_type = &quot;per_row&quot;,
+                     return_heights = TRUE,
+                     bg = bg,
+                     pseudocount = 0.01,
+                     logo_control = list(score = &quot;ash&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                      control= list(quant=0.5,
+                          ash_control = list(nP=10^10, nQ=10^4),
+                          gap_ylab = 2.5,
+                          round_off=0,
+                          posbins = 3,
+                          negbins = 3)))</code></pre>
+<p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+</div>
+
+<hr>
+<p>
+    This webpage has been developed using RStudio's <a href="http://rmarkdown.rstudio.com">R Markdown</a> and John D Blischak's <a href="https://github.com/jdblischak/workflowr">workflowr</a> package. 
+</p>
+<hr>
+
+<!-- To enable disqus, uncomment the section below and provide your disqus_shortname -->
+
+<!-- disqus
+  <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'rmarkdown'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+-->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
