@@ -168,3 +168,22 @@ out <- Logolas::logomaker(table,
                           negbins = 3)))
 
 ```
+
+## EDLogo - preclog
+
+```{r warning=FALSE, message=FALSE}
+out <- Logolas::logomaker(sequences,
+                          type = "EDLogo",
+                          color_type = "per_row",
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = "preclog",
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                            gap_ylab = 2.5,
+                                                            round_off=0,
+                                                            posbins = 3,
+                                                            negbins = 3)))
+
+```

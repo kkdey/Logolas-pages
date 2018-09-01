@@ -95,6 +95,7 @@ if (window.hljs) {
 <li><a href="#np-104-nq-104">nP = 10^4, nQ = 10^4</a></li>
 <li><a href="#np-1010-nq-104">nP = 10^10, nQ = 10^4</a></li>
 </ul></li>
+<li><a href="#edlogo---preclog">EDLogo - preclog</a></li>
 </ul>
 </div>
 
@@ -258,6 +259,23 @@ sequences</code></pre>
                           negbins = 3)))</code></pre>
 <p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
+</div>
+<div id="edlogo---preclog" class="section level2">
+<h2>EDLogo - preclog</h2>
+<pre class="r"><code>out &lt;- Logolas::logomaker(sequences,
+                          type = &quot;EDLogo&quot;,
+                          color_type = &quot;per_row&quot;,
+                          return_heights = TRUE,
+                          bg = bg,
+                          logo_control = list(score = &quot;preclog&quot;,
+                                              ic = FALSE,
+                                              y_fontsize=15,
+                                              control= list(quant=0.5,
+                                                            gap_ylab = 2.5,
+                                                            round_off=0,
+                                                            posbins = 3,
+                                                            negbins = 3)))</code></pre>
+<p><img src="ash_depletion_check_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 </div>
 
 <hr>
